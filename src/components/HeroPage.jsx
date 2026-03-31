@@ -104,6 +104,20 @@ function FooterCol({ title, links }) {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function HeroPage({ onAuth }) {
   const navigate = useNavigate();
+
+  // Hero cards can be customised from Admin → Hero Settings
+  const heroCards = (() => {
+    try {
+      const saved = localStorage.getItem("maison_hero_cards");
+      return saved ? JSON.parse(saved) : null;
+    } catch { return null; }
+  })();
+
+  const COLLECTION_CARDS = heroCards || [
+    { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80&fit=crop", cls:"col-card-1", rev:"m-reveal-left",  d:"" },
+    { id:"card2", eye:"EFFORTLESS STYLE", name:"Casual Luxe", link:"/shop?category=Women",         image:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&fit=crop", cls:"col-card-2", rev:"m-reveal",        d:"m-d2" },
+    { id:"card3", eye:"FINAL TOUCHES",    name:"Accessories", link:"/shop?category=Accessories",   image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&fit=crop", cls:"col-card-3", rev:"m-reveal-right", d:"" },
+  ];
   const heroContentRef = useRef(null);
   const heroBeamRef    = useRef(null);
   const [email, setEmail]       = useState("");
@@ -248,14 +262,10 @@ export default function HeroPage({ onAuth }) {
       <section style={{background:"#f5f0eb",padding:"90px 48px"}}>
         <SectionHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU"/>
         <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"20px",maxWidth:"1300px",margin:"0 auto"}}>
-          {[
-            { cls:"col-card-1", eye:"SHARP & REFINED",  name:"Tailoring",   rev:"m-reveal-left",  d:"",  image:"https://images.unsplash.com/photo-1594938298870-5100bf2e3c8c?w=800&q=80&fit=crop" },
-            { cls:"col-card-2", eye:"EFFORTLESS STYLE", name:"Casual Luxe", rev:"m-reveal",        d:"m-d2", image:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=80&fit=crop" },
-            { cls:"col-card-3", eye:"FINAL TOUCHES",    name:"Accessories", rev:"m-reveal-right",  d:"",  image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&fit=crop" },
-          ].map(({ cls, eye, name, rev, d, image }) => (
-            <div key={name} className={`m-col-card ${rev} ${d}`} style={{position:"relative",overflow:"hidden",cursor:"pointer",aspectRatio:"3/4"}}>
+          {COLLECTION_CARDS.map(({ cls="col-card-1", eye, name, rev="m-reveal", d="", image, link }) => (
+            <div key={name} className={`m-col-card ${rev} ${d}`} onClick={() => navigate(link)} style={{position:"relative",overflow:"hidden",cursor:"pointer",aspectRatio:"3/4"}}>
               <div className={`m-col-bg ${cls}`} style={{position:"absolute",inset:0}}/>
-              {image && <img src={image} alt={name} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}} />}
+              {image && <img src={image} alt={name} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none"}} />}
               <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(12,7,0,0.75) 0%,rgba(12,7,0,0.1) 50%,transparent 100%)"}}/>
               <div style={{position:"absolute",bottom:"28px",left:"28px",right:"28px"}}>
                 <span style={{fontSize:"8.5px",letterSpacing:"0.28em",color:"rgba(255,255,255,0.6)",fontFamily:"'Cormorant Garamond',Georgia,serif",display:"block",marginBottom:"6px"}}>{eye}</span>
@@ -276,10 +286,10 @@ export default function HeroPage({ onAuth }) {
         <SectionHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
         <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"20px",maxWidth:"1300px",margin:"0 auto"}}>
           {[
-            { cls:"prod-1", type:"MEN · FORMALWEAR",       name:"Navy Pinstripe Blazer", price:"₹18,500", d:"m-d1", image:"https://images.unsplash.com/photo-1594938298870-5100bf2e3c8c?w=600&q=80&fit=crop" },
-            { cls:"prod-2", type:"WOMEN · OUTERWEAR",      name:"Belted Trench Coat",    price:"₹24,900", d:"m-d2", image:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=80&fit=crop" },
-            { cls:"prod-3", type:"ACCESSORIES · FOOTWEAR", name:"Chelsea Leather Boots", price:"₹12,750", d:"m-d3", image:"https://images.unsplash.com/photo-1638247025967-51873b8a5a6b?w=600&q=80&fit=crop" },
-            { cls:"prod-4", type:"WOMEN · TOPS",           name:"Silk Satin Blouse",     price:"₹8,200",  d:"m-d4", image:"https://images.unsplash.com/photo-1485968579580-ee2a6b1e450f?w=600&q=80&fit=crop" },
+            { cls:"prod-1", type:"MEN · FORMALWEAR",       name:"Navy Pinstripe Blazer", price:"₹18,500", d:"m-d1", image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop" },
+            { cls:"prod-2", type:"WOMEN · OUTERWEAR",      name:"Belted Trench Coat",    price:"₹24,900", d:"m-d2", image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop" },
+            { cls:"prod-3", type:"ACCESSORIES · FOOTWEAR", name:"Chelsea Leather Boots", price:"₹12,750", d:"m-d3", image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop" },
+            { cls:"prod-4", type:"WOMEN · TOPS",           name:"Silk Satin Blouse",     price:"₹8,200",  d:"m-d4", image:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop" },
           ].map(({ cls, type, name, price, d, image }) => (
             <div key={name} className={`m-prod-card m-reveal ${d}`} style={{cursor:"pointer"}}>
               <div style={{position:"relative",overflow:"hidden",aspectRatio:"3/4",marginBottom:"16px"}}>

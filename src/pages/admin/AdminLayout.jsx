@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { C, HomeIconEl, TagIconEl, UsersIconEl, OrdersIcon, ChartIcon, SettingsIcon, LogoutIcon, BellIconEl } from "../../components/shared";
+import { C, HomeIconEl, TagIconEl, UsersIconEl, OrdersIcon, ChartIcon, SettingsIcon, LogoutIcon, BellIconEl, PlayIcon } from "../../components/shared";
 import { useAuth } from "../../context/AuthContext";
 
 const MENU = [
-  { label: "Dashboard",  path: "/admin",           icon: HomeIconEl },
-  { label: "Products",   path: "/admin/products",   icon: TagIconEl },
-  { label: "Orders",     path: "/admin/orders",     icon: OrdersIcon },
-  { label: "Customers",  path: "/admin/customers",  icon: UsersIconEl },
-  { label: "Analytics",  path: "/admin/analytics",  icon: ChartIcon },
-  { label: "Settings",   path: "/admin/settings",   icon: SettingsIcon },
+  { label: "Dashboard",     path: "/admin",            icon: HomeIconEl },
+  { label: "Products",      path: "/admin/products",   icon: TagIconEl },
+  { label: "Orders",        path: "/admin/orders",     icon: OrdersIcon },
+  { label: "Customers",     path: "/admin/customers",  icon: UsersIconEl },
+  { label: "Analytics",     path: "/admin/analytics",  icon: ChartIcon },
+  { label: "Hero Images",   path: "/admin/hero",       icon: PlayIcon },
+  { label: "Settings",      path: "/admin/settings",   icon: SettingsIcon },
 ];
 
 export default function AdminLayout({ children, title }) {
