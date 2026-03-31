@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { C, GoldBar, EyeIcon, MailIcon, LockIcon, XIcon, Spinner } from "./shared";
 
@@ -120,6 +121,7 @@ export default function SignIn({ onClose, onSwitchToSignUp }) {
   }, []);
 
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (!form.email.includes("@")) return setMsg({ type: "err", text: "Enter a valid email address." });
@@ -129,9 +131,12 @@ export default function SignIn({ onClose, onSwitchToSignUp }) {
     setMsg({ type: "", text: "" });
 
     try {
-      await login({ email: form.email, password: form.password });
+      const data = await login({ email: form.email, password: form.password });
       setMsg({ type: "ok", text: "✓  Welcome back to MAISON." });
-      setTimeout(dismiss, 1000);
+      setTimeout(() => {
+        dismiss();
+        if (data?.user?.role === "admin") navigate("/admin");
+      }, 800);
     } catch (err) {
       setMsg({ type: "err", text: err?.response?.data?.message || "Invalid credentials. Please try again." });
     } finally {

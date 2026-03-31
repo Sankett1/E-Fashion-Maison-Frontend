@@ -57,37 +57,83 @@ function HomePage() {
 }
 
 // ── Admin guard ───────────────────────────────────────────────────────────────
+// IMPORTANT: This component only runs at render time (inside React tree + AuthProvider).
+// It waits for `hydrated` before making any redirect decision so localStorage
+// reads and optional getMe() API calls can complete first.
 function AdminGuardOutlet() {
-  const { isAuthenticated, isAdmin, hydrated } = useAuth();
-  if (!hydrated) return (
-    <div style={{ minHeight: "100vh", background: "#080502", display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ width: 32, height: 32, border: `2px solid ${C.gold}`, borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
-      <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-    </div>
-  );
-  if (!isAuthenticated || !isAdmin) return <Navigate to="/" replace />;
+  const { isAuthenticated, isAdmin, hydrated, user } = useAuth();
+
+  // Not yet read from localStorage / finished getMe — show spinner
+  if (!hydrated) {
+    return (
+      <div style={{
+        minHeight: "100vh",
+        background: "#080502",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 16,
+      }}>
+        <div style={{
+          width: 36,
+          height: 36,
+          border: `2px solid ${C.gold}`,
+          borderTopColor: "transparent",
+          borderRadius: "50%",
+          animation: "spin 0.8s linear infinite",
+        }} />
+        <div style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 11,
+          letterSpacing: "0.2em",
+          color: "rgba(255,255,255,0.3)",
+        }}>
+          VERIFYING ACCESS…
+        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  // Not logged in at all → home
+  if (!isAuthenticated) {
+    return <Navigate to="/" replace />;
+  }
+
+  // Logged in but not admin → home
+  // Debug: log what role we actually see so you can diagnose in DevTools console
+  if (!isAdmin) {
+    console.warn(
+      "[AdminGuard] Access denied. User role:",
+      user?.role,
+      "| Full user object:",
+      user,
+      "\nTo fix: update this user's role to 'admin' in MongoDB:\n",
+      `db.users.updateOne({ email: "${user?.email}" }, { $set: { role: "admin" } })`
+    );
+    return <Navigate to="/" replace />;
+  }
+
   return <Outlet />;
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
-// All navbar dropdown links use query params on /shop — ShopPage reads them.
-// Dedicated clean URLs also exist for the key landing pages.
 const router = createBrowserRouter([
   // Home
   { path: "/", element: <HomePage /> },
 
-  // Shop — main collection + all filtered views via query params
-  // e.g. /shop?category=Women&sub=Dresses, /shop?tag=SALE, /shop?tag=NEW, etc.
+  // Shop — universal filtered page (reads ?category, ?sub, ?tag, ?sort, ?filter, ?q)
   { path: "/shop",     element: <WithNavbar Page={ShopPage} /> },
   { path: "/shop/:id", element: <WithNavbar Page={ProductDetailPage} /> },
 
-  // NEW IN sub-routes (clean URLs pointing to filtered ShopPage)
+  // NEW IN clean URLs
   { path: "/new-arrivals",  element: <WithNavbar Page={ShopPage} /> },
   { path: "/trending",      element: <WithNavbar Page={ShopPage} /> },
   { path: "/back-in-stock", element: <WithNavbar Page={ShopPage} /> },
   { path: "/editors-picks", element: <WithNavbar Page={ShopPage} /> },
 
-  // Women sub-category clean URLs
+  // Women
   { path: "/women",           element: <WithNavbar Page={ShopPage} /> },
   { path: "/women/dresses",   element: <WithNavbar Page={ShopPage} /> },
   { path: "/women/tops",      element: <WithNavbar Page={ShopPage} /> },
@@ -96,7 +142,7 @@ const router = createBrowserRouter([
   { path: "/women/knitwear",  element: <WithNavbar Page={ShopPage} /> },
   { path: "/women/shoes",     element: <WithNavbar Page={ShopPage} /> },
 
-  // Men sub-category clean URLs
+  // Men
   { path: "/men",             element: <WithNavbar Page={ShopPage} /> },
   { path: "/men/shirts",      element: <WithNavbar Page={ShopPage} /> },
   { path: "/men/trousers",    element: <WithNavbar Page={ShopPage} /> },
@@ -105,7 +151,7 @@ const router = createBrowserRouter([
   { path: "/men/knitwear",    element: <WithNavbar Page={ShopPage} /> },
   { path: "/men/shoes",       element: <WithNavbar Page={ShopPage} /> },
 
-  // Accessories sub-category clean URLs
+  // Accessories
   { path: "/accessories",            element: <WithNavbar Page={ShopPage} /> },
   { path: "/accessories/bags",       element: <WithNavbar Page={ShopPage} /> },
   { path: "/accessories/scarves",    element: <WithNavbar Page={ShopPage} /> },
@@ -114,24 +160,24 @@ const router = createBrowserRouter([
   { path: "/accessories/sunglasses", element: <WithNavbar Page={ShopPage} /> },
   { path: "/accessories/hats",       element: <WithNavbar Page={ShopPage} /> },
 
-  // Sale clean URLs
-  { path: "/sale",              element: <WithNavbar Page={ShopPage} /> },
-  { path: "/sale/women",        element: <WithNavbar Page={ShopPage} /> },
-  { path: "/sale/men",          element: <WithNavbar Page={ShopPage} /> },
-  { path: "/sale/accessories",  element: <WithNavbar Page={ShopPage} /> },
+  // Sale
+  { path: "/sale",             element: <WithNavbar Page={ShopPage} /> },
+  { path: "/sale/women",       element: <WithNavbar Page={ShopPage} /> },
+  { path: "/sale/men",         element: <WithNavbar Page={ShopPage} /> },
+  { path: "/sale/accessories", element: <WithNavbar Page={ShopPage} /> },
 
   // Other pages
-  { path: "/cart",        element: <WithNavbar Page={CartPage} /> },
-  { path: "/checkout",    element: <WithNavbar Page={CheckoutPage} /> },
-  { path: "/account",     element: <WithNavbar Page={AccountPage} /> },
-  { path: "/about",       element: <WithNavbar Page={AboutPage} /> },
-  { path: "/wishlist",    element: <WithNavbar Page={WishlistPage} /> },
-  { path: "/contact",     element: <WithNavbar Page={ContactPage} /> },
-  { path: "/gift-cards",  element: <WithNavbar Page={GiftCardsPage} /> },
-  { path: "/size-guide",  element: <WithNavbar Page={SizeGuidePage} /> },
-  { path: "/returns",     element: <WithNavbar Page={ReturnsPage} /> },
+  { path: "/cart",       element: <WithNavbar Page={CartPage} /> },
+  { path: "/checkout",   element: <WithNavbar Page={CheckoutPage} /> },
+  { path: "/account",    element: <WithNavbar Page={AccountPage} /> },
+  { path: "/about",      element: <WithNavbar Page={AboutPage} /> },
+  { path: "/wishlist",   element: <WithNavbar Page={WishlistPage} /> },
+  { path: "/contact",    element: <WithNavbar Page={ContactPage} /> },
+  { path: "/gift-cards", element: <WithNavbar Page={GiftCardsPage} /> },
+  { path: "/size-guide", element: <WithNavbar Page={SizeGuidePage} /> },
+  { path: "/returns",    element: <WithNavbar Page={ReturnsPage} /> },
 
-  // Admin
+  // Admin — protected, waits for hydration
   {
     element: <AdminGuardOutlet />,
     children: [
