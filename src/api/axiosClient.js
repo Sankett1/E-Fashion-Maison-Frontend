@@ -25,9 +25,12 @@ api.interceptors.response.use(
     const status = error.response?.status;
 
     if (status === 401) {
-      // Token expired or invalid — clear session
+      // Token expired or invalid — clear session and redirect to home
       localStorage.removeItem("maison_token");
       localStorage.removeItem("maison_user");
+      if (window.location.pathname !== "/") {
+        window.location.href = "/";
+      }
     }
 
     if (status === 429) {

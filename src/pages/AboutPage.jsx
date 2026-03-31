@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
 
 const TEAM = [
@@ -14,6 +15,7 @@ const VALUES = [
 ];
 
 export default function AboutPage({ onAuth }) {
+  const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);
     const els = document.querySelectorAll(".m-reveal, .m-reveal-left, .m-reveal-right");
@@ -133,7 +135,7 @@ export default function AboutPage({ onAuth }) {
             <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:"36px", lineHeight:1.8 }}>
               Explore pieces crafted at the intersection of heritage and modernity.
             </p>
-            <button className="m-btn-gold">SHOP NOW</button>
+            <button className="m-btn-gold" onClick={() => navigate("/shop")}>SHOP NOW</button>
           </div>
         </section>
       </div>

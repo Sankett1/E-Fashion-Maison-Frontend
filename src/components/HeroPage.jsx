@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "./shared";
 
 // ── Hero-only keyframes (h* prefix avoids conflict with shared.jsx) ───────────
@@ -102,6 +103,7 @@ function FooterCol({ title, links }) {
 // MAIN EXPORT
 // ─────────────────────────────────────────────────────────────────────────────
 export default function HeroPage({ onAuth }) {
+  const navigate = useNavigate();
   const heroContentRef = useRef(null);
   const heroBeamRef    = useRef(null);
   const [email, setEmail]       = useState("");
@@ -202,8 +204,8 @@ export default function HeroPage({ onAuth }) {
             REDEFINING ELEGANCE THROUGH<br/>MODERN SILHOUETTES
           </p>
           <div style={{display:"flex",gap:"14px",flexWrap:"wrap",animation:"hFadeUp 0.7s ease 1.3s forwards",opacity:0}}>
-            <button className="m-btn-gold"          onClick={() => onAuth && onAuth("signup")}>EXPLORE NOW</button>
-            <button className="m-btn-outline-white" onClick={() => onAuth && onAuth("signin")}>VIEW LOOKBOOK</button>
+            <button className="m-btn-gold"          onClick={() => navigate("/shop")}>EXPLORE NOW</button>
+            <button className="m-btn-outline-white" onClick={() => navigate("/about")}>VIEW LOOKBOOK</button>
           </div>
         </div>
 
@@ -311,7 +313,7 @@ export default function HeroPage({ onAuth }) {
             <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"15px",lineHeight:1.85,color:"rgba(255,255,255,0.55)",fontWeight:300,marginBottom:"20px"}}>
               Every piece is designed in our Mumbai atelier, crafted by master artisans with decades of expertise, and delivered with the care that a luxury garment deserves.
             </p>
-            <button className="m-btn-outline-light">OUR STORY</button>
+            <button className="m-btn-outline-light" onClick={() => navigate("/about")}>OUR STORY</button>
           </div>
           <div className="m-reveal-right" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"20px"}}>
             {[

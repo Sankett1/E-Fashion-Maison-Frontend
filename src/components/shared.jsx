@@ -15,14 +15,14 @@ export const C = {
 };
 
 export const NAV_ITEMS = [
-  { label: "NEW IN",      path: "/shop?tag=NEW",  items: [
+  { label: "NEW IN", path: "/shop?tag=NEW", items: [
     { label: "New Arrivals",   path: "/shop?tag=NEW" },
     { label: "Trending Now",   path: "/shop?sort=trending" },
     { label: "Back in Stock",  path: "/shop?filter=restock" },
     { label: "Editor's Picks", path: "/shop?filter=editors" },
     { label: "Gift Cards",     path: "/gift-cards" },
   ]},
-  { label: "WOMEN",       path: "/shop?category=Women", items: [
+  { label: "WOMEN", path: "/shop?category=Women", items: [
     { label: "Dresses",        path: "/shop?category=Women&sub=Dresses" },
     { label: "Tops & Blouses", path: "/shop?category=Women&sub=Tops" },
     { label: "Trousers",       path: "/shop?category=Women&sub=Trousers" },
@@ -30,13 +30,13 @@ export const NAV_ITEMS = [
     { label: "Knitwear",       path: "/shop?category=Women&sub=Knitwear" },
     { label: "Shoes",          path: "/shop?category=Women&sub=Shoes" },
   ]},
-  { label: "MEN",         path: "/shop?category=Men", items: [
-    { label: "Shirts",     path: "/shop?category=Men&sub=Shirts" },
-    { label: "Trousers",   path: "/shop?category=Men&sub=Trousers" },
-    { label: "Suits",      path: "/shop?category=Men&sub=Suits" },
-    { label: "Outerwear",  path: "/shop?category=Men&sub=Outerwear" },
-    { label: "Knitwear",   path: "/shop?category=Men&sub=Knitwear" },
-    { label: "Shoes",      path: "/shop?category=Men&sub=Shoes" },
+  { label: "MEN", path: "/shop?category=Men", items: [
+    { label: "Shirts",         path: "/shop?category=Men&sub=Shirts" },
+    { label: "Trousers",       path: "/shop?category=Men&sub=Trousers" },
+    { label: "Suits",          path: "/shop?category=Men&sub=Suits" },
+    { label: "Outerwear",      path: "/shop?category=Men&sub=Outerwear" },
+    { label: "Knitwear",       path: "/shop?category=Men&sub=Knitwear" },
+    { label: "Shoes",          path: "/shop?category=Men&sub=Shoes" },
   ]},
   { label: "ACCESSORIES", path: "/shop?category=Accessories", items: [
     { label: "Bags",           path: "/shop?category=Accessories&sub=Bags" },
@@ -46,7 +46,7 @@ export const NAV_ITEMS = [
     { label: "Sunglasses",     path: "/shop?category=Accessories&sub=Sunglasses" },
     { label: "Hats",           path: "/shop?category=Accessories&sub=Hats" },
   ]},
-  { label: "SALE",        path: "/shop?tag=SALE", items: [
+  { label: "SALE", path: "/shop?tag=SALE", items: [
     { label: "Women's Sale",     path: "/shop?category=Women&tag=SALE" },
     { label: "Men's Sale",       path: "/shop?category=Men&tag=SALE" },
     { label: "Accessories Sale", path: "/shop?category=Accessories&tag=SALE" },
