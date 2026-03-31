@@ -40,7 +40,10 @@ export const createProduct = async (formData) => {
 
 // ── Admin: update product ─────────────────────────────────────────────────────
 export const updateProduct = async (id, payload) => {
-  const { data } = await api.put(`/products/${id}`, payload);
+  // payload must be a FormData (multipart) — same as createProduct
+  const { data } = await api.put(`/products/${id}`, payload, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return data;
 };
 
