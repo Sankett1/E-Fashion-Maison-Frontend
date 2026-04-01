@@ -105,13 +105,17 @@ function FooterCol({ title, links }) {
 export default function HeroPage({ onAuth }) {
   const navigate = useNavigate();
 
-  // Hero cards can be customised from Admin → Hero Settings
+  // Hero content can be customised from Admin → Hero Settings
   const heroCards = (() => {
     try {
       const saved = localStorage.getItem("maison_hero_cards");
       return saved ? JSON.parse(saved) : null;
     } catch { return null; }
   })();
+
+  // Video background — falls back to default Pexels fabric video
+  const heroVideoUrl = localStorage.getItem("maison_hero_video") ||
+    "https://videos.pexels.com/video-files/3141207/3141207-hd_1920_1080_25fps.mp4";
 
   const COLLECTION_CARDS = heroCards || [
     { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80&fit=crop", cls:"col-card-1", rev:"m-reveal-left",  d:"" },
@@ -156,54 +160,44 @@ export default function HeroPage({ onAuth }) {
       <section id="hero" style={{
         position:"relative", minHeight:"100vh", overflow:"hidden",
         display:"flex", alignItems:"center",
-        background:"linear-gradient(128deg,#cba96e 0%,#b89050 22%,#9f7538 48%,#8a6228 70%,#74501a 100%)",
+        background:"#080502",
       }}>
-        {/* Overlays */}
-        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 65% 75% at 72% 38%,rgba(255,225,150,0.1) 0%,transparent 65%)",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,rgba(12,7,0,0.52) 0%,rgba(12,7,0,0.08) 48%,transparent 100%)",pointerEvents:"none"}}/>
-        <div style={{position:"absolute",bottom:0,left:0,right:0,height:"30%",background:"linear-gradient(to top,rgba(8,5,0,0.5) 0%,transparent 100%)",pointerEvents:"none"}}/>
+        {/* ── Full-bleed background video ─────────────────────────────────── */}
+        <video
+          autoPlay muted loop playsInline
+          style={{
+            position:"absolute", inset:0,
+            width:"100%", height:"100%",
+            objectFit:"cover",
+            zIndex:0,
+            opacity:0.85,
+          }}
+        >
+          {/* Free fashion/fabric videos from Pexels CDN — no API key needed */}
+          <source src={heroVideoUrl} type="video/mp4"/>
+          {/* Fallback video if primary fails */}
+          <source src="https://videos.pexels.com/video-files/4068498/4068498-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+        </video>
+
+        {/* Dark overlay so text stays readable */}
+        <div style={{position:"absolute",inset:0,background:"rgba(5,3,1,0.55)",zIndex:1,pointerEvents:"none"}}/>
+        {/* Left-side text vignette */}
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,rgba(5,3,1,0.65) 0%,rgba(5,3,1,0.2) 50%,transparent 100%)",zIndex:1,pointerEvents:"none"}}/>
+        {/* Bottom fade */}
+        <div style={{position:"absolute",bottom:0,left:0,right:0,height:"25%",background:"linear-gradient(to top,rgba(8,5,0,0.7) 0%,transparent 100%)",zIndex:1,pointerEvents:"none"}}/>
 
         {/* Diagonal beam */}
-        <div ref={heroBeamRef} style={{position:"absolute",top:0,right:"30%",width:"1.5px",height:"68%",background:"linear-gradient(to bottom,rgba(255,238,185,0.22) 0%,transparent 100%)",transform:"rotate(-10deg)",transformOrigin:"top center",pointerEvents:"none"}}/>
+        <div ref={heroBeamRef} style={{position:"absolute",zIndex:2,top:0,right:"30%",width:"1.5px",height:"68%",background:"linear-gradient(to bottom,rgba(255,238,185,0.18) 0%,transparent 100%)",transform:"rotate(-10deg)",transformOrigin:"top center",pointerEvents:"none"}}/>
 
-        {/* Right panel — SVG fashion silhouette */}
-        <div style={{position:"absolute",right:0,top:0,bottom:0,width:"55%",overflow:"hidden",pointerEvents:"none"}}>
-          <div style={{position:"absolute",inset:0,background:"linear-gradient(to left,rgba(165,115,42,0.1) 0%,transparent 55%)"}}/>
-          <svg style={{position:"absolute",bottom:0,right:"9%",height:"90%",animation:"hFadeIn 1.4s ease 0.8s both"}} viewBox="0 0 280 700" preserveAspectRatio="xMidYMax meet">
-            <defs>
-              <linearGradient id="hbG" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stopColor="#1e160e" stopOpacity=".9"/>
-                <stop offset="55%"  stopColor="#100a04" stopOpacity="1"/>
-                <stop offset="100%" stopColor="#1e160e" stopOpacity=".85"/>
-              </linearGradient>
-              <linearGradient id="hsG" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%"   stopColor="rgba(201,168,76,0)"/>
-                <stop offset="50%"  stopColor="rgba(201,168,76,0.1)"/>
-                <stop offset="100%" stopColor="rgba(201,168,76,0)"/>
-              </linearGradient>
-              <radialGradient id="hsdG" cx="50%" cy="100%" r="50%">
-                <stop offset="0%"   stopColor="rgba(0,0,0,.45)"/>
-                <stop offset="100%" stopColor="rgba(0,0,0,0)"/>
-              </radialGradient>
-              <filter id="hsf"><feGaussianBlur stdDeviation="2"/></filter>
-            </defs>
-            <ellipse cx="140" cy="694" rx="70" ry="7" fill="url(#hsdG)" filter="url(#hsf)"/>
-            <ellipse cx="140" cy="36"  rx="30" ry="34" fill="#2e2210"/>
-            <path d="M110 22Q140 6 170 22Q178 44 172 58Q155 38 140 30Q125 38 108 58Q102 44 110 22Z" fill="#a08860" opacity=".72"/>
-            <path d="M92 72Q97 58 140 52Q183 58 188 72L206 230Q202 275 199 320L214 472Q218 552 213 632L202 700H78L67 632Q62 552 66 472L81 320Q78 275 74 230Z" fill="url(#hbG)"/>
-            <path d="M92 82Q140 70 188 82L199 290Q160 273 81 290Z" fill="url(#hsG)"/>
-            <path d="M140 90L116 188L130 224L140 202L150 224L164 188Z" fill="#100a04" opacity=".85"/>
-            <path d="M125 70Q140 60 155 70L160 95Q140 80 120 95Z" fill="#1a1208" opacity=".9"/>
-            <rect x="86" y="302" width="108" height="5" rx="1" fill="#c9a84c" opacity=".18"/>
-            <path d="M92 108Q68 168 63 270Q71 282 80 276Q85 184 100 120Z" fill="#100a04" opacity=".88"/>
-            <path d="M188 108Q212 165 217 268Q209 280 200 274Q196 182 180 120Z" fill="#100a04" opacity=".88"/>
-            <path d="M200 268Q215 273 218 292Q207 302 197 291Z" fill="#1a1208" opacity=".8"/>
-          </svg>
+        {/* Right panel placeholder (video fills full bg now, no SVG needed) */}
+        <div style={{position:"absolute",right:0,top:0,bottom:0,width:"55%",overflow:"hidden",pointerEvents:"none",zIndex:1}}>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to left,rgba(5,3,1,0.1) 0%,transparent 55%)"}}/>
+
           <div style={{position:"absolute",top:"5%",right:"22%",width:"1.5px",height:"68%",background:"linear-gradient(to bottom,rgba(255,240,185,0.2) 0%,transparent 100%)",transform:"rotate(-10deg)",transformOrigin:"top center"}}/>
         </div>
 
         {/* Hero text */}
-        <div ref={heroContentRef} style={{position:"relative",zIndex:10,paddingLeft:"clamp(32px,6vw,88px)",paddingTop:"80px",maxWidth:"580px"}}>
+        <div ref={heroContentRef} style={{position:"relative",zIndex:10,paddingLeft:"clamp(32px,6vw,88px)",paddingTop:"80px",maxWidth:"580px",paddingBottom:"80px"}}>
           <div style={{width:"72px",height:"1px",marginBottom:"38px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)",animation:"hScaleX 0.8s ease 0.4s both",transformOrigin:"left"}}/>
           <div style={{overflow:"hidden"}}>
             <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(52px,8.5vw,98px)",fontWeight:400,color:"#fff",margin:0,lineHeight:1,textShadow:"0 2px 50px rgba(0,0,0,0.18)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.55s forwards",opacity:0}}>Spring</h1>

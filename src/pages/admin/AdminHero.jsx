@@ -9,7 +9,17 @@ const DEFAULT_CARDS = [
   { id: "card3", eye: "FINAL TOUCHES",    name: "Accessories", link: "/shop?category=Accessories",    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&fit=crop" },
 ];
 
-const STORAGE_KEY = "maison_hero_cards";
+const STORAGE_KEY       = "maison_hero_cards";
+const VIDEO_STORAGE_KEY = "maison_hero_video";
+
+const SAMPLE_VIDEOS = [
+  { label: "Fabric Weaving",   url: "https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4" },
+  { label: "Luxury Fashion",   url: "https://videos.pexels.com/video-files/4068498/4068498-hd_1920_1080_25fps.mp4" },
+  { label: "Tailoring Atelier",url: "https://videos.pexels.com/video-files/4065934/4065934-hd_1920_1080_24fps.mp4" },
+  { label: "Silk & Draping",   url: "https://videos.pexels.com/video-files/3195394/3195394-hd_1920_1080_25fps.mp4" },
+  { label: "Model Walk",       url: "https://videos.pexels.com/video-files/5638431/5638431-hd_1920_1080_30fps.mp4" },
+  { label: "Fashion Studio",   url: "https://videos.pexels.com/video-files/3256542/3256542-hd_1920_1080_25fps.mp4" },
+];
 
 export default function AdminHero() {
   const [cards, setCards] = useState(() => {
@@ -17,6 +27,10 @@ export default function AdminHero() {
       const saved = localStorage.getItem(STORAGE_KEY);
       return saved ? JSON.parse(saved) : DEFAULT_CARDS;
     } catch { return DEFAULT_CARDS; }
+  });
+  const [videoUrl, setVideoUrl] = useState(() => {
+    return localStorage.getItem(VIDEO_STORAGE_KEY) ||
+      "https://videos.pexels.com/video-files/3141207/3141207-hd_1920_1080_25fps.mp4";
   });
   const [saved, setSaved] = useState(false);
   const [editing, setEditing] = useState(null); // index being edited
@@ -27,6 +41,7 @@ export default function AdminHero() {
 
   const save = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
+    localStorage.setItem(VIDEO_STORAGE_KEY, videoUrl);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);
   };
@@ -34,6 +49,8 @@ export default function AdminHero() {
   const reset = () => {
     setCards(DEFAULT_CARDS);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(VIDEO_STORAGE_KEY);
+    setVideoUrl(SAMPLE_VIDEOS[0].url);
   };
 
   const inputStyle = {
@@ -60,6 +77,53 @@ export default function AdminHero() {
         ★ Changes here update the 3 collection cards on the homepage. Paste any image URL
         (Unsplash, Cloudinary, etc.) — the card will display it immediately.
         Changes are saved in the browser and persist across sessions.
+      </div>
+
+      {/* ── Hero Video Settings ──────────────────────────────────────────── */}
+      <div style={{ background: "linear-gradient(135deg,#0f0c08,#110e08)",
+        border: "1px solid rgba(201,168,76,0.15)", padding: 24, marginBottom: 24 }}>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 17,
+          color: "#fff", marginBottom: 16 }}>Hero Background Video</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 12, marginBottom: 16 }}>
+          <div>
+            <label style={labelStyle}>VIDEO URL (MP4, hosted on any CDN)</label>
+            <input
+              value={videoUrl}
+              onChange={e => setVideoUrl(e.target.value)}
+              placeholder="https://videos.pexels.com/video-files/..."
+              style={{ ...inputStyle, fontFamily: "monospace", fontSize: 11 }}
+            />
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-end" }}>
+            <video key={videoUrl} src={videoUrl} muted style={{
+              width: 120, height: 68, objectFit: "cover",
+              border: "1px solid rgba(201,168,76,0.2)", flexShrink: 0,
+            }}/>
+          </div>
+        </div>
+        <div style={{ marginBottom: 14 }}>
+          <label style={labelStyle}>QUICK SELECT — FREE PEXELS VIDEOS</label>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {SAMPLE_VIDEOS.map(v => (
+              <button key={v.url}
+                onClick={() => setVideoUrl(v.url)}
+                style={{ padding: "7px 14px",
+                  background: videoUrl === v.url ? C.gold : "rgba(255,255,255,0.04)",
+                  border: `1px solid ${videoUrl === v.url ? C.gold : "rgba(201,168,76,0.2)"}`,
+                  color: videoUrl === v.url ? "#0f0c08" : "rgba(255,255,255,0.6)",
+                  fontSize: "9.5px", letterSpacing: "0.14em",
+                  cursor: "pointer", fontFamily: "inherit",
+                  transition: "all 0.2s" }}>
+                {v.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)",
+          fontFamily: "'Cormorant Garamond',serif" }}>
+          Tip: You can also upload your own video to Cloudinary and paste its URL here.
+          For best performance use MP4 format, max 10MB.
+        </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20, marginBottom: 32 }}>
