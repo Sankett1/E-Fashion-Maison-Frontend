@@ -30,7 +30,7 @@ export default function AdminHero() {
   });
   const [videoUrl, setVideoUrl] = useState(() => {
     return localStorage.getItem(VIDEO_STORAGE_KEY) ||
-      "https://videos.pexels.com/video-files/3141207/3141207-hd_1920_1080_25fps.mp4";
+      "https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4";
   });
   const [saved, setSaved] = useState(false);
   const [editing, setEditing] = useState(null); // index being edited

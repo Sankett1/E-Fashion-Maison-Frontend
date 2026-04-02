@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "./shared";
 
@@ -99,9 +99,315 @@ function FooterCol({ title, links }) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MAIN EXPORT
-// ─────────────────────────────────────────────────────────────────────────────
+
+// ══════════════════════════════════════════════════════════════════════════════
+// 3D ANIMATION SYSTEM
+// ══════════════════════════════════════════════════════════════════════════════
+const MX_CSS = `
+  .mx-scene{perspective:1400px;perspective-origin:50% 35%}
+  .mx-card{transform-style:preserve-3d;will-change:transform;transition:box-shadow .4s ease;position:relative;overflow:hidden}
+  .mx-card:hover{box-shadow:0 48px 96px rgba(0,0,0,.55),0 0 0 1px rgba(201,168,76,.22),inset 0 1px 0 rgba(255,255,255,.06)}
+  .mx-holo{position:absolute;inset:0;z-index:30;pointer-events:none;border-radius:inherit;
+    background:radial-gradient(ellipse 110% 75% at var(--hx,50%) var(--hy,50%),rgba(255,255,255,.13) 0%,rgba(201,168,76,.06) 35%,transparent 65%),
+    linear-gradient(calc(var(--ha,135deg)),rgba(201,168,76,.04) 0%,transparent 40%,rgba(255,255,255,.04) 60%,transparent 100%);
+    mix-blend-mode:screen}
+  .mx-edge{position:absolute;top:0;left:0;right:0;height:1.5px;z-index:41;
+    background:linear-gradient(90deg,transparent,rgba(201,168,76,.8),transparent);
+    transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.23,1,.32,1)}
+  .mx-card:hover .mx-edge{transform:scaleX(1)}
+
+  /* Collection stagger reveal */
+  .mxc-wrap{opacity:0;transform:translateY(72px) rotateX(14deg) scale(.97);
+    transition:opacity .9s cubic-bezier(.23,1,.32,1),transform .9s cubic-bezier(.23,1,.32,1)}
+  .mxc-wrap.mxc-in{opacity:1;transform:translateY(0) rotateX(0) scale(1)}
+  .mxc-wrap:nth-child(1){transition-delay:0s}
+  .mxc-wrap:nth-child(2){transition-delay:.13s}
+  .mxc-wrap:nth-child(3){transition-delay:.26s}
+
+  /* Trending cinematic rise */
+  .mxt-wrap{opacity:0;transform:translateY(90px) rotateX(24deg) rotateZ(-1deg) scale(.91);
+    transition:opacity 1s cubic-bezier(.23,1,.32,1),transform 1s cubic-bezier(.23,1,.32,1)}
+  .mxt-wrap.mxt-in{opacity:1;transform:translateY(0) rotateX(0) rotateZ(0) scale(1)}
+  .mxt-wrap:nth-child(1){transition-delay:0s}
+  .mxt-wrap:nth-child(2){transition-delay:.1s}
+  .mxt-wrap:nth-child(3){transition-delay:.2s}
+  .mxt-wrap:nth-child(4){transition-delay:.3s}
+  .mxt-img{transition:transform .6s cubic-bezier(.23,1,.32,1);width:100%;height:100%;object-fit:cover}
+  .mxt-hover .mxt-img{transform:scale(1.07)}
+  .mxt-qadd{position:absolute;bottom:0;left:0;right:0;padding:12px 0;text-align:center;
+    font:300 9px/1 'Cormorant Garamond',serif;letter-spacing:.24em;color:#fff;
+    background:linear-gradient(to top,rgba(8,4,1,.95),rgba(8,4,1,.85));
+    transform:translateY(102%);transition:transform .38s cubic-bezier(.23,1,.32,1);z-index:5}
+  .mxt-hover .mxt-qadd{transform:translateY(0)}
+
+  /* Testimonial carousel */
+  .mxq-scroll{overflow-x:auto;overflow-y:visible;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x mandatory;
+    cursor:grab;padding:32px 0 56px}
+  .mxq-scroll::-webkit-scrollbar{display:none}
+  .mxq-scroll:active{cursor:grabbing}
+  .mxq-track{display:flex;gap:20px}
+  .mxq-card{flex:0 0 360px;scroll-snap-align:center;opacity:0;
+    transform:translateY(56px) rotateY(-10deg) scale(.92);
+    transition:opacity .8s cubic-bezier(.23,1,.32,1),transform .8s cubic-bezier(.23,1,.32,1),
+      box-shadow .4s ease,filter .4s ease;will-change:transform,opacity;position:relative;overflow:hidden}
+  .mxq-card.mxq-in{opacity:1;transform:none}
+  .mxq-card.mxq-center{transform:translateY(-7px) scale(1.035)!important;
+    box-shadow:0 28px 64px rgba(0,0,0,.18),0 0 0 1.5px rgba(201,168,76,.35);filter:none;z-index:4}
+  .mxq-card.mxq-far{transform:scale(.96) translateY(5px)!important;opacity:.65!important;filter:brightness(.95)}
+  .mxq-progress{position:absolute;bottom:0;left:0;height:2px;width:0;
+    background:linear-gradient(90deg,#c9a84c,#e8c96e);
+    transition:width 4s linear}
+
+  /* Animated header */
+  .mxh-word{display:inline-block;opacity:0;transform:translateY(100%);
+    transition:opacity .7s ease,transform .7s cubic-bezier(.23,1,.32,1)}
+  .mxh-go .mxh-word{opacity:1;transform:translateY(0)}
+  .mxh-go .mxh-word:nth-child(1){transition-delay:0s}
+  .mxh-go .mxh-word:nth-child(2){transition-delay:.08s}
+  .mxh-go .mxh-word:nth-child(3){transition-delay:.16s}
+  .mxh-go .mxh-word:nth-child(4){transition-delay:.24s}
+  .mxh-go .mxh-word:nth-child(5){transition-delay:.32s}
+  .mxh-sub{opacity:0;transform:translateY(16px);transition:opacity .6s ease .3s,transform .6s cubic-bezier(.23,1,.32,1) .3s}
+  .mxh-go .mxh-sub{opacity:1;transform:none}
+
+  /* Dot navigator */
+  .mxq-dot{width:6px;height:6px;border-radius:3px;background:rgba(201,168,76,.25);
+    border:none;cursor:pointer;padding:0;transition:all .4s cubic-bezier(.23,1,.32,1)}
+  .mxq-dot.on{width:28px;background:#c9a84c;box-shadow:0 2px 8px rgba(201,168,76,.4)}
+`;
+
+// ── useScrollIn: add className when element enters viewport ──────────────────
+function useScrollIn(ref, addedClass, delay=0, opts={}) {
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        setTimeout(() => el.classList.add(addedClass), delay);
+        obs.unobserve(el);
+      }
+    }, { threshold: opts.t||.12, rootMargin: opts.rm||"0px 0px -40px 0px" });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+}
+
+// ── useMagTilt: smooth lerp magnetic tilt + holographic shine ────────────────
+function useMagTilt(ref, str=1) {
+  useEffect(() => {
+    const el = ref.current; if (!el) return;
+    let tx=0, ty=0, cx=0, cy=0, af=null;
+    const lerp=(a,b,t)=>a+(b-a)*t;
+    const tick=()=>{
+      cx=lerp(cx,tx,.11); cy=lerp(cy,ty,.11);
+      el.style.transform=`rotateX(${cy}deg) rotateY(${cx}deg) scale(${tx?1.02:1})`;
+      if(Math.abs(cx-tx)>.01||Math.abs(cy-ty)>.01) af=requestAnimationFrame(tick); else af=null;
+    };
+    const mv=(e)=>{
+      const r=el.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width, y=(e.clientY-r.top)/r.height;
+      tx=(x-.5)*24*str; ty=(y-.5)*-20*str;
+      const h=el.querySelector(".mx-holo");
+      if(h){h.style.setProperty("--hx",`${x*100}%`);h.style.setProperty("--hy",`${y*100}%`);h.style.setProperty("--ha",`${x*120+45}deg`);}
+      if(!af) af=requestAnimationFrame(tick);
+    };
+    const lv=()=>{ tx=0;ty=0; if(!af) af=requestAnimationFrame(tick); };
+    el.addEventListener("mousemove",mv,{passive:true});
+    el.addEventListener("mouseleave",lv);
+    return()=>{ el.removeEventListener("mousemove",mv); el.removeEventListener("mouseleave",lv); if(af) cancelAnimationFrame(af); };
+  },[]);
+}
+
+// ── AnimHeader ───────────────────────────────────────────────────────────────
+function AnimHeader({title, sub, dark=false}) {
+  const ref=useRef(null);
+  useScrollIn(ref,"mxh-go",0,{t:.2});
+  return (
+    <div ref={ref} style={{textAlign:"center",marginBottom:56}}>
+      <div style={{width:40,height:1,margin:"0 auto 20px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)"}}/>
+      <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(34px,4.5vw,52px)",fontWeight:400,
+        color:dark?"#fff":"#1a1208",margin:"0 0 14px",lineHeight:1.1,overflow:"hidden"}}>
+        {title.split(" ").map((w,i)=>(
+          <span key={i} className="mxh-word" style={{marginRight:"0.26em"}}>{w}</span>
+        ))}
+      </h2>
+      <p className="mxh-sub" style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"9.5px",
+        letterSpacing:"0.3em",color:dark?"rgba(255,255,255,.35)":"#6b5c44",fontWeight:300}}>{sub}</p>
+    </div>
+  );
+}
+
+// ── CollectionCard ───────────────────────────────────────────────────────────
+function CollectionCard({eye,name,image,link}) {
+  const wrap=useRef(null), card=useRef(null);
+  const nav=useNavigate();
+  useScrollIn(wrap,"mxc-in");
+  useMagTilt(card);
+  return (
+    <div ref={wrap} className="mxc-wrap">
+      <div className="mx-scene" style={{aspectRatio:"3/4"}}>
+        <div ref={card} className="mx-card" onClick={()=>nav(link||"/shop")}
+          style={{width:"100%",height:"100%",background:"#0a0603",cursor:"pointer"}}>
+          <div className="mx-holo"/><div className="mx-edge"/>
+          {image&&<img src={image} alt={name}
+            style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",transition:"transform .7s cubic-bezier(.23,1,.32,1)"}}
+            onError={e=>{e.target.style.display="none"}}/>}
+          {/* Overlays */}
+          <div style={{position:"absolute",inset:0,zIndex:2,background:"linear-gradient(to top,rgba(4,2,0,.94) 0%,rgba(4,2,0,.28) 45%,transparent 75%)"}}/>
+          <div style={{position:"absolute",inset:0,zIndex:3,background:"linear-gradient(135deg,rgba(201,168,76,.04) 0%,transparent 50%,rgba(0,0,0,.18) 100%)"}}/>
+        
+          {/* Vertical eyebrow */}
+          <div style={{position:"absolute",left:20,top:"28%",zIndex:10,display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
+            <div style={{width:1,height:28,background:"rgba(201,168,76,.35)"}}/>
+            <span style={{fontSize:"12.5px",letterSpacing:"0.32em",color:"rgba(255,255,255,.4)",fontFamily:"'Cormorant Garamond',serif",writingMode:"vertical-rl",textOrientation:"sideways-right",fontWeight:500}}>{eye}</span>
+          </div>
+
+          {/* Bottom */}
+          <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:10,padding:"0 26px 30px"}}>
+            <div style={{width:28,height:1,background:"rgba(201,168,76,.55)",marginBottom:12}}/>
+            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(22px,2.4vw,30px)",fontWeight:400,color:"#fff",margin:"0 0 16px",lineHeight:1.1,textShadow:"0 4px 24px rgba(0,0,0,.6)"}}>{name}</h3>
+            <div style={{display:"flex",alignItems:"center",gap:8,fontSize:"9px",letterSpacing:"0.22em",color:"rgba(201,168,76,.8)",fontFamily:"'Cormorant Garamond',serif"}}>
+              EXPLORE
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TrendingCard ─────────────────────────────────────────────────────────────
+function TrendingCard({type,name,price,image,index}) {
+  const wrap=useRef(null),img=useRef(null);
+  const [wish,setWish]=useState(false),[hov,setHov]=useState(false);
+  useScrollIn(wrap,"mxt-in");
+  useMagTilt(img,.65);
+  return (
+    <div ref={wrap} className="mxt-wrap">
+      <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{cursor:"pointer"}}>
+        <div className="mx-scene" style={{marginBottom:18,aspectRatio:"3/4"}}>
+          <div ref={img} className={`mx-card ${hov?"mxt-hover":""}`} style={{width:"100%",height:"100%",background:"#e4e0d8"}}>
+            <div className="mx-holo"/>
+            {image&&<img className="mxt-img" src={image} alt={name} style={{position:"absolute",inset:0}} onError={e=>{e.target.style.display="none"}}/>}
+            <div style={{position:"absolute",inset:0,zIndex:2,background:"rgba(0,0,0,.1)",opacity:hov?1:0,transition:"opacity .3s"}}/>
+            <div style={{position:"absolute",top:0,left:0,right:0,height:"1.5px",zIndex:5,background:"linear-gradient(90deg,transparent,rgba(201,168,76,.55),transparent)"}}/>
+            <button onClick={e=>{e.stopPropagation();setWish(w=>!w)}}
+              style={{position:"absolute",top:13,right:13,zIndex:10,width:33,height:33,borderRadius:"50%",
+                background:"rgba(255,255,255,.92)",border:"none",cursor:"pointer",
+                display:"flex",alignItems:"center",justifyContent:"center",
+                color:wish?"#e07070":"#3a2e1e",boxShadow:"0 2px 10px rgba(0,0,0,.14)",transition:"all .22s"}}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill={wish?"#e07070":"none"} stroke="currentColor" strokeWidth="1.8">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+            </button>
+            <div className="mxt-qadd">ADD TO BAG</div>
+          </div>
+        </div>
+        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"9.5px",letterSpacing:"0.18em",color:"#6b5c44",marginBottom:5}}>{type}</div>
+        <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,color:"#1a1208",marginBottom:7,lineHeight:1.3}}>{name}</div>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <span style={{fontFamily:"'Playfair Display',serif",fontSize:15,color:"#1a1208"}}>{price}</span>
+          <div style={{flex:1,height:"0.5px",background:"linear-gradient(90deg,rgba(201,168,76,.4),transparent)"}}/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── TestCarousel ─────────────────────────────────────────────────────────────
+function TestCarousel({items}) {
+  const scrollRef=useRef(null),trackRef=useRef(null);
+  const [active,setActive]=useState(0),[ready,setReady]=useState(false);
+  const CW=360+20;
+
+  useEffect(()=>{
+    const obs=new IntersectionObserver(([e])=>{
+      if(e.isIntersecting&&!ready){
+        setReady(true);
+        trackRef.current?.querySelectorAll(".mxq-card").forEach((c,i)=>{
+          setTimeout(()=>c.classList.add("mxq-in"),i*90);
+        });
+      }
+    },{threshold:.08});
+    if(scrollRef.current) obs.observe(scrollRef.current);
+    return()=>obs.disconnect();
+  },[ready]);
+
+  const sync=(idx)=>{
+    const clamped=Math.max(0,Math.min(idx,items.length-1));
+    setActive(clamped);
+    trackRef.current?.querySelectorAll(".mxq-card").forEach((c,i)=>{
+      c.classList.remove("mxq-center","mxq-far");
+      if(i===clamped) c.classList.add("mxq-center");
+      else if(Math.abs(i-clamped)>=2) c.classList.add("mxq-far");
+    });
+  };
+  const goTo=(idx)=>{ scrollRef.current?.scrollTo({left:idx*CW,behavior:"smooth"}); sync(idx); };
+  const onScroll=()=>{ const idx=Math.round(scrollRef.current.scrollLeft/CW); sync(idx); };
+
+  // Auto-advance
+  useEffect(()=>{ const id=setInterval(()=>goTo((active+1)%items.length),4200); return()=>clearInterval(id); },[active,items.length]);
+
+  return (
+    <div style={{position:"relative"}}>
+      <div ref={scrollRef} className="mxq-scroll" onScroll={onScroll}>
+        <div ref={trackRef} className="mxq-track"
+          style={{paddingLeft:"max(48px,calc((100vw - 1100px)/2))",paddingRight:"max(48px,calc((100vw - 1100px)/2))"}}>
+          {items.map((item,i)=>(
+            <div key={item.name} className="mxq-card"
+              style={{background:"#fff",padding:"36px 30px",
+                border:"1px solid rgba(201,168,76,.13)",transitionDelay:`${i*.07}s`}}>
+              {/* Progress line — resets on active change via key */}
+              {i===active&&<div key={`p${active}`} className="mxq-progress"
+                ref={el=>{if(el) setTimeout(()=>{el.style.width="100%"},50)}}/>}
+              <div style={{position:"absolute",top:0,left:0,right:0,height:i===active?"2px":"1px",
+                background:i===active
+                  ?"linear-gradient(90deg,transparent,#c9a84c 30%,#e8c96e 50%,#c9a84c 70%,transparent)"
+                  :"linear-gradient(90deg,transparent,rgba(201,168,76,.18),transparent)",
+                transition:"height .3s,background .3s"}}/>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:68,lineHeight:.75,
+                color:"#c9a84c",opacity:i===active?.72:.2,marginBottom:22,userSelect:"none",
+                transition:"opacity .4s"}}>"</div>
+              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"13.5px",lineHeight:1.8,
+                color:"#3a2e1e",fontWeight:300,fontStyle:"italic",marginBottom:22,minHeight:96}}>
+                "{item.text}"</p>
+              <div style={{width:22,height:"0.5px",background:"rgba(201,168,76,.5)",marginBottom:14}}/>
+              <div style={{display:"flex",gap:2,marginBottom:11}}>
+                {"★★★★★".split("").map((s,si)=><span key={si} style={{color:"#c9a84c",fontSize:10}}>{s}</span>)}
+              </div>
+              <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:500,color:"#1a1208",marginBottom:3}}>{item.name}</div>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8.5px",letterSpacing:"0.18em",color:"#6b5c44",marginBottom:9}}>{item.loc}</div>
+              <div style={{display:"flex",alignItems:"center",gap:8}}>
+                <div style={{width:14,height:"0.5px",background:"rgba(201,168,76,.4)"}}/>
+                <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8px",letterSpacing:"0.18em",color:"#c9a84c"}}>{item.purchase}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Dots */}
+      <div style={{display:"flex",justifyContent:"center",gap:8,marginTop:28}}>
+        {items.map((_,i)=><button key={i} onClick={()=>goTo(i)} className={`mxq-dot ${i===active?"on":""}`}/>)}
+      </div>
+      {/* Arrows */}
+      {[{d:-1,s:"left"},{d:1,s:"right"}].map(({d,s})=>(
+        <button key={s} onClick={()=>goTo(Math.max(0,Math.min(active+d,items.length-1)))}
+          style={{position:"absolute",top:"38%",[s]:0,width:42,height:42,
+            background:"rgba(255,255,255,.96)",border:"1px solid rgba(201,168,76,.22)",
+            cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",
+            color:"#1a1208",boxShadow:"0 4px 16px rgba(0,0,0,.1)",transition:"all .22s",zIndex:10}}
+          onMouseEnter={e=>{e.currentTarget.style.background="#c9a84c";e.currentTarget.style.color="#fff";e.currentTarget.style.borderColor="#c9a84c"}}
+          onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.96)";e.currentTarget.style.color="#1a1208";e.currentTarget.style.borderColor="rgba(201,168,76,.22)"}}>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+            {d<0?<path d="M15 18l-6-6 6-6"/>:<path d="M9 18l6-6-6-6"/>}
+          </svg>
+        </button>
+      ))}
+    </div>
+  );
+}
+
 export default function HeroPage({ onAuth }) {
   const navigate = useNavigate();
 
@@ -115,7 +421,7 @@ export default function HeroPage({ onAuth }) {
 
   // Video background — falls back to default Pexels fabric video
   const heroVideoUrl = localStorage.getItem("maison_hero_video") ||
-    "https://videos.pexels.com/video-files/3141207/3141207-hd_1920_1080_25fps.mp4";
+    "https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4";
 
   const COLLECTION_CARDS = heroCards || [
     { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80&fit=crop", cls:"col-card-1", rev:"m-reveal-left",  d:"" },
@@ -152,7 +458,7 @@ export default function HeroPage({ onAuth }) {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: HERO_CSS }}/>
+      <style dangerouslySetInnerHTML={{ __html: HERO_CSS + MX_CSS }}/>
 
       {/* ════════════════════════════════════════════
           HERO
@@ -176,7 +482,7 @@ export default function HeroPage({ onAuth }) {
           {/* Free fashion/fabric videos from Pexels CDN — no API key needed */}
           <source src={heroVideoUrl} type="video/mp4"/>
           {/* Fallback video if primary fails */}
-          <source src="https://videos.pexels.com/video-files/4068498/4068498-hd_1920_1080_25fps.mp4" type="video/mp4"/>
+          <source src="https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4" type="video/mp4"/>
         </video>
 
         {/* Dark overlay so text stays readable */}
@@ -250,53 +556,29 @@ export default function HeroPage({ onAuth }) {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          CURATED COLLECTIONS
-      ════════════════════════════════════════════ */}
-      <section style={{background:"#f5f0eb",padding:"90px 48px"}}>
-        <SectionHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU"/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"20px",maxWidth:"1300px",margin:"0 auto"}}>
-          {COLLECTION_CARDS.map(({ cls="col-card-1", eye, name, rev="m-reveal", d="", image, link }) => (
-            <div key={name} className={`m-col-card ${rev} ${d}`} onClick={() => navigate(link)} style={{position:"relative",overflow:"hidden",cursor:"pointer",aspectRatio:"3/4"}}>
-              <div className={`m-col-bg ${cls}`} style={{position:"absolute",inset:0}}/>
-              {image && <img src={image} alt={name} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover"}} onError={e=>{e.target.style.display="none"}} />}
-              <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(12,7,0,0.75) 0%,rgba(12,7,0,0.1) 50%,transparent 100%)"}}/>
-              <div style={{position:"absolute",bottom:"28px",left:"28px",right:"28px"}}>
-                <span style={{fontSize:"8.5px",letterSpacing:"0.28em",color:"rgba(255,255,255,0.6)",fontFamily:"'Cormorant Garamond',Georgia,serif",display:"block",marginBottom:"6px"}}>{eye}</span>
-                <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"28px",fontWeight:500,color:"#fff",margin:0,textShadow:"0 2px 20px rgba(0,0,0,0.3)"}}>{name}</h3>
-              </div>
-              <div className="m-col-arrow" style={{position:"absolute",top:"28px",right:"28px",width:"36px",height:"36px",border:"1px solid rgba(255,255,255,0.3)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff"}}>
-                <ArrowUpRight/>
-              </div>
-            </div>
-          ))}
+      {/* ════════ CURATED COLLECTIONS — magnetic 3D + scroll stagger ═══════ */}
+      <section style={{background:"#0c0905",padding:"110px 48px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,.045) 0%,transparent 65%)",pointerEvents:"none"}}/>
+        <div style={{position:"relative",zIndex:1}}>
+          <AnimHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU" dark/>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"18px",maxWidth:"1260px",margin:"0 auto"}}>
+            {COLLECTION_CARDS.map(({eye,name,image,link},i)=>(
+              <CollectionCard key={name} eye={eye} name={name} image={image} link={link||"/shop"} index={i}/>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          TRENDING NOW
-      ════════════════════════════════════════════ */}
-      <section style={{background:"#eee9e2",padding:"90px 48px"}}>
-        <SectionHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"20px",maxWidth:"1300px",margin:"0 auto"}}>
+      {/* ════════ TRENDING NOW — cinematic scroll rise + tilt ══════════════ */}
+      <section style={{background:"#f5f0eb",padding:"110px 48px"}}>
+        <AnimHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"26px",maxWidth:"1260px",margin:"0 auto"}}>
           {[
-            { cls:"prod-1", type:"MEN · FORMALWEAR",       name:"Navy Pinstripe Blazer", price:"₹18,500", d:"m-d1", image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop" },
-            { cls:"prod-2", type:"WOMEN · OUTERWEAR",      name:"Belted Trench Coat",    price:"₹24,900", d:"m-d2", image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop" },
-            { cls:"prod-3", type:"ACCESSORIES · FOOTWEAR", name:"Chelsea Leather Boots", price:"₹12,750", d:"m-d3", image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop" },
-            { cls:"prod-4", type:"WOMEN · TOPS",           name:"Silk Satin Blouse",     price:"₹8,200",  d:"m-d4", image:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop" },
-          ].map(({ cls, type, name, price, d, image }) => (
-            <div key={name} className={`m-prod-card m-reveal ${d}`} style={{cursor:"pointer"}}>
-              <div style={{position:"relative",overflow:"hidden",aspectRatio:"3/4",marginBottom:"16px"}}>
-                <div className={`m-prod-bg ${cls}`} style={{position:"absolute",inset:0}}/>
-                {image && <img src={image} alt={name} style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",transition:"transform 0.5s ease"}} className="m-prod-img" />}
-                <button className="m-quick-add" style={{position:"absolute",bottom:0,left:0,right:0,padding:"14px",textAlign:"center",fontSize:"9.5px",letterSpacing:"0.2em",background:"#1a1208",color:"#fff",border:"none",width:"100%",fontFamily:"'Cormorant Garamond',Georgia,serif",cursor:"pointer"}}>QUICK ADD</button>
-                <button className="m-wishlist"   style={{position:"absolute",top:"14px",right:"14px",width:"32px",height:"32px",background:"rgba(255,255,255,0.9)",display:"flex",alignItems:"center",justifyContent:"center",border:"none",cursor:"pointer",color:"#3a2e1e"}}><HeartIcon/></button>
-              </div>
-              <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"10px",letterSpacing:"0.14em",color:"#6b5c44",fontWeight:300,marginBottom:"4px"}}>{type}</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"16px",fontWeight:400,color:"#1a1208",marginBottom:"6px"}}>{name}</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"16px",color:"#3a2e1e",fontWeight:400}}>{price}</div>
-            </div>
-          ))}
+            {type:"MEN · FORMALWEAR",       name:"Navy Pinstripe Blazer", price:"₹18,500", image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop"},
+            {type:"WOMEN · OUTERWEAR",      name:"Belted Trench Coat",    price:"₹24,900", image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop"},
+            {type:"ACCESSORIES · FOOTWEAR", name:"Chelsea Leather Boots", price:"₹12,750", image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"},
+            {type:"WOMEN · TOPS",           name:"Silk Satin Blouse",     price:"₹8,200",  image:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop"},
+          ].map((p,i)=><TrendingCard key={p.name} {...p} index={i}/>)}
         </div>
       </section>
 
@@ -335,29 +617,22 @@ export default function HeroPage({ onAuth }) {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          TESTIMONIALS
-      ════════════════════════════════════════════ */}
-      <section style={{background:"#f5f0eb",padding:"90px 48px"}}>
-        <SectionHeader title="What Our Clients Say" sub="STORIES FROM THE MAISON COMMUNITY"/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"18px",maxWidth:"1300px",margin:"0 auto"}}>
-          {[
-            { text:"The quality of the Silk Satin Blouse is absolutely stunning. It feels luxurious and the fit is perfect. MAISON has become my go-to for premium fashion.",                name:"Priya Mehta",      loc:"MUMBAI, MAHARASHTRA",   purchase:"SILK SATIN BLOUSE",      d:"m-d1" },
-            { text:"Bought the Structured Wool Blazer for a board meeting — received so many compliments! The craftsmanship is on par with international luxury brands.",                   name:"Arjun Kapoor",     loc:"DELHI, NCR",             purchase:"STRUCTURED WOOL BLAZER", d:"m-d2" },
-            { text:"Delivery was surprisingly fast and the packaging was beautiful — felt like receiving a gift. The Chelsea Boots are worth every rupee.",                                 name:"Kavya Reddy",      loc:"HYDERABAD, TELANGANA",   purchase:"CHELSEA LEATHER BOOTS",  d:"m-d3" },
-            { text:"Finally a brand that understands Indian aesthetics with a global sensibility. The Trench Coat drapes beautifully. Will definitely be ordering again.",                  name:"Rohan Singhania",  loc:"BENGALURU, KARNATAKA",   purchase:"BELTED TRENCH COAT",     d:"m-d4" },
-          ].map(({ text, name, loc, purchase, d }) => (
-            <div key={name} className={`m-test-card m-reveal ${d}`} style={{background:"#fff",padding:"32px 28px",border:"1px solid rgba(201,168,76,0.12)",position:"relative",overflow:"hidden"}}>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"42px",fontWeight:400,lineHeight:1,color:"#c9a84c",marginBottom:"18px",opacity:0.7}}>"</div>
-              <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"13.5px",lineHeight:1.75,color:"#3a2e1e",fontWeight:300,marginBottom:"20px",fontStyle:"italic"}}>"{text}"</p>
-              <div style={{width:"32px",height:"1px",marginBottom:"16px",background:"#c9a84c",opacity:0.5}}/>
-              <div style={{display:"flex",gap:"3px",marginBottom:"12px"}}>{"★★★★★".split("").map((s,i) => <span key={i} style={{color:"#c9a84c",fontSize:"12px"}}>{s}</span>)}</div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:"15px",fontWeight:500,color:"#1a1208",marginBottom:"3px"}}>{name}</div>
-              <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8.5px",letterSpacing:"0.18em",color:"#6b5c44",marginBottom:"8px"}}>{loc}</div>
-              <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8.5px",letterSpacing:"0.14em",color:"#c9a84c"}}>PURCHASED: {purchase}</div>
-            </div>
-          ))}
+      {/* ════════ TESTIMONIALS — depth snap carousel + auto-advance ══════════ */}
+      <section style={{background:"#0c0905",padding:"110px 0 90px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",
+          width:"65%",height:"100%",pointerEvents:"none",
+          background:"radial-gradient(ellipse 100% 55% at 50% 50%,rgba(201,168,76,.04) 0%,transparent 70%)"}}/>
+        <div style={{padding:"0 48px",position:"relative",zIndex:1}}>
+          <AnimHeader title="What Our Clients Say" sub="STORIES FROM THE MAISON COMMUNITY" dark/>
         </div>
+        <TestCarousel items={[
+          {text:"The quality of the Silk Satin Blouse is absolutely stunning. It feels luxurious and the fit is perfect. MAISON has become my go-to for premium fashion.",                name:"Priya Mehta",      loc:"MUMBAI, MAHARASHTRA",   purchase:"SILK SATIN BLOUSE"},
+          {text:"Bought the Structured Wool Blazer for a board meeting — received so many compliments! The craftsmanship is on par with international luxury brands.",                   name:"Arjun Kapoor",     loc:"DELHI, NCR",             purchase:"STRUCTURED WOOL BLAZER"},
+          {text:"Delivery was surprisingly fast and the packaging was beautiful — felt like receiving a gift. The Chelsea Boots are worth every rupee.",                                 name:"Kavya Reddy",      loc:"HYDERABAD, TELANGANA",   purchase:"CHELSEA LEATHER BOOTS"},
+          {text:"Finally a brand that understands Indian aesthetics with a global sensibility. The Trench Coat drapes beautifully. Will definitely be ordering again.",                  name:"Rohan Singhania",  loc:"BENGALURU, KARNATAKA",   purchase:"BELTED TRENCH COAT"},
+          {text:"Ordered the Cashmere Cardigan and it arrived in the most gorgeous packaging. The fabric is unbelievably soft. This is genuinely world-class Indian luxury.",            name:"Ananya Pillai",    loc:"CHENNAI, TAMIL NADU",    purchase:"CASHMERE WRAP CARDIGAN"},
+          {text:"The attention to detail in every stitch is remarkable. Wore the Double-Breasted Suit to a wedding — had strangers asking where I bought it. Worth every rupee.",        name:"Vikram Mehrotra",  loc:"PUNE, MAHARASHTRA",      purchase:"DOUBLE-BREASTED SUIT"},
+        ]}/>
       </section>
 
       {/* ════════════════════════════════════════════
