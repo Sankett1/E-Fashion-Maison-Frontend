@@ -421,7 +421,7 @@ export default function HeroPage({ onAuth }) {
 
   // Video background — falls back to default Pexels fabric video
   const heroVideoUrl = localStorage.getItem("maison_hero_video") ||
-    "https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4";
+    "https://res.cloudinary.com/dt2hohaty/video/upload/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4";
 
   const COLLECTION_CARDS = heroCards || [
     { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80&fit=crop", cls:"col-card-1", rev:"m-reveal-left",  d:"" },
@@ -482,11 +482,11 @@ export default function HeroPage({ onAuth }) {
           {/* Free fashion/fabric videos from Pexels CDN — no API key needed */}
           <source src={heroVideoUrl} type="video/mp4"/>
           {/* Fallback video if primary fails */}
-          <source src="https://res.cloudinary.com/dt2hohaty/video/upload/q_auto/f_auto/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4" type="video/mp4"/>
+          <source src="https://res.cloudinary.com/dt2hohaty/video/upload/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4" type="video/mp4"/>
         </video>
 
         {/* Dark overlay so text stays readable */}
-        <div style={{position:"absolute",inset:0,background:"rgba(5,3,1,0.55)",zIndex:1,pointerEvents:"none"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(5,3,1,0.55)",zIndex:1,pointerEvents:"none",opacity:0.110}}/>
         {/* Left-side text vignette */}
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to right,rgba(5,3,1,0.65) 0%,rgba(5,3,1,0.2) 50%,transparent 100%)",zIndex:1,pointerEvents:"none"}}/>
         {/* Bottom fade */}
