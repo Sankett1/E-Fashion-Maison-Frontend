@@ -530,31 +530,6 @@ export default function HeroPage({ onAuth }) {
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════
-          FEATURES BAR
-      ════════════════════════════════════════════ */}
-      <section style={{background:"#ede5d6",borderBottom:"1px solid rgba(201,168,76,0.2)",borderTop:"1px solid rgba(201,168,76,0.2)",padding:"36px 48px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(6,1fr)",gap:"24px",maxWidth:"1300px",margin:"0 auto"}}>
-          {[
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,     title:"FREE SHIPPING",    sub:"On orders above ₹2,000", d:"m-d1" },
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>,                                                                                           title:"EASY RETURNS",     sub:"30-day return policy",   d:"m-d2" },
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                                                                                                                          title:"SECURE PAYMENT",   sub:"Razorpay protected",     d:"m-d3" },
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,         title:"24/7 SUPPORT",     sub:"Dedicated care team",   d:"m-d4" },
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,                                                                                   title:"EMI AVAILABLE",    sub:"No-cost EMI options",    d:"m-d5" },
-            { icon:<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,                                       title:"PREMIUM PACKAGING", sub:"Gift-ready unboxing",   d:"m-d6" },
-          ].map(({ icon, title, sub, d }) => (
-            <div key={title} className={`m-feat-item m-reveal ${d}`} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"12px",textAlign:"center"}}>
-              <div className="m-feat-icon" style={{width:"52px",height:"52px",borderRadius:"50%",border:"1px solid rgba(201,168,76,0.35)",display:"flex",alignItems:"center",justifyContent:"center",color:"#c9a84c",background:"rgba(201,168,76,0.06)"}}>
-                {icon}
-              </div>
-              <div>
-                <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"10px",letterSpacing:"0.2em",fontWeight:500,color:"#3a2e1e"}}>{title}</div>
-                <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"11px",color:"#6b5c44",fontWeight:300,lineHeight:1.5}}>{sub}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* ════════ CURATED COLLECTIONS — magnetic 3D + scroll stagger ═══════ */}
       <section style={{background:"#0c0905",padding:"110px 48px",position:"relative",overflow:"hidden"}}>
@@ -635,10 +610,11 @@ export default function HeroPage({ onAuth }) {
         ]}/>
       </section>
 
+
       {/* ════════════════════════════════════════════
           NEWSLETTER
       ════════════════════════════════════════════ */}
-      <section style={{background:"#1a1208",padding:"100px 48px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"#1a1208",padding:"56px 48px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 60% 50% at 50% 50%,rgba(201,168,76,0.06) 0%,transparent 65%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",zIndex:1}}>
           <div className="m-reveal" style={{width:"48px",height:"1px",margin:"0 auto",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)"}}/>
@@ -666,6 +642,87 @@ export default function HeroPage({ onAuth }) {
               {subState === "success" ? "✓  SUBSCRIBED" : <><span>SUBSCRIBE</span><ArrowRight/></>}
             </button>
           </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          TRUST BAR — below newsletter
+      ════════════════════════════════════════════ */}
+      <section style={{
+        background:"#1a1208",
+        borderTop:"1px solid rgba(201,168,76,0.12)",
+        padding:"36px 48px",
+        position:"relative",
+        overflow:"hidden",
+      }}>
+        <div style={{position:"absolute",inset:0,pointerEvents:"none",
+          background:"radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,0.05) 0%,transparent 70%)"}}/>
+        <div style={{
+          display:"grid",
+          gridTemplateColumns:"repeat(6,1fr)",
+          gap:"20px",
+          maxWidth:"1300px",
+          margin:"0 auto",
+          position:"relative",
+          zIndex:1,
+        }}>
+          {[
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>, title:"FREE SHIPPING",    sub:"On orders above ₹2,000" },
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>,                                                                                                title:"EASY RETURNS",     sub:"30-day return policy"   },
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,                                                                                                                           title:"SECURE PAYMENT",   sub:"Razorpay protected"     },
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,          title:"24/7 SUPPORT",     sub:"Dedicated care team"    },
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,                                                                                    title:"EMI AVAILABLE",    sub:"No-cost EMI options"    },
+            { icon:<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,                                        title:"PREMIUM PACKAGING", sub:"Gift-ready unboxing"   },
+          ].map(({ icon, title, sub }, i) => (
+            <div key={title} style={{
+              display:"flex", flexDirection:"column", alignItems:"center",
+              textAlign:"center", gap:14, padding:"4px",
+              opacity:0,
+              animation:`trustIn 0.7s cubic-bezier(0.23,1,0.32,1) ${i * 0.08}s forwards`,
+            }}>
+              <style>{`@keyframes trustIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}`}</style>
+              <div
+                style={{
+                  width:52, height:52, borderRadius:"50%",
+                  border:"1px solid rgba(201,168,76,0.3)",
+                  background:"rgba(201,168,76,0.06)",
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  color:"#c9a84c",
+                  transition:"all 0.3s ease",
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = "rgba(201,168,76,0.14)";
+                  e.currentTarget.style.borderColor = "#c9a84c";
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = "0 10px 28px rgba(201,168,76,0.22)";
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = "rgba(201,168,76,0.06)";
+                  e.currentTarget.style.borderColor = "rgba(201,168,76,0.3)";
+                  e.currentTarget.style.transform = "";
+                  e.currentTarget.style.boxShadow = "";
+                }}
+              >
+                {icon}
+              </div>
+              <div>
+                <div style={{
+                  fontFamily:"'Cormorant Garamond',Georgia,serif",
+                  fontSize:"10px", letterSpacing:"0.22em", fontWeight:600,
+                  color:"rgba(255,255,255,0.88)", marginBottom:5,
+                }}>
+                  {title}
+                </div>
+                <div style={{
+                  fontFamily:"'Cormorant Garamond',Georgia,serif",
+                  fontSize:"12px", color:"rgba(255,255,255,0.35)",
+                  fontWeight:300, lineHeight:1.55,
+                }}>
+                  {sub}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
