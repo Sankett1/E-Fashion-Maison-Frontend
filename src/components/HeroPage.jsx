@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "./shared";
+import { getProducts } from "../api/productApi";
 
 // ── Hero-only keyframes (h* prefix avoids conflict with shared.jsx) ───────────
 const HERO_CSS = `
@@ -104,6 +105,36 @@ function FooterCol({ title, links }) {
 // 3D ANIMATION SYSTEM
 // ══════════════════════════════════════════════════════════════════════════════
 const MX_CSS = `
+  /* ── Scroll arrow ──────────────────────────────────────────────────── */
+  @keyframes arrowBounce{
+    0%,100%{transform:translateX(-50%) translateY(0px)}
+    50%{transform:translateX(-50%) translateY(8px)}
+  }
+  @keyframes htSpin{to{transform:rotate(360deg)}}
+
+  /* ── Trending horizontal scroll strip ─────────────────────────────── */
+  .ht-scroll{
+    overflow-x:auto;overflow-y:visible;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;-ms-overflow-style:none;
+    cursor:grab;padding:16px 0 48px;
+  }
+  .ht-scroll:active{cursor:grabbing}
+  .ht-scroll::-webkit-scrollbar{display:none}
+  .ht-track{display:flex;gap:22px;padding:0 48px;width:max-content}
+  .ht-card{flex:0 0 265px;opacity:0;
+    transform:translateY(60px) rotateX(20deg) scale(.93);
+    transition:opacity .85s cubic-bezier(.23,1,.32,1),transform .85s cubic-bezier(.23,1,.32,1)}
+  .ht-card.ht-in{opacity:1;transform:none}
+  .ht-card:nth-child(1){transition-delay:0s}
+  .ht-card:nth-child(2){transition-delay:.08s}
+  .ht-card:nth-child(3){transition-delay:.16s}
+  .ht-card:nth-child(4){transition-delay:.24s}
+  .ht-card:nth-child(5){transition-delay:.32s}
+  .ht-card:nth-child(6){transition-delay:.40s}
+  .ht-card:nth-child(7){transition-delay:.48s}
+  .ht-card:nth-child(8){transition-delay:.56s}
+
   .mx-scene{perspective:1400px;perspective-origin:50% 35%}
   .mx-card{transform-style:preserve-3d;will-change:transform;transition:box-shadow .4s ease;position:relative;overflow:hidden}
   .mx-card:hover{box-shadow:0 48px 96px rgba(0,0,0,.55),0 0 0 1px rgba(201,168,76,.22),inset 0 1px 0 rgba(255,255,255,.06)}
@@ -278,18 +309,19 @@ function CollectionCard({eye,name,image,link}) {
 }
 
 // ── TrendingCard ─────────────────────────────────────────────────────────────
-function TrendingCard({type,name,price,image,index}) {
+function TrendingCard({type,name,price,image,index,tag,originalPrice,productId,onClick}) {
   const wrap=useRef(null),img=useRef(null);
   const [wish,setWish]=useState(false),[hov,setHov]=useState(false);
   useScrollIn(wrap,"mxt-in");
   useMagTilt(img,.65);
   return (
-    <div ref={wrap} className="mxt-wrap">
+    <div ref={wrap} className="mxt-wrap" onClick={onClick} style={{cursor:onClick?"pointer":"default"}}>
       <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{cursor:"pointer"}}>
         <div className="mx-scene" style={{marginBottom:18,aspectRatio:"3/4"}}>
           <div ref={img} className={`mx-card ${hov?"mxt-hover":""}`} style={{width:"100%",height:"100%",background:"#e4e0d8"}}>
             <div className="mx-holo"/>
             {image&&<img className="mxt-img" src={image} alt={name} style={{position:"absolute",inset:0}} onError={e=>{e.target.style.display="none"}}/>}
+            {tag&&<div style={{position:"absolute",top:12,left:12,zIndex:10,padding:"4px 9px",fontSize:"8px",letterSpacing:"0.2em",fontWeight:600,background:tag==="SALE"?"#e07070":"#c9a84c",color:"#0f0c08"}}>{tag}</div>}
             <div style={{position:"absolute",inset:0,zIndex:2,background:"rgba(0,0,0,.1)",opacity:hov?1:0,transition:"opacity .3s"}}/>
             <div style={{position:"absolute",top:0,left:0,right:0,height:"1.5px",zIndex:5,background:"linear-gradient(90deg,transparent,rgba(201,168,76,.55),transparent)"}}/>
             <button onClick={e=>{e.stopPropagation();setWish(w=>!w)}}
@@ -408,6 +440,156 @@ function TestCarousel({items}) {
   );
 }
 
+
+// ── Fallback data for strip ───────────────────────────────────────────────────
+const HT_FALLBACK = [
+  {_id:"ht1",name:"Navy Pinstripe Blazer",   category:"Men",         subCategory:"Suits",      price:18500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop"}]},
+  {_id:"ht2",name:"Belted Trench Coat",      category:"Women",       subCategory:"Outerwear",  price:24900, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop"}]},
+  {_id:"ht3",name:"Chelsea Leather Boots",   category:"Accessories", subCategory:"Shoes",      price:12750, originalPrice:18000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"}]},
+  {_id:"ht4",name:"Silk Satin Blouse",       category:"Women",       subCategory:"Tops",       price:8200,  tag:null,   images:[{url:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop"}]},
+  {_id:"ht5",name:"Shawl Collar Overcoat",   category:"Men",         subCategory:"Outerwear",  price:34500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1520975916090-8105d898b5a1?w=600&q=80&fit=crop"}]},
+  {_id:"ht6",name:"Cashmere Wrap Cardigan",  category:"Women",       subCategory:"Knitwear",   price:19500, originalPrice:26000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80&fit=crop"}]},
+  {_id:"ht7",name:"Leather Crossbody Bag",   category:"Accessories", subCategory:"Bags",       price:16800, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&fit=crop"}]},
+  {_id:"ht8",name:"Double-Breasted Suit",    category:"Men",         subCategory:"Suits",      price:48000, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80&fit=crop"}]},
+];
+
+// ── HomeTrendingStrip — horizontal scroll, wheel-driven, API-fetched ──────────
+function HomeTrendingStrip() {
+  const [items,  setItems]   = useState([]);
+  const [loading,setLoading] = useState(true);
+  const scrollEl = useRef(null);
+  const trackEl  = useRef(null);
+  const navigate = useNavigate();
+
+  // Fetch from API (8 newest), fall back to static
+  useEffect(() => {
+    getProducts({ sort:"-createdAt", limit:8, page:1 })
+      .then(d => { const p=d.products||[]; setItems(p.length ? p : HT_FALLBACK); })
+      .catch(() => setItems(HT_FALLBACK))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Mouse-wheel → horizontal scroll
+  useEffect(() => {
+    const el = scrollEl.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // native horizontal — leave alone
+      e.preventDefault();
+      el.scrollBy({ left: e.deltaY * 2.4, behavior:"auto" });
+    };
+    el.addEventListener("wheel", onWheel, { passive:false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [loading]);
+
+  // Click-drag scroll
+  useEffect(() => {
+    const el = scrollEl.current;
+    if (!el) return;
+    let down=false, startX=0, sl=0;
+    const md=(e)=>{ down=true; startX=e.pageX-el.offsetLeft; sl=el.scrollLeft; };
+    const mu=()=>{ down=false; };
+    const mm=(e)=>{ if(!down) return; e.preventDefault(); el.scrollLeft=sl-(e.pageX-el.offsetLeft-startX)*1.4; };
+    el.addEventListener("mousedown",md);
+    window.addEventListener("mouseup",mu);
+    el.addEventListener("mousemove",mm);
+    return ()=>{ el.removeEventListener("mousedown",md); window.removeEventListener("mouseup",mu); el.removeEventListener("mousemove",mm); };
+  }, [loading]);
+
+  // Scroll-reveal: stagger cards in when strip enters viewport
+  useEffect(() => {
+    if (loading || !trackEl.current) return;
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        trackEl.current?.querySelectorAll(".ht-card").forEach((c,i) => {
+          setTimeout(() => c.classList.add("ht-in"), i*80);
+        });
+        obs.disconnect();
+      }
+    }, { threshold:0.1 });
+    obs.observe(trackEl.current);
+    return () => obs.disconnect();
+  }, [loading]);
+
+  if (loading) return (
+    <div style={{display:"flex",justifyContent:"center",alignItems:"center",
+      gap:12,padding:"60px 0"}}>
+      <div style={{width:26,height:26,border:"2px solid #c9a84c",borderTopColor:"transparent",
+        borderRadius:"50%",animation:"htSpin .75s linear infinite"}}/>
+      <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:12,
+        letterSpacing:"0.18em",color:"#6b5c44"}}>LOADING…</span>
+    </div>
+  );
+
+  return (
+    <div style={{position:"relative"}}>
+      {/* Left / right fade edges */}
+      <div style={{position:"absolute",left:0,top:0,bottom:40,width:80,zIndex:10,pointerEvents:"none",
+        background:"linear-gradient(to right,#f5f0eb,transparent)"}}/>
+      <div style={{position:"absolute",right:0,top:0,bottom:40,width:80,zIndex:10,pointerEvents:"none",
+        background:"linear-gradient(to left,#f5f0eb,transparent)"}}/>
+
+      {/* Scroll hint */}
+      <div style={{textAlign:"center",marginBottom:16,
+        fontFamily:"'Cormorant Garamond',serif",fontSize:"9px",
+        letterSpacing:"0.24em",color:"rgba(107,92,68,0.45)",
+        display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+        <svg width="28" height="8" viewBox="0 0 28 8" fill="none">
+          <path d="M1 4h22M18 1l4 3-4 3" stroke="rgba(201,168,76,0.45)" strokeWidth="1.2" strokeLinecap="round"/>
+        </svg>
+        SCROLL TO EXPLORE
+        <svg width="28" height="8" viewBox="0 0 28 8" fill="none">
+          <path d="M27 4H5M10 1L6 4l4 3" stroke="rgba(201,168,76,0.45)" strokeWidth="1.2" strokeLinecap="round"/>
+        </svg>
+      </div>
+
+      {/* Scroll container */}
+      <div ref={scrollEl} className="ht-scroll">
+        <div ref={trackEl} className="ht-track">
+          {items.map((p,i) => (
+            <div key={p._id} className="ht-card">
+              <TrendingCard
+                productId={p._id}
+                type={`${p.category?.toUpperCase()}${p.subCategory?" · "+p.subCategory.toUpperCase():""}`}
+                name={p.name}
+                price={"₹"+Number(p.price).toLocaleString("en-IN")}
+                image={p.images?.[0]?.url}
+                tag={p.tag}
+                originalPrice={p.originalPrice}
+                index={i}
+                onClick={()=>navigate(`/shop/${p._id}`)}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* View All CTA — centred below strip */}
+      <div style={{textAlign:"center",marginTop:8}}>
+        <button
+          onClick={()=>navigate("/trending")}
+          style={{
+            fontFamily:"'Cormorant Garamond',Georgia,serif",
+            fontSize:"10px",letterSpacing:"0.24em",
+            color:"#c9a84c",background:"none",
+            border:"1px solid rgba(201,168,76,0.4)",
+            padding:"11px 28px",cursor:"pointer",
+            display:"inline-flex",alignItems:"center",gap:10,
+            transition:"all 0.25s",
+          }}
+          onMouseEnter={e=>{e.currentTarget.style.background="rgba(201,168,76,0.08)";e.currentTarget.style.borderColor="#c9a84c";}}
+          onMouseLeave={e=>{e.currentTarget.style.background="none";e.currentTarget.style.borderColor="rgba(201,168,76,0.4)";}}>
+          VIEW ALL TRENDING
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function HeroPage({ onAuth }) {
   const navigate = useNavigate();
 
@@ -430,6 +612,7 @@ export default function HeroPage({ onAuth }) {
   ];
   const heroContentRef = useRef(null);
   const heroBeamRef    = useRef(null);
+  const trendingRef    = useRef(null);
   const [email, setEmail]       = useState("");
   const [subState, setSubState] = useState("idle");
 
@@ -532,10 +715,10 @@ export default function HeroPage({ onAuth }) {
 
 
       {/* ════════ CURATED COLLECTIONS — magnetic 3D + scroll stagger ═══════ */}
-      <section style={{background:"#0c0905",padding:"110px 48px",position:"relative",overflow:"hidden"}}>
+      <section style={{background:"#f5f0eb",padding:"110px 48px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,.045) 0%,transparent 65%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",zIndex:1}}>
-          <AnimHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU" dark/>
+          <AnimHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU"/>
           <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"18px",maxWidth:"1260px",margin:"0 auto"}}>
             {COLLECTION_CARDS.map(({eye,name,image,link},i)=>(
               <CollectionCard key={name} eye={eye} name={name} image={image} link={link||"/shop"} index={i}/>
@@ -544,17 +727,21 @@ export default function HeroPage({ onAuth }) {
         </div>
       </section>
 
-      {/* ════════ TRENDING NOW — cinematic scroll rise + tilt ══════════════ */}
-      <section style={{background:"#f5f0eb",padding:"110px 48px"}}>
-        <AnimHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:"26px",maxWidth:"1260px",margin:"0 auto"}}>
-          {[
-            {type:"MEN · FORMALWEAR",       name:"Navy Pinstripe Blazer", price:"₹18,500", image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop"},
-            {type:"WOMEN · OUTERWEAR",      name:"Belted Trench Coat",    price:"₹24,900", image:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop"},
-            {type:"ACCESSORIES · FOOTWEAR", name:"Chelsea Leather Boots", price:"₹12,750", image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"},
-            {type:"WOMEN · TOPS",           name:"Silk Satin Blouse",     price:"₹8,200",  image:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop"},
-          ].map((p,i)=><TrendingCard key={p.name} {...p} index={i}/>)}
+      {/* ════════ TRENDING NOW — centered header + horizontal scroll ════════ */}
+      <section ref={trendingRef} style={{
+        background:"#f5f0eb",
+        padding:"80px 0 70px",
+        position:"relative",
+        overflow:"hidden",
+      }}>
+        
+        {/* ── Centered header ── */}
+        <div style={{padding:"0 48px"}}>
+          <AnimHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
         </div>
+
+        {/* ── Horizontal scroll strip ── */}
+        <HomeTrendingStrip/>
       </section>
 
       {/* ════════════════════════════════════════════

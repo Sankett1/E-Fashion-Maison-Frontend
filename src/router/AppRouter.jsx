@@ -22,6 +22,9 @@ import ReturnsPage        from "../pages/ReturnsPage";
 import NotFoundPage       from "../pages/NotFoundPage";
 
 // Admin
+import TrendingPage   from "../pages/TrendingPage";
+
+// Admin
 import AdminDashboard  from "../pages/admin/AdminDashboard";
 import AdminProducts   from "../pages/admin/AdminProducts";
 import AdminOrders     from "../pages/admin/AdminOrders";
@@ -130,7 +133,7 @@ const router = createBrowserRouter([
 
   // NEW IN clean URLs
   { path: "/new-arrivals",  element: <WithNavbar Page={ShopPage} /> },
-  { path: "/trending",      element: <WithNavbar Page={ShopPage} /> },
+  { path: "/trending",      element: <WithNavbar Page={TrendingPage} /> },
   { path: "/back-in-stock", element: <WithNavbar Page={ShopPage} /> },
   { path: "/editors-picks", element: <WithNavbar Page={ShopPage} /> },
 
