@@ -41,3 +41,16 @@ export const getOrderStats = async () => {
   const { data } = await api.get("/orders/admin/stats");
   return data;
 };
+
+// ── Razorpay: create Razorpay order (server-side) ────────────────────────────
+export const createRazorpayOrder = async (orderId) => {
+  const { data } = await api.post("/orders/razorpay/create", { orderId });
+  return data; // { razorpayOrderId, amount, currency, razorpayKeyId, ... }
+};
+
+// ── Razorpay: verify payment signature (server-side) ─────────────────────────
+export const verifyRazorpayPayment = async (payload) => {
+  const { data } = await api.post("/orders/razorpay/verify", payload);
+  return data; // { success, order }
+};
+

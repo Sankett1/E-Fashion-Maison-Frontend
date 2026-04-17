@@ -1,5 +1,21 @@
 import { useState, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
+import { useCart } from "../context/CartContext";
+import { createOrder, createRazorpayOrder, verifyRazorpayPayment } from "../api/orderApi";
+
+// ── Helper: load Razorpay script on demand ────────────────────────────────────
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (document.getElementById("razorpay-sdk")) { resolve(true); return; }
+    const script = document.createElement("script");
+    script.id  = "razorpay-sdk";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.onload  = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+}
 
 const STEPS = ["Delivery", "Payment", "Confirmation"];
 
@@ -56,20 +72,26 @@ function InputField({ label, placeholder, value, onChange, type="text", error })
   );
 }
 
-const ORDER_ITEMS = [
-  { name:"Silk Satin Blouse", size:"M", qty:1, price:8200, image:"https://images.unsplash.com/photo-1485968579580-ee2a6b1e450f?w=200&q=80&fit=crop", grad:"linear-gradient(160deg,#f0ebe0 0%,#e0d8c8 50%,#c8bca8 100%)" },
-  { name:"Belted Trench Coat", size:"S", qty:1, price:24900, image:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=200&q=80&fit=crop", grad:"linear-gradient(160deg,#c8b080 0%,#a89060 50%,#806840 100%)" },
-];
-
 export default function CheckoutPage({ onAuth }) {
-  const [step, setStep] = useState(0);
-  const [form, setForm] = useState({ firstName:"", lastName:"", email:"", phone:"", address:"", city:"", state:"", pin:"", payMethod:"card", cardNum:"", expiry:"", cvv:"" });
-  const [errors, setErrors] = useState({});
+  const { cart, clearCart, cartTotal } = useCart();
+  const navigate = useNavigate();
 
-  const subtotal = ORDER_ITEMS.reduce((s, i) => s + i.price * i.qty, 0);
-  const total = subtotal;
+  const [step, setStep]         = useState(0);
+  const [form, setForm]         = useState({ firstName:"", lastName:"", email:"", phone:"", address:"", city:"", state:"", pin:"" });
+  const [errors, setErrors]     = useState({});
+  const [placing, setPlacing]   = useState(false);
+  const [orderNum, setOrderNum] = useState("");
+  const [apiError, setApiError] = useState("");
+  const [payMethod, setPayMethod] = useState("card");
 
-  const set = key => e => { setForm({ ...form, [key]: e.target.value }); if (errors[key]) setErrors({ ...errors, [key]:"" }); };
+  const subtotal       = cartTotal;
+  const shippingCharge = subtotal >= 2000 ? 0 : 199;
+  const total          = subtotal + shippingCharge;
+
+  const set = key => e => {
+    setForm({ ...form, [key]: e.target.value });
+    if (errors[key]) setErrors({ ...errors, [key]:"" });
+  };
 
   const validateStep0 = () => {
     const errs = {};
@@ -78,18 +100,139 @@ export default function CheckoutPage({ onAuth }) {
     if (!form.phone.match(/^\d{10}$/)) errs.phone = "Valid 10-digit number required";
     if (!form.address.trim()) errs.address = "Required";
     if (!form.city.trim()) errs.city = "Required";
+    if (!form.state.trim()) errs.state = "Required";
     if (!form.pin.match(/^\d{6}$/)) errs.pin = "Valid 6-digit PIN required";
     return errs;
+  };
+
+  // ── Full Razorpay payment flow ─────────────────────────────────────────────
+  const handlePlaceOrder = async () => {
+    setApiError("");
+    setPlacing(true);
+    try {
+      // Step 1: load Razorpay JS SDK
+      const loaded = await loadRazorpayScript();
+      if (!loaded) throw new Error("Failed to load Razorpay SDK. Check your internet connection.");
+
+      // Step 2: create a pending order in MongoDB
+      const orderPayload = {
+        items: cart.map(i => ({ product: i.id, size: i.size, qty: i.qty })),
+        shippingAddress: {
+          firstName: form.firstName,
+          lastName:  form.lastName,
+          email:     form.email,
+          phone:     form.phone,
+          address:   form.address,
+          city:      form.city,
+          state:     form.state,
+          pincode:   form.pin,
+        },
+        paymentMethod: "razorpay",
+      };
+      const { order } = await createOrder(orderPayload);
+
+      // Step 3: get Razorpay order ID from our server
+      const rzpData = await createRazorpayOrder(order._id);
+
+      // Step 4: open Razorpay checkout modal and wait for payment
+      await new Promise((resolve, reject) => {
+        // Map our UI method key to Razorpay's method identifiers
+        const rzpMethodMap = { card:"card", upi:"upi", netbanking:"netbanking", wallet:"wallet", emi:"emi" };
+        const selectedRzpMethod = rzpMethodMap[payMethod] || "card";
+
+        const options = {
+          key:         rzpData.razorpayKeyId,
+          amount:      rzpData.amount,
+          currency:    rzpData.currency,
+          name:        "E-Fashion Maison",
+          description: `Order ${rzpData.orderNumber}`,
+          order_id:    rzpData.razorpayOrderId,
+          prefill: {
+            name:    rzpData.customerName,
+            email:   rzpData.customerEmail,
+            contact: rzpData.customerPhone,
+            method:  selectedRzpMethod,
+          },
+          config: {
+            display: {
+              blocks: {
+                preferred: {
+                  name: "Preferred Payment",
+                  instruments: [{ method: selectedRzpMethod }],
+                },
+              },
+              sequence: ["block.preferred"],
+              preferences: { show_default_blocks: true },
+            },
+          },
+          theme: { color: "#C9A84C" },
+          modal: { ondismiss: () => reject(new Error("Payment cancelled by user")) },
+          handler: async (response) => {
+            try {
+              // Step 5: verify HMAC signature on our server
+              const result = await verifyRazorpayPayment({
+                orderId:             order._id,
+                razorpay_order_id:   response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+              });
+              if (result.success) { setOrderNum(result.order.orderNumber); resolve(); }
+              else reject(new Error("Payment verification failed"));
+            } catch (err) { reject(err); }
+          },
+        };
+
+        const rzp = new window.Razorpay(options);
+        rzp.on("payment.failed", (resp) => reject(new Error(resp.error?.description || "Payment failed")));
+        rzp.open();
+      });
+
+      clearCart();
+      setStep(2);
+      window.scrollTo(0, 0);
+
+    } catch (err) {
+      if (err.message !== "Payment cancelled by user") {
+        const msg = err.response?.data?.message || err.message || "Something went wrong. Please try again.";
+        setApiError(msg);
+      }
+    } finally {
+      setPlacing(false);
+    }
   };
 
   const handleNext = () => {
     if (step === 0) {
       const errs = validateStep0();
       if (Object.keys(errs).length) { setErrors(errs); return; }
+      setStep(1);
+      window.scrollTo(0, 0);
+    } else if (step === 1) {
+      handlePlaceOrder();
     }
-    setStep(s => s + 1);
-    window.scrollTo(0, 0);
   };
+
+  // If the cart is empty and we're not on the confirmation step, redirect to cart
+  if (cart.length === 0 && step !== 2) {
+    return (
+      <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center" }}>
+        <div style={{ textAlign:"center" }}>
+          <div style={{ width:"80px", height:"80px", margin:"0 auto 28px", border:"1px solid rgba(201,168,76,0.3)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+          </div>
+          <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>
+            Your bag is empty
+          </h2>
+          <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", color:"#6b5c44", marginBottom:"28px" }}>
+            Add items to your bag before checking out
+          </p>
+          <button className="m-btn-gold" onClick={() => navigate("/shop")}>EXPLORE COLLECTION</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -103,7 +246,7 @@ export default function CheckoutPage({ onAuth }) {
           <StepIndicator current={step} />
 
           <div style={{ display:"grid", gridTemplateColumns:"1fr 360px", gap:"48px", alignItems:"start" }}>
-            {/* Main content */}
+            {/* ── Main Panel ─────────────────────────────────────────────── */}
             <div style={{ background:"#fff", padding:"40px", border:"1px solid rgba(201,168,76,0.12)" }}>
 
               {/* STEP 0 — Delivery */}
@@ -123,7 +266,7 @@ export default function CheckoutPage({ onAuth }) {
                   </div>
                   <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"16px" }}>
                     <InputField label="City" placeholder="Mumbai" value={form.city} onChange={set("city")} error={errors.city}/>
-                    <InputField label="State" placeholder="Maharashtra" value={form.state} onChange={set("state")}/>
+                    <InputField label="State" placeholder="Maharashtra" value={form.state} onChange={set("state")} error={errors.state}/>
                     <InputField label="PIN Code" placeholder="400001" value={form.pin} onChange={set("pin")} error={errors.pin}/>
                   </div>
                 </>
@@ -132,36 +275,103 @@ export default function CheckoutPage({ onAuth }) {
               {/* STEP 1 — Payment */}
               {step === 1 && (
                 <>
-                  <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"32px" }}>Payment Method</h2>
-                  {/* Method tabs */}
-                  <div style={{ display:"flex", gap:"12px", marginBottom:"28px" }}>
-                    {[["card","💳 Card"],["upi","₹ UPI"],["netbanking","🏦 Net Banking"]].map(([id, label]) => (
-                      <button key={id} onClick={() => setForm({ ...form, payMethod:id })} style={{
-                        flex:1, padding:"14px 0", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px",
-                        border: form.payMethod===id ? `2px solid ${C.gold}` : "1px solid rgba(201,168,76,0.25)",
-                        background: form.payMethod===id ? "rgba(201,168,76,0.06)" : "#fff",
-                        color: form.payMethod===id ? C.gold : "#6b5c44", cursor:"pointer", transition:"all 0.2s",
-                      }}>{label}</button>
-                    ))}
+                  <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"8px" }}>Choose Payment Method</h2>
+                  <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44", marginBottom:"28px", lineHeight:1.6 }}>
+                    Select your preferred payment method. You'll be securely redirected to
+                    complete the transaction via Razorpay.
+                  </p>
+
+                  {/* Payment method cards */}
+                  <div style={{ display:"flex", flexDirection:"column", gap:"12px", marginBottom:"28px" }}>
+                    {[
+                      { key:"card",       icon:"💳", title:"Credit / Debit Card",  desc:"Visa, Mastercard, Rupay & more" },
+                      { key:"upi",        icon:"₹",  title:"UPI",                  desc:"Google Pay, PhonePe, Paytm & BHIM" },
+                      { key:"netbanking", icon:"🏦", title:"Net Banking",           desc:"All major Indian banks supported" },
+                      { key:"wallet",     icon:"👜", title:"Wallets",               desc:"Paytm, Mobikwik, Freecharge & more" },
+                      { key:"emi",        icon:"📦", title:"EMI",                   desc:"No-cost & standard EMI on cards" },
+                    ].map(m => {
+                      const sel = payMethod === m.key;
+                      return (
+                        <button
+                          key={m.key}
+                          onClick={() => setPayMethod(m.key)}
+                          style={{
+                            display:"flex", alignItems:"center", gap:"18px",
+                            padding:"18px 22px", cursor:"pointer", textAlign:"left",
+                            border: sel ? `2px solid ${C.gold}` : "1px solid rgba(201,168,76,0.2)",
+                            background: sel ? "rgba(201,168,76,0.06)" : "#fff",
+                            transition:"all 0.25s ease",
+                            position:"relative", overflow:"hidden",
+                          }}
+                          onMouseEnter={e => { if (!sel) e.currentTarget.style.borderColor="rgba(201,168,76,0.5)"; }}
+                          onMouseLeave={e => { if (!sel) e.currentTarget.style.borderColor="rgba(201,168,76,0.2)"; }}
+                        >
+                          {/* Radio indicator */}
+                          <div style={{
+                            width:"20px", height:"20px", borderRadius:"50%", flexShrink:0,
+                            border: sel ? `2px solid ${C.gold}` : "2px solid rgba(201,168,76,0.3)",
+                            display:"flex", alignItems:"center", justifyContent:"center",
+                            transition:"all 0.2s",
+                          }}>
+                            {sel && <div style={{ width:"10px", height:"10px", borderRadius:"50%", background:C.gold }} />}
+                          </div>
+                          {/* Icon */}
+                          <div style={{
+                            width:"44px", height:"44px", display:"flex", alignItems:"center", justifyContent:"center",
+                            fontSize:"22px", flexShrink:0,
+                            background: sel ? "rgba(201,168,76,0.12)" : "rgba(201,168,76,0.05)",
+                            borderRadius:"8px", transition:"background 0.2s",
+                          }}>
+                            {m.icon}
+                          </div>
+                          {/* Text */}
+                          <div style={{ flex:1 }}>
+                            <div style={{
+                              fontFamily:"'Playfair Display',serif", fontSize:"15px",
+                              color: sel ? "#1a1208" : "#3a2e1e", fontWeight: sel ? 500 : 400,
+                              marginBottom:"3px", transition:"color 0.2s",
+                            }}>
+                              {m.title}
+                            </div>
+                            <div style={{
+                              fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px",
+                              color:"#b0a08a", letterSpacing:"0.02em",
+                            }}>
+                              {m.desc}
+                            </div>
+                          </div>
+                          {/* Selected tick */}
+                          {sel && (
+                            <div style={{
+                              fontFamily:"'Playfair Display',serif", fontSize:"14px",
+                              color:C.gold, fontWeight:600,
+                            }}>✓</div>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
-                  {form.payMethod === "card" && (
-                    <div style={{ display:"flex", flexDirection:"column", gap:"16px" }}>
-                      <InputField label="Card Number" placeholder="1234 5678 9012 3456" value={form.cardNum} onChange={set("cardNum")}/>
-                      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px" }}>
-                        <InputField label="Expiry" placeholder="MM / YY" value={form.expiry} onChange={set("expiry")}/>
-                        <InputField label="CVV" placeholder="•••" type="password" value={form.cvv} onChange={set("cvv")}/>
+
+                  {/* Security footer */}
+                  <div style={{
+                    display:"flex", alignItems:"center", gap:"14px",
+                    padding:"16px 20px", background:"rgba(201,168,76,0.04)",
+                    border:"1px solid rgba(201,168,76,0.12)",
+                  }}>
+                    <div style={{ fontSize:"20px" }}>🔒</div>
+                    <div>
+                      <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.14em", color:"#6b5c44", marginBottom:"2px" }}>
+                        SECURED BY RAZORPAY
+                      </div>
+                      <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", color:"#b0a08a" }}>
+                        256-bit SSL encryption · PCI DSS compliant · RBI regulated
                       </div>
                     </div>
-                  )}
-                  {form.payMethod === "upi" && (
-                    <InputField label="UPI ID" placeholder="yourname@upi" value={form.cardNum} onChange={set("cardNum")}/>
-                  )}
-                  {form.payMethod === "netbanking" && (
-                    <div>
-                      <label style={{ display:"block", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.18em", color:"#6b5c44", marginBottom:"8px" }}>SELECT BANK</label>
-                      <select style={{ width:"100%", padding:"13px 16px", border:"1px solid rgba(201,168,76,0.25)", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", color:"#1a1208", outline:"none", background:"#fff" }}>
-                        {["SBI","HDFC Bank","ICICI Bank","Axis Bank","Kotak Bank","Yes Bank"].map(b => <option key={b}>{b}</option>)}
-                      </select>
+                  </div>
+
+                  {apiError && (
+                    <div style={{ marginTop:"20px", padding:"12px 16px", background:"rgba(220,100,100,0.06)", border:"1px solid rgba(220,100,100,0.3)", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#c0504d" }}>
+                      ⚠ {apiError}
                     </div>
                   )}
                 </>
@@ -175,7 +385,7 @@ export default function CheckoutPage({ onAuth }) {
                   </div>
                   <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Order Confirmed!</h2>
                   <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"#6b5c44", lineHeight:1.7, marginBottom:"10px" }}>
-                    Thank you for your purchase. Your order <strong style={{ color:C.gold }}>#MSN-2026-8847</strong> has been placed.
+                    Thank you for your purchase. Your order <strong style={{ color:C.gold }}>#{orderNum || "MSN-2026-XXXX"}</strong> has been placed and payment received.
                   </p>
                   <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#b0a08a", marginBottom:"36px" }}>
                     A confirmation has been sent to {form.email || "your email"}.
@@ -183,31 +393,31 @@ export default function CheckoutPage({ onAuth }) {
                   </p>
                   <div style={{ display:"flex", gap:"14px", justifyContent:"center" }}>
                     <button className="m-btn-gold">TRACK ORDER</button>
-                    <button className="m-btn-outline-white" style={{ color:"#3a2e1e", borderColor:"rgba(58,46,30,0.4)" }}>CONTINUE SHOPPING</button>
+                    <button className="m-btn-outline-white" style={{ color:"#3a2e1e", borderColor:"rgba(58,46,30,0.4)" }} onClick={() => navigate("/shop")}>CONTINUE SHOPPING</button>
                   </div>
                 </div>
               )}
 
-              {/* Navigation buttons */}
+              {/* Navigation */}
               {step < 2 && (
                 <div style={{ display:"flex", justifyContent:"space-between", marginTop:"36px", paddingTop:"24px", borderTop:"1px solid rgba(201,168,76,0.12)" }}>
                   {step > 0 ? (
-                    <button onClick={() => setStep(s => s-1)} className="m-btn-outline-white" style={{ color:"#3a2e1e", borderColor:"rgba(58,46,30,0.3)" }}>
+                    <button onClick={() => { setStep(s => s-1); setApiError(""); }} className="m-btn-outline-white" style={{ color:"#3a2e1e", borderColor:"rgba(58,46,30,0.3)" }}>
                       BACK
                     </button>
                   ) : <div/>}
-                  <button onClick={handleNext} className="m-btn-gold">
-                    {step === 1 ? "PLACE ORDER" : "CONTINUE"}
+                  <button onClick={handleNext} className="m-btn-gold" disabled={placing} style={{ opacity:placing ? 0.7 : 1, cursor:placing ? "not-allowed" : "pointer" }}>
+                    {placing ? "PROCESSING…" : step === 1 ? "PAY NOW" : "CONTINUE"}
                   </button>
                 </div>
               )}
             </div>
 
-            {/* Order Summary sidebar */}
+            {/* ── Order Summary sidebar ──────────────────────────────────── */}
             <div style={{ background:"#fff", padding:"32px", border:"1px solid rgba(201,168,76,0.12)", position:"sticky", top:"90px" }}>
               <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"24px" }}>Order Summary</h3>
-              {ORDER_ITEMS.map(item => (
-                <div key={item.name} style={{ display:"flex", gap:"14px", marginBottom:"18px", alignItems:"center" }}>
+              {cart.map(item => (
+                <div key={`${item.id}-${item.size}`} style={{ display:"flex", gap:"14px", marginBottom:"18px", alignItems:"center" }}>
                   <div style={{ width:"56px", aspectRatio:"3/4", background:item.grad, flexShrink:0, position:"relative", overflow:"hidden" }}>
                     {item.image && <img src={item.image} alt={item.name} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }} />}
                   </div>
@@ -215,16 +425,37 @@ export default function CheckoutPage({ onAuth }) {
                     <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"14px", color:"#1a1208", marginBottom:"3px" }}>{item.name}</div>
                     <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", color:"#b0a08a" }}>Size: {item.size} · Qty: {item.qty}</div>
                   </div>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"14px", color:"#1a1208" }}>₹{item.price.toLocaleString("en-IN")}</div>
+                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"14px", color:"#1a1208" }}>₹{(item.price * item.qty).toLocaleString("en-IN")}</div>
                 </div>
               ))}
+
+              {cart.length === 0 && step === 2 && (
+                <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44", fontStyle:"italic", padding:"12px 0" }}>
+                  Order completed successfully
+                </div>
+              )}
+
               <div style={{ height:"1px", background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent)", margin:"20px 0" }}/>
+
+              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"8px" }}>
+                <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44" }}>Subtotal</span>
+                <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#1a1208" }}>₹{subtotal.toLocaleString("en-IN")}</span>
+              </div>
+              <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"16px" }}>
+                <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44" }}>Shipping</span>
+                <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:shippingCharge === 0 ? "#7ab87a" : "#1a1208" }}>
+                  {shippingCharge === 0 ? "FREE" : `₹${shippingCharge}`}
+                </span>
+              </div>
+
+              <div style={{ height:"1px", background:"rgba(201,168,76,0.12)", margin:"0 0 16px" }}/>
               <div style={{ display:"flex", justifyContent:"space-between" }}>
                 <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"16px", color:"#1a1208" }}>Total</span>
                 <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", color:"#1a1208" }}>₹{total.toLocaleString("en-IN")}</span>
               </div>
+
               <div style={{ marginTop:"16px", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px", color:"#7ab87a", textAlign:"center" }}>
-                🚚 Free Shipping · 🔒 Secure Payment
+                🚚 Free Shipping on orders ₹2000+ · 🔒 Razorpay Secured
               </div>
             </div>
           </div>

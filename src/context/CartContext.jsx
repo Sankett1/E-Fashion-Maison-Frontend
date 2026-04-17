@@ -15,7 +15,7 @@ export function CartProvider({ children }) {
     setCart(prev => {
       const existing = prev.find(i => i.id === product._id && i.size === size);
       if (existing) return prev.map(i => i.id === product._id && i.size === size ? { ...i, qty: i.qty + qty } : i);
-      return [...prev, { id: product._id, name: product.name, price: product.price, size, qty, grad: product.images?.[0]?.url || "linear-gradient(160deg,#c8b080 0%,#8a6228 100%)", category: product.category }];
+      return [...prev, { id: product._id, name: product.name, price: product.price, size, qty, image: product.images?.[0]?.url || "", grad: "linear-gradient(160deg,#c8b080 0%,#8a6228 100%)", category: product.category }];
     });
   };
 

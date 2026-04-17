@@ -1,11 +1,7 @@
-import { useState } from "react";
 import { C } from "../components/shared";
-
-const INITIAL_CART = [
-  { id:1, name:"Silk Satin Blouse",      category:"Women · Tops",        size:"M",  qty:1, price:8200,  image:"https://images.unsplash.com/photo-1485968579580-ee2a6b1e450f?w=300&q=80&fit=crop", grad:"linear-gradient(160deg,#f0ebe0 0%,#e0d8c8 50%,#c8bca8 100%)" },
-  { id:2, name:"Belted Trench Coat",     category:"Women · Outerwear",   size:"S",  qty:1, price:24900, image:"https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&q=80&fit=crop", grad:"linear-gradient(160deg,#c8b080 0%,#a89060 50%,#806840 100%)" },
-  { id:3, name:"Chelsea Leather Boots",  category:"Accessories · Shoes", size:"41", qty:1, price:12750, image:"https://images.unsplash.com/photo-1638247025967-51873b8a5a6b?w=300&q=80&fit=crop", grad:"linear-gradient(160deg,#6b4c36 0%,#4a321e 50%,#2e1e0e 100%)" },
-];
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const TrashIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
@@ -28,7 +24,7 @@ function CartItem({ item, onQtyChange, onRemove }) {
       {/* Info */}
       <div>
         <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.18em", color:"#6b5c44", marginBottom:"6px" }}>
-          {item.category.toUpperCase()}
+          {(item.category || "").toUpperCase()}
         </div>
         <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", fontWeight:400, color:"#1a1208", margin:"0 0 6px" }}>
           {item.name}
@@ -39,11 +35,11 @@ function CartItem({ item, onQtyChange, onRemove }) {
         {/* Qty controls */}
         <div style={{ display:"flex", alignItems:"center", gap:"14px" }}>
           <div style={{ display:"flex", border:"1px solid rgba(201,168,76,0.25)", overflow:"hidden" }}>
-            <button onClick={() => onQtyChange(item.id, item.qty - 1)} style={{ width:"36px", height:"36px", background:"none", border:"none", cursor:"pointer", color:"#6b5c44", fontSize:"16px" }}>−</button>
+            <button onClick={() => onQtyChange(item.id, item.size, item.qty - 1)} style={{ width:"36px", height:"36px", background:"none", border:"none", cursor:"pointer", color:"#6b5c44", fontSize:"16px" }}>−</button>
             <span style={{ width:"36px", height:"36px", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"'Playfair Display',serif", fontSize:"14px", color:"#1a1208", borderLeft:"1px solid rgba(201,168,76,0.2)", borderRight:"1px solid rgba(201,168,76,0.2)" }}>{item.qty}</span>
-            <button onClick={() => onQtyChange(item.id, item.qty + 1)} style={{ width:"36px", height:"36px", background:"none", border:"none", cursor:"pointer", color:"#6b5c44", fontSize:"16px" }}>+</button>
+            <button onClick={() => onQtyChange(item.id, item.size, item.qty + 1)} style={{ width:"36px", height:"36px", background:"none", border:"none", cursor:"pointer", color:"#6b5c44", fontSize:"16px" }}>+</button>
           </div>
-          <button onClick={() => onRemove(item.id)} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", cursor:"pointer", color:"#b0a08a", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.1em", transition:"color 0.2s" }}
+          <button onClick={() => onRemove(item.id, item.size)} style={{ display:"flex", alignItems:"center", gap:"6px", background:"none", border:"none", cursor:"pointer", color:"#b0a08a", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.1em", transition:"color 0.2s" }}
             onMouseEnter={e => e.currentTarget.style.color="#e07070"}
             onMouseLeave={e => e.currentTarget.style.color="#b0a08a"}
           >
@@ -67,20 +63,15 @@ function CartItem({ item, onQtyChange, onRemove }) {
 }
 
 export default function CartPage({ onAuth }) {
-  const [cart, setCart] = useState(INITIAL_CART);
+  const { cart, updateQty, removeFromCart, cartTotal } = useCart();
+  const navigate = useNavigate();
   const [coupon, setCoupon] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
 
-  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal = cartTotal;
   const discount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const shipping = subtotal >= 2000 ? 0 : 199;
   const total = subtotal - discount + shipping;
-
-  const updateQty = (id, newQty) => {
-    if (newQty < 1) return;
-    setCart(c => c.map(i => i.id === id ? { ...i, qty: newQty } : i));
-  };
-  const removeItem = (id) => setCart(c => c.filter(i => i.id !== id));
 
   const applyCoupon = () => {
     if (coupon.trim().toUpperCase() === "MAISON10") setCouponApplied(true);
@@ -97,7 +88,7 @@ export default function CartPage({ onAuth }) {
           </div>
           <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"32px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Your bag is empty</h2>
           <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"#6b5c44", marginBottom:"32px" }}>Discover our curated collection</p>
-          <button className="m-btn-gold">EXPLORE COLLECTION</button>
+          <button className="m-btn-gold" onClick={() => navigate("/shop")}>EXPLORE COLLECTION</button>
         </div>
       </div>
     </>
@@ -116,7 +107,7 @@ export default function CartPage({ onAuth }) {
             {/* Cart Items */}
             <div>
               {cart.map(item => (
-                <CartItem key={item.id} item={item} onQtyChange={updateQty} onRemove={removeItem} />
+                <CartItem key={`${item.id}-${item.size}`} item={item} onQtyChange={updateQty} onRemove={removeFromCart} />
               ))}
             </div>
 
@@ -176,11 +167,11 @@ export default function CartPage({ onAuth }) {
                 <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", color:"#1a1208" }}>₹{total.toLocaleString("en-IN")}</span>
               </div>
 
-              <button className="m-btn-gold" style={{ width:"100%", padding:"16px" }}>
+              <button className="m-btn-gold" style={{ width:"100%", padding:"16px" }} onClick={() => navigate("/checkout")}>
                 PROCEED TO CHECKOUT
               </button>
               <div style={{ textAlign:"center", marginTop:"14px" }}>
-                <button style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px", color:C.gold, background:"none", border:"none", cursor:"pointer", textDecoration:"underline", textUnderlineOffset:"3px" }}>
+                <button onClick={() => navigate("/shop")} style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px", color:C.gold, background:"none", border:"none", cursor:"pointer", textDecoration:"underline", textUnderlineOffset:"3px" }}>
                   Continue Shopping
                 </button>
               </div>
