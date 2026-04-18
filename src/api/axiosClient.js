@@ -1,10 +1,11 @@
 import axios from "axios";
 
 // ── Base axios instance ───────────────────────────────────────────────────────
+// VITE_API_URL should be e.g. http://localhost:5000/api  (include /api)
 const api = axios.create({
-  baseURL:         import.meta.env.VITE_API_URL,
+  baseURL:         import.meta.env.VITE_API_URL || "http://localhost:5000/api",
   withCredentials: true,
-  timeout:         15000,
+  timeout:         20000,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -24,22 +25,22 @@ api.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
 
+    // 401 — only clear session if we're NOT already on a public page to avoid loop
     if (status === 401) {
-      // Token expired or invalid — clear session and redirect to home
+      const publicPaths = ["/", "/shop", "/about", "/contact"];
+      const isPublic = publicPaths.some(p => window.location.pathname.startsWith(p));
       localStorage.removeItem("maison_token");
       localStorage.removeItem("maison_user");
-      if (window.location.pathname !== "/") {
+      if (!isPublic && window.location.pathname !== "/") {
         window.location.href = "/";
       }
     }
 
     if (status === 429) {
-      // Rate limited — attach friendly message for UI to surface
       error.friendlyMessage = "Too many requests. Please wait a moment and try again.";
     }
 
     if (!error.response) {
-      // Network error / server down
       error.friendlyMessage = "Unable to reach the server. Please check your connection.";
     }
 
