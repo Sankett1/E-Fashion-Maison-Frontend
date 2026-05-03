@@ -327,7 +327,7 @@ export default function TrendingPage() {
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <div style={{
         background:"linear-gradient(135deg,#0d0a06 0%,#1a1208 50%,#0d0a06 100%)",
-        padding:"80px 48px 60px",textAlign:"center",position:"relative",overflow:"hidden",
+        padding:"24px 28px 20px",textAlign:"center",position:"relative",overflow:"hidden",
       }}>
         {/* Grid lines */}
         <div style={{position:"absolute",inset:0,pointerEvents:"none",opacity:.025,
@@ -337,39 +337,39 @@ export default function TrendingPage() {
           background:"radial-gradient(ellipse 65% 70% at 50% 50%,rgba(201,168,76,.07) 0%,transparent 65%)"}}/>
 
         {/* Flame */}
-        <div style={{position:"relative",zIndex:1,marginBottom:18}}>
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"
+        <div style={{position:"relative",zIndex:1,marginBottom:8}}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
             stroke="#c9a84c" strokeWidth="1.5" strokeLinecap="round">
             <path d="M12 2c0 0-4 4-4 7a4 4 0 0 0 8 0c0-1.5-1-3-2-4l-1 2c0-1-1-4-1-5z"/>
             <path d="M12 22c-4.4 0-8-3.6-8-8 0-2 1-4 2-5"/>
             <path d="M12 22c4.4 0 8-3.6 8-8 0-2-1-4-2-5"/>
           </svg>
         </div>
-        <div style={{width:40,height:1,margin:"0 auto 18px",
+        <div style={{width:32,height:1,margin:"0 auto 10px",
           background:"linear-gradient(90deg,transparent,#c9a84c,transparent)",position:"relative",zIndex:1}}/>
         <h1 style={{fontFamily:"'Playfair Display',serif",
-          fontSize:"clamp(42px,6vw,72px)",fontWeight:400,color:"#fff",
-          margin:"0 0 10px",lineHeight:1.05,position:"relative",zIndex:1}}>
+          fontSize:"clamp(28px,4vw,44px)",fontWeight:400,color:"#fff",
+          margin:"0 0 6px",lineHeight:1.1,position:"relative",zIndex:1}}>
           Trending Now
         </h1>
         <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",
-          fontSize:"9.5px",letterSpacing:"0.3em",color:"rgba(255,255,255,.35)",
+          fontSize:"8.5px",letterSpacing:"0.3em",color:"rgba(255,255,255,.35)",
           position:"relative",zIndex:1}}>
           MOST COVETED PIECES THIS SEASON
         </p>
 
         {/* Stats */}
-        <div style={{display:"flex",justifyContent:"center",gap:52,
-          marginTop:40,position:"relative",zIndex:1}}>
+        <div style={{display:"flex",justifyContent:"center",gap:36,
+          marginTop:16,position:"relative",zIndex:1}}>
           {[{n:50,s:"K+",l:"HAPPY CLIENTS"},{n:200,s:"+",l:"STYLES TRENDING"},{n:48,s:"HR",l:"NEW ARRIVALS"}]
             .map(({n,s,l})=>(
             <div key={l} style={{textAlign:"center"}}>
               <div className="tp-gold" style={{fontFamily:"'Playfair Display',serif",
-                fontSize:"clamp(26px,3vw,38px)",fontWeight:400}}>
+                fontSize:"clamp(20px,2.5vw,28px)",fontWeight:400}}>
                 <CountUp end={n} suffix={s}/>
               </div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8px",
-                letterSpacing:"0.24em",color:"rgba(255,255,255,.28)",marginTop:4}}>{l}</div>
+              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"7.5px",
+                letterSpacing:"0.22em",color:"rgba(255,255,255,.28)",marginTop:2}}>{l}</div>
             </div>
           ))}
         </div>

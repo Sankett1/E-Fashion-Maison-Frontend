@@ -1,18 +1,49 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
 
 const TEAM = [
-  { name:"Aarav Shah", title:"Founder & Creative Director", grad:"linear-gradient(160deg,#c8b080 0%,#8a6228 100%)" },
-  { name:"Meera Pillai", title:"Head of Design", grad:"linear-gradient(160deg,#e8e0d0 0%,#c0a880 100%)" },
-  { name:"Rahul Desai", title:"Master Tailor", grad:"linear-gradient(160deg,#6b4c36 0%,#2e1e0e 100%)" },
+  { name:"Aarav Shah", title:"Founder & Creative Director", image:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80&fit=crop" },
+  { name:"Meera Pillai", title:"Head of Design", image:"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80&fit=crop" },
+  { name:"Rahul Desai", title:"Master Tailor", image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop" },
 ];
 
 const VALUES = [
-  { icon:"🧵", title:"Artisan First", text:"Every garment is conceived in close collaboration with Indian master craftspeople, ensuring techniques developed over generations continue to thrive." },
-  { icon:"🌿", title:"Responsible Craft", text:"We partner exclusively with GOTS-certified farms and use low-impact dyes. Our packaging is 100% compostable, and we offset every shipment." },
-  { icon:"♾️", title:"Timeless by Design", text:"We design against trends. Each MAISON piece is built to outlast seasons — in quality, construction, and aesthetic relevance." },
+  { icon:"🧵", title:"Artisan First", text:"Every garment is conceived in close collaboration with Indian master craftspeople, ensuring techniques developed over generations continue to thrive.", image:"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80&fit=crop" },
+  { icon:"🌿", title:"Responsible Craft", text:"We partner exclusively with GOTS-certified farms and use low-impact dyes. Our packaging is 100% compostable, and we offset every shipment.", image:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop" },
+  { icon:"♾️", title:"Timeless by Design", text:"We design against trends. Each MAISON piece is built to outlast seasons — in quality, construction, and aesthetic relevance.", image:"https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
 ];
+
+// Origin story images
+const STORY_IMAGES = {
+  main: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80&fit=crop",
+  topRight: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+  bottomRight: "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop",
+};
+
+// Journey / milestone images
+const JOURNEY_IMAGES = [
+  { year: "2014", title: "The Beginning", text: "A small studio in Bandra, a big vision — Aarav Shah begins sourcing India's finest textiles.", image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop" },
+  { year: "2016", title: "First Collection", text: "Our debut collection of 12 pieces sells out in 48 hours, validating the demand for Indian luxury.", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop" },
+  { year: "2019", title: "BKC Atelier", text: "MAISON moves to its flagship atelier in Mumbai's Bandra-Kurla Complex, housing 40 artisans.", image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
+  { year: "2022", title: "Going Global", text: "International shipping launches. MAISON pieces find homes across 28 countries.", image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&q=80&fit=crop" },
+  { year: "2024", title: "50K Community", text: "Our community crosses 50,000 discerning clients. Sustainability certification achieved.", image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&fit=crop" },
+];
+
+// Atelier gallery images
+const ATELIER_GALLERY = [
+  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop",
+  "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80&fit=crop",
+  "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+  "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop",
+];
+
+function ImgWithFallback({ src, alt, style, grad }) {
+  const [err, setErr] = useState(false);
+  return err
+    ? <div style={{ ...style, background: grad || "linear-gradient(160deg,#c8b080 0%,#806840 100%)" }} />
+    : <img src={src} alt={alt} onError={() => setErr(true)} style={style} />;
+}
 
 export default function AboutPage({ onAuth }) {
   const navigate = useNavigate();
@@ -28,33 +59,61 @@ export default function AboutPage({ onAuth }) {
 
   return (
     <>
+      <style>{`
+        @keyframes aboutFadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:none} }
+        @keyframes aboutKen { 0%{transform:scale(1)} 100%{transform:scale(1.08)} }
+        .about-img-hover { transition: transform 0.7s cubic-bezier(0.23,1,0.32,1), filter 0.4s ease; }
+        .about-img-hover:hover { transform: scale(1.05); filter: brightness(1.05); }
+        .journey-card { transition: all 0.4s cubic-bezier(0.23,1,0.32,1); }
+        .journey-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+        .journey-card:hover .journey-year { color: ${C.gold}; }
+        .gallery-img { transition: transform 0.6s cubic-bezier(0.23,1,0.32,1); }
+        .gallery-img:hover { transform: scale(1.04); }
+      `}</style>
+
       <div style={{ paddingTop:"64px", background:"#f5f0eb" }}>
 
-        {/* Hero */}
+        {/* ════════════════════════════════════════════
+            HERO — with background image
+        ════════════════════════════════════════════ */}
         <section style={{
-          minHeight:"70vh", display:"flex", alignItems:"center", justifyContent:"center",
-          background:"linear-gradient(145deg,#0f0a04 0%,#1e140a 40%,#2a1a0a 70%,#1e140a 100%)",
+          minHeight:"75vh", display:"flex", alignItems:"center", justifyContent:"center",
           position:"relative", overflow:"hidden", padding:"80px 48px",
         }}>
-          <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.07),transparent)", pointerEvents:"none" }}/>
-          <div style={{ position:"absolute", top:"30%", right:"5%", fontFamily:"'Playfair Display',serif", fontSize:"clamp(80px,15vw,200px)", fontWeight:700, color:"rgba(201,168,76,0.04)", lineHeight:1, userSelect:"none", pointerEvents:"none" }}>MAISON</div>
-          <div style={{ maxWidth:"700px", textAlign:"center", position:"relative", zIndex:1 }}>
+          {/* Background image */}
+          <div style={{ position:"absolute", inset:0, zIndex:0 }}>
+            <img
+              src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80&fit=crop"
+              alt="Maison atelier"
+              style={{ width:"100%", height:"100%", objectFit:"cover", animation:"aboutKen 20s ease infinite alternate" }}
+            />
+          </div>
+          {/* Dark overlay */}
+          <div style={{ position:"absolute", inset:0, background:"linear-gradient(145deg,rgba(15,10,4,0.92) 0%,rgba(30,20,10,0.85) 40%,rgba(42,26,10,0.88) 70%,rgba(15,10,4,0.92) 100%)", zIndex:1 }}/>
+          {/* Radial glow */}
+          <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.07),transparent)", pointerEvents:"none", zIndex:2 }}/>
+          {/* Large watermark */}
+          <div style={{ position:"absolute", top:"30%", right:"5%", fontFamily:"'Playfair Display',serif", fontSize:"clamp(80px,15vw,200px)", fontWeight:700, color:"rgba(201,168,76,0.04)", lineHeight:1, userSelect:"none", pointerEvents:"none", zIndex:2 }}>MAISON</div>
+          
+          <div style={{ maxWidth:"700px", textAlign:"center", position:"relative", zIndex:3 }}>
             <div style={{ width:"48px", height:"1px", margin:"0 auto 32px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(46px,7vw,88px)", fontWeight:400, color:"#fff", margin:"0 0 20px", lineHeight:1.05 }}>
+            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(46px,7vw,88px)", fontWeight:400, color:"#fff", margin:"0 0 20px", lineHeight:1.05, animation:"aboutFadeUp 1s ease 0.3s both" }}>
               Our Story
             </h1>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.35)", marginBottom:"32px" }}>
+            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.35)", marginBottom:"32px", animation:"aboutFadeUp 1s ease 0.5s both" }}>
               MUMBAI, INDIA · FOUNDED 2014
             </p>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"18px", lineHeight:1.8, color:"rgba(255,255,255,0.6)", fontWeight:300, fontStyle:"italic" }}>
+            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"18px", lineHeight:1.8, color:"rgba(255,255,255,0.6)", fontWeight:300, fontStyle:"italic", animation:"aboutFadeUp 1s ease 0.7s both" }}>
               "We didn't set out to build a fashion brand. We set out to prove that Indian luxury deserved a global audience."
             </p>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.16em", color:C.gold, marginTop:"16px" }}>— AARAV SHAH, FOUNDER</p>
+            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.16em", color:C.gold, marginTop:"16px", animation:"aboutFadeUp 1s ease 0.9s both" }}>— AARAV SHAH, FOUNDER</p>
           </div>
         </section>
 
-        {/* Origin story */}
-        <section style={{ padding:"100px 48px", background:"#f5f0eb" }}>
+        {/* ════════════════════════════════════════════
+            ORIGIN STORY — with image grid
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"110px 48px", background:"#f5f0eb" }}>
           <div style={{ maxWidth:"1200px", margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"80px", alignItems:"center" }}>
             <div className="m-reveal-left">
               <div style={{ width:"56px", height:"1px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)`, marginBottom:"28px" }}/>
@@ -73,17 +132,114 @@ export default function AboutPage({ onAuth }) {
             </div>
             <div className="m-reveal-right">
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"12px" }}>
-                <div style={{ aspectRatio:"3/4", background:"linear-gradient(160deg,#c8b080 0%,#a89060 50%,#806840 100%)", gridRow:"span 2" }}/>
-                <div style={{ aspectRatio:"1/1", background:"linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 100%)" }}/>
-                <div style={{ aspectRatio:"1/1", background:"linear-gradient(160deg,#f0ebe0 0%,#e0d8c8 100%)" }}/>
+                {/* Main tall image */}
+                <div style={{ aspectRatio:"3/4", gridRow:"span 2", overflow:"hidden", position:"relative" }}>
+                  <ImgWithFallback
+                    src={STORY_IMAGES.main}
+                    alt="MAISON atelier craftsmanship"
+                    style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
+                    grad="linear-gradient(160deg,#c8b080 0%,#a89060 50%,#806840 100%)"
+                  />
+                  <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(26,18,8,0.3),transparent 50%)" }}/>
+                </div>
+                {/* Top right */}
+                <div style={{ aspectRatio:"1/1", overflow:"hidden", position:"relative" }}>
+                  <ImgWithFallback
+                    src={STORY_IMAGES.topRight}
+                    alt="Fashion fabric detail"
+                    style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
+                    grad="linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 100%)"
+                  />
+                </div>
+                {/* Bottom right */}
+                <div style={{ aspectRatio:"1/1", overflow:"hidden", position:"relative" }}>
+                  <ImgWithFallback
+                    src={STORY_IMAGES.bottomRight}
+                    alt="Luxury fashion showcase"
+                    style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
+                    grad="linear-gradient(160deg,#f0ebe0 0%,#e0d8c8 100%)"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Values */}
-        <section style={{ padding:"90px 48px", background:"#1a1208", position:"relative", overflow:"hidden" }}>
+        {/* ════════════════════════════════════════════
+            ATELIER GALLERY — fullbleed image strip
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"0", overflow:"hidden" }}>
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:0, height:"clamp(240px,28vw,380px)" }}>
+            {ATELIER_GALLERY.map((src, i) => (
+              <div key={i} style={{ overflow:"hidden", position:"relative" }}>
+                <img
+                  className="gallery-img"
+                  src={src} alt={`MAISON atelier ${i+1}`}
+                  style={{ width:"100%", height:"100%", objectFit:"cover" }}
+                />
+                <div style={{ position:"absolute", inset:0, background:"rgba(26,18,8,0.15)", pointerEvents:"none" }}/>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════
+            OUR JOURNEY — Timeline with images
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"110px 48px", background:"#f5f0eb", position:"relative" }}>
+          <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
+            <div style={{ textAlign:"center", marginBottom:"64px" }} className="m-reveal">
+              <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
+              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Our Journey</h2>
+              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44" }}>A DECADE OF CRAFTSMANSHIP</p>
+            </div>
+
+            {/* Timeline line */}
+            <div style={{ position:"relative" }}>
+              <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:"1px", background:`linear-gradient(to bottom,transparent,${C.gold}30,${C.gold}30,transparent)`, transform:"translateX(-50%)" }}/>
+              
+              {JOURNEY_IMAGES.map((item, i) => (
+                <div key={item.year} className={`m-reveal ${i % 2 === 0 ? "m-reveal-left" : "m-reveal-right"}`} style={{
+                  display:"grid", gridTemplateColumns:"1fr 1fr", gap:"48px", alignItems:"center",
+                  marginBottom: i < JOURNEY_IMAGES.length - 1 ? "64px" : 0,
+                  direction: i % 2 === 1 ? "rtl" : "ltr",
+                }}>
+                  {/* Image side */}
+                  <div className="journey-card" style={{
+                    overflow:"hidden", position:"relative", aspectRatio:"16/10",
+                    boxShadow:"0 8px 32px rgba(0,0,0,0.08)", direction:"ltr",
+                  }}>
+                    <img
+                      className="about-img-hover"
+                      src={item.image} alt={item.title}
+                      style={{ width:"100%", height:"100%", objectFit:"cover" }}
+                    />
+                    <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(26,18,8,0.5) 0%,transparent 50%)" }}/>
+                    <div style={{ position:"absolute", bottom:16, left:20, fontFamily:"'Playfair Display',serif", fontSize:"clamp(36px,5vw,56px)", fontWeight:400, color:"rgba(255,255,255,0.12)", lineHeight:1 }}>
+                      {item.year}
+                    </div>
+                  </div>
+                  {/* Text side */}
+                  <div style={{ padding:"20px 0", direction:"ltr" }}>
+                    <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.3em", color:C.gold, marginBottom:"12px" }}>{item.year}</div>
+                    <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(22px,2.5vw,32px)", fontWeight:400, color:"#1a1208", marginBottom:"14px", lineHeight:1.2 }}>{item.title}</h3>
+                    <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", lineHeight:1.8, color:"#6b5c44", fontWeight:300 }}>{item.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════════════════════════════════
+            VALUES — with background imagery
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"100px 48px", background:"#1a1208", position:"relative", overflow:"hidden" }}>
           <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.04),transparent)", pointerEvents:"none" }}/>
+          {/* Subtle background image */}
+          <div style={{ position:"absolute", inset:0, opacity:0.04, zIndex:0 }}>
+            <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=1400&q=60&fit=crop" alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
+          </div>
           <div style={{ maxWidth:"1200px", margin:"0 auto", position:"relative", zIndex:1 }}>
             <div style={{ textAlign:"center", marginBottom:"56px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
@@ -92,21 +248,36 @@ export default function AboutPage({ onAuth }) {
             </div>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"28px" }}>
               {VALUES.map((v, i) => (
-                <div key={v.title} className={`m-reveal m-d${i+1}`} style={{ padding:"36px 32px", border:"1px solid rgba(201,168,76,0.15)", background:"rgba(201,168,76,0.02)", transition:"all 0.3s" }}
-                  onMouseEnter={e => { e.currentTarget.style.background="rgba(201,168,76,0.04)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.3)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.background="rgba(201,168,76,0.02)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.15)"; }}
+                <div key={v.title} className={`m-reveal m-d${i+1}`} style={{
+                  border:"1px solid rgba(201,168,76,0.15)", background:"rgba(201,168,76,0.02)",
+                  transition:"all 0.4s", overflow:"hidden",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background="rgba(201,168,76,0.04)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.3)"; e.currentTarget.style.transform="translateY(-4px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background="rgba(201,168,76,0.02)"; e.currentTarget.style.borderColor="rgba(201,168,76,0.15)"; e.currentTarget.style.transform=""; }}
                 >
-                  <div style={{ fontSize:"28px", marginBottom:"20px" }}>{v.icon}</div>
-                  <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", fontWeight:400, color:C.gold, marginBottom:"14px" }}>{v.title}</h3>
-                  <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", lineHeight:1.8, color:"rgba(255,255,255,0.5)", fontWeight:300 }}>{v.text}</p>
+                  {/* Value image header */}
+                  <div style={{ height:"180px", overflow:"hidden", position:"relative" }}>
+                    <img
+                      src={v.image} alt={v.title}
+                      style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform 0.6s ease" }}
+                    />
+                    <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(26,18,8,0.95) 0%,rgba(26,18,8,0.3) 60%,transparent 100%)" }}/>
+                    <div style={{ position:"absolute", bottom:16, left:20, fontSize:"36px" }}>{v.icon}</div>
+                  </div>
+                  <div style={{ padding:"28px 28px 32px" }}>
+                    <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", fontWeight:400, color:C.gold, marginBottom:"14px" }}>{v.title}</h3>
+                    <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", lineHeight:1.8, color:"rgba(255,255,255,0.5)", fontWeight:300 }}>{v.text}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Team */}
-        <section style={{ padding:"90px 48px", background:"#f5f0eb" }}>
+        {/* ════════════════════════════════════════════
+            TEAM — with portrait images
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"100px 48px", background:"#f5f0eb" }}>
           <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
             <div style={{ textAlign:"center", marginBottom:"56px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
@@ -116,7 +287,21 @@ export default function AboutPage({ onAuth }) {
             <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"28px" }}>
               {TEAM.map((member, i) => (
                 <div key={member.name} className={`m-reveal m-d${i+1}`} style={{ textAlign:"center" }}>
-                  <div style={{ aspectRatio:"1/1", background:member.grad, marginBottom:"20px" }}/>
+                  <div style={{
+                    aspectRatio:"3/4", overflow:"hidden", position:"relative", marginBottom:"20px",
+                    boxShadow:"0 8px 32px rgba(0,0,0,0.08)",
+                  }}>
+                    <ImgWithFallback
+                      src={member.image}
+                      alt={member.name}
+                      style={{ width:"100%", height:"100%", objectFit:"cover", objectPosition:"center top", position:"absolute", inset:0, transition:"transform 0.6s cubic-bezier(0.23,1,0.32,1)" }}
+                      grad={`linear-gradient(160deg,#c8b080 0%,#806840 100%)`}
+                    />
+                    {/* Overlay */}
+                    <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(26,18,8,0.6) 0%,transparent 40%)", transition:"opacity 0.3s" }}/>
+                    {/* Gold bottom line */}
+                    <div style={{ position:"absolute", bottom:0, left:0, right:0, height:"2px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
+                  </div>
                   <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"6px" }}>{member.name}</h3>
                   <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.14em", color:C.gold }}>{member.title.toUpperCase()}</p>
                 </div>
@@ -125,9 +310,22 @@ export default function AboutPage({ onAuth }) {
           </div>
         </section>
 
-        {/* CTA */}
-        <section style={{ padding:"90px 48px", background:"#1a1208", textAlign:"center" }}>
-          <div style={{ maxWidth:"600px", margin:"0 auto" }}>
+        {/* ════════════════════════════════════════════
+            CTA — with background image
+        ════════════════════════════════════════════ */}
+        <section style={{ padding:"110px 48px", position:"relative", overflow:"hidden", textAlign:"center" }}>
+          {/* Background image */}
+          <div style={{ position:"absolute", inset:0, zIndex:0 }}>
+            <img
+              src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&q=80&fit=crop"
+              alt="Collection showcase"
+              style={{ width:"100%", height:"100%", objectFit:"cover" }}
+            />
+          </div>
+          <div style={{ position:"absolute", inset:0, background:"rgba(26,18,8,0.88)", zIndex:1 }}/>
+          <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 60% 50% at 50% 50%,rgba(201,168,76,0.06),transparent)", zIndex:2, pointerEvents:"none" }}/>
+          
+          <div style={{ maxWidth:"600px", margin:"0 auto", position:"relative", zIndex:3 }}>
             <div style={{ width:"40px", height:"1px", margin:"0 auto 24px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
             <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(30px,4vw,48px)", fontWeight:400, color:"#fff", marginBottom:"16px" }}>
               Discover the Collection
@@ -135,7 +333,10 @@ export default function AboutPage({ onAuth }) {
             <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:"36px", lineHeight:1.8 }}>
               Explore pieces crafted at the intersection of heritage and modernity.
             </p>
-            <button className="m-btn-gold" onClick={() => navigate("/shop")}>SHOP NOW</button>
+            <div style={{ display:"flex", gap:"14px", justifyContent:"center", flexWrap:"wrap" }}>
+              <button className="m-btn-gold" onClick={() => navigate("/shop")}>SHOP NOW</button>
+              <button className="m-btn-outline-white" onClick={() => navigate("/shop?tag=NEW")}>NEW ARRIVALS</button>
+            </div>
           </div>
         </section>
       </div>
