@@ -110,7 +110,7 @@ export default function ProductDetailPage({ onAuth }) {
     <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh" }}>
 
       {/* Breadcrumb */}
-      <div style={{ padding:"16px 48px", background:"#fff", borderBottom:"1px solid rgba(201,168,76,0.1)" }}>
+      <div className="r-section" style={{ background:"#fff", borderBottom:"1px solid rgba(201,168,76,0.1)", paddingTop:"16px", paddingBottom:"16px" }}>
         <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px",
           color:"#b0a08a", letterSpacing:"0.1em", cursor:"pointer" }}
           onClick={() => navigate("/")}>HOME</span>
@@ -127,8 +127,7 @@ export default function ProductDetailPage({ onAuth }) {
         </span>
       </div>
 
-      <div style={{ maxWidth:1300, margin:"0 auto", padding:"56px 48px",
-        display:"grid", gridTemplateColumns:"1fr 1fr", gap:"72px", alignItems:"start" }}>
+      <div className="r-section r-section-v r-grid-2" style={{ maxWidth:1300, margin:"0 auto", gap:"72px", alignItems:"start" }}>
 
         {/* LEFT — Images */}
         <div>
@@ -383,7 +382,7 @@ export default function ProductDetailPage({ onAuth }) {
 
       {/* Reviews */}
       {reviews.length > 0 && (
-        <div style={{ maxWidth:1300, margin:"0 auto", padding:"0 48px 80px" }}>
+        <div className="r-section" style={{ maxWidth:1300, margin:"0 auto", paddingBottom:"80px" }}>
           <div style={{ height:1, background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent)", marginBottom:48 }}/>
           <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:30, fontWeight:400, color:"#1a1208", marginBottom:32 }}>
             Customer Reviews

@@ -20,7 +20,7 @@ export default function ContactPage({ onAuth }) {
     <>
       <div style={{ minHeight: "100vh", background: C.bg, paddingTop: "100px" }}>
         {/* Hero */}
-        <div style={{ textAlign: "center", padding: "48px 20px 60px" }}>
+        <div className="r-section" style={{ textAlign: "center", paddingTop: "48px", paddingBottom: "60px" }}>
           <div style={{ fontSize: "9.5px", letterSpacing: "0.28em", color: C.gold, marginBottom: "14px" }}>WE'RE HERE</div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "52px", fontWeight: 400, color: "#fff", marginBottom: "16px" }}>Get in Touch</h1>
           <GoldBar centered />
@@ -29,7 +29,8 @@ export default function ContactPage({ onAuth }) {
           </p>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0", maxWidth: "1100px", margin: "0 auto 80px", border: "1px solid rgba(201,168,76,0.15)" }}>
+        <div className="r-section" style={{ paddingBottom: "80px" }}>
+          <div className="r-grid-2" style={{ gap: "0", maxWidth: "1100px", margin: "0 auto", border: "1px solid rgba(201,168,76,0.15)" }}>
           {/* Info */}
           <div style={{ background: "linear-gradient(160deg, #0f0c08 0%, #1a1208 100%)", padding: "56px 48px", borderRight: "1px solid rgba(201,168,76,0.12)" }}>
             <div style={{ marginBottom: "48px" }}>
@@ -76,7 +77,7 @@ export default function ContactPage({ onAuth }) {
             ) : (
               <form onSubmit={handle}>
                 <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "22px", color: "#fff", marginBottom: "32px" }}>Send a Message</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px", marginBottom: "16px" }}>
+                <div className="r-grid-2" style={{ gap: "16px", marginBottom: "16px" }}>
                   {[{ key: "name", ph: "Your Name" }, { key: "email", ph: "Email Address" }].map(f => (
                     <div key={f.key}>
                       <label style={{ display: "block", fontSize: "9px", letterSpacing: "0.18em", color: "rgba(255,255,255,0.35)", marginBottom: "8px" }}>{f.key.toUpperCase()}</label>
@@ -103,6 +104,7 @@ export default function ContactPage({ onAuth }) {
                 </button>
               </form>
             )}
+          </div>
           </div>
         </div>
       </div>

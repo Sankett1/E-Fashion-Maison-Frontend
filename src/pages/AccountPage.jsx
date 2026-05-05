@@ -35,7 +35,7 @@ export default function AccountPage({ onAuth }) {
     <>
       <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh" }}>
         {/* Header */}
-        <div style={{ background:"linear-gradient(135deg,#1a1208 0%,#2a1e0a 50%,#1a1208 100%)", padding:"56px 48px 48px" }}>
+        <div className="r-section" style={{ background:"linear-gradient(135deg,#1a1208 0%,#2a1e0a 50%,#1a1208 100%)", paddingTop:"56px", paddingBottom:"48px" }}>
           <div style={{ maxWidth:"1200px", margin:"0 auto", display:"flex", alignItems:"center", gap:"28px" }}>
             <div style={{
               width:"80px", height:"80px", borderRadius:"50%",
@@ -52,9 +52,9 @@ export default function AccountPage({ onAuth }) {
           </div>
         </div>
 
-        <div style={{ maxWidth:"1200px", margin:"0 auto", padding:"0 48px 80px" }}>
+        <div className="r-section" style={{ maxWidth:"1200px", margin:"0 auto", paddingBottom:"80px" }}>
           {/* Tab Nav */}
-          <div style={{ display:"flex", gap:"0", borderBottom:"1px solid rgba(201,168,76,0.15)", marginBottom:"40px" }}>
+          <div className="r-tabs" style={{ display:"flex", gap:"0", borderBottom:"1px solid rgba(201,168,76,0.15)", marginBottom:"40px", overflowX:"auto" }}>
             {TABS.map(tab => (
               <button key={tab} onClick={() => setActiveTab(tab)} style={{
                 padding:"18px 24px", background:"none", border:"none", cursor:"pointer",
@@ -103,7 +103,7 @@ export default function AccountPage({ onAuth }) {
             <div>
               <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"28px" }}>Order History</h2>
               {ORDERS.map(order => (
-                <div key={order.id} style={{ background:"#fff", padding:"24px 28px", border:"1px solid rgba(201,168,76,0.12)", marginBottom:"14px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"24px" }}>
+                <div key={order.id} style={{ background:"#fff", padding:"24px 28px", border:"1px solid rgba(201,168,76,0.12)", marginBottom:"14px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:"24px", flexWrap:"wrap" }}>
                   <div>
                     <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"17px", color:C.gold, marginBottom:"4px" }}>#{order.id}</div>
                     <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px", color:"#b0a08a" }}>{order.date} · {order.items} {order.items===1?"item":"items"}</div>
@@ -173,7 +173,7 @@ export default function AccountPage({ onAuth }) {
                 { title:"Order Notifications", desc:"SMS and email alerts for order updates and delivery.", checked:true },
                 { title:"Personalised Recommendations", desc:"Allow MAISON to curate personalised product suggestions.", checked:false },
               ].map(setting => (
-                <div key={setting.title} style={{ background:"#fff", padding:"22px 24px", border:"1px solid rgba(201,168,76,0.12)", marginBottom:"12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:"24px" }}>
+                <div key={setting.title} style={{ background:"#fff", padding:"22px 24px", border:"1px solid rgba(201,168,76,0.12)", marginBottom:"12px", display:"flex", justifyContent:"space-between", alignItems:"center", gap:"24px", flexWrap:"wrap" }}>
                   <div>
                     <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"16px", color:"#1a1208", marginBottom:"4px" }}>{setting.title}</div>
                     <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44", fontWeight:300 }}>{setting.desc}</div>

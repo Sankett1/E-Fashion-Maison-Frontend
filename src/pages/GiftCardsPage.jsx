@@ -14,7 +14,7 @@ export default function GiftCardsPage({ onAuth }) {
   return (
     <>
       <div style={{ minHeight: "100vh", background: C.bg, paddingTop: "100px" }}>
-        <div style={{ textAlign: "center", padding: "48px 20px 60px" }}>
+        <div className="r-section" style={{ textAlign: "center", paddingTop: "48px", paddingBottom: "60px" }}>
           <div style={{ fontSize: "9.5px", letterSpacing: "0.28em", color: C.gold, marginBottom: "14px" }}>THE PERFECT GIFT</div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "52px", fontWeight: 400, color: "#fff", marginBottom: "16px" }}>Gift Cards</h1>
           <GoldBar centered />
@@ -23,7 +23,7 @@ export default function GiftCardsPage({ onAuth }) {
           </p>
         </div>
 
-        <div style={{ maxWidth: "960px", margin: "0 auto 80px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", padding: "0 40px" }}>
+        <div className="r-section r-grid-2" style={{ maxWidth: "960px", margin: "0 auto", paddingBottom: "80px", gap: "40px" }}>
           {/* Card preview */}
           <div>
             <div style={{ aspectRatio: "1.6/1", background: "linear-gradient(135deg, #1a1208 0%, #2a1e0a 40%, #3a2810 60%, #1a0f05 100%)", border: `1px solid ${C.border}`, padding: "36px", display: "flex", flexDirection: "column", justifyContent: "space-between", position: "relative", overflow: "hidden", marginBottom: "28px" }}>

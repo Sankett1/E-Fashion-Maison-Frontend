@@ -239,8 +239,8 @@ export default function ShopPage() {
       <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}`}</style>
 
       {/* Hero header */}
-      <div style={{ background: "linear-gradient(135deg,#1a1208 0%,#2a1e0a 50%,#1a1208 100%)",
-        padding: "60px 48px 50px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <div className="r-section" style={{ background: "linear-gradient(135deg,#1a1208 0%,#2a1e0a 50%,#1a1208 100%)",
+        paddingTop: "60px", paddingBottom: "50px", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0,
           background: "radial-gradient(ellipse 60% 80% at 50% 50%,rgba(201,168,76,0.07),transparent)",
           pointerEvents: "none" }} />
@@ -263,9 +263,9 @@ export default function ShopPage() {
       </div>
 
       {/* Sort & filter bar */}
-      <div style={{ background: "#fff", borderBottom: "1px solid rgba(201,168,76,0.15)",
-        padding: "0 48px", position: "sticky", top: 64, zIndex: 100,
-        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+      <div className="r-section" style={{ background: "#fff", borderBottom: "1px solid rgba(201,168,76,0.15)",
+        position: "sticky", top: 64, zIndex: 100,
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <span style={{ fontFamily: "'Cormorant Garamond',Georgia,serif", fontSize: "12px",
           color: "#6b5c44", padding: "16px 0" }}>
           {filtered.length} {filtered.length === 1 ? "piece" : "pieces"}
@@ -290,8 +290,8 @@ export default function ShopPage() {
 
       {/* Filter drawer */}
       {filterOpen && (
-        <div style={{ background: "#fff", borderBottom: "1px solid rgba(201,168,76,0.12)",
-          padding: "20px 48px", display: "flex", alignItems: "center", gap: 32 }}>
+        <div className="r-section" style={{ background: "#fff", borderBottom: "1px solid rgba(201,168,76,0.12)",
+          paddingTop: "20px", paddingBottom: "20px", display: "flex", alignItems: "center", gap: 32 }}>
           <div>
             <div style={{ fontSize: "9px", letterSpacing: "0.2em", color: "#3a2e1e", marginBottom: 10,
               fontFamily: "'Cormorant Garamond',Georgia,serif" }}>PRICE RANGE</div>
@@ -309,7 +309,7 @@ export default function ShopPage() {
       )}
 
       {/* Grid */}
-      <div style={{ padding: "48px", maxWidth: 1400, margin: "0 auto" }}>
+      <div className="r-section r-section-v" style={{ maxWidth: 1400, margin: "0 auto" }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign: "center", padding: "80px 0" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>

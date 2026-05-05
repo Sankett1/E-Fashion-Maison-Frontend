@@ -11,8 +11,7 @@ const TrashIcon = () => (
 
 function CartItem({ item, onQtyChange, onRemove }) {
   return (
-    <div style={{
-      display:"grid", gridTemplateColumns:"100px 1fr auto",
+    <div className="r-grid-cart-item" style={{
       gap:"24px", alignItems:"start", padding:"28px 0",
       borderBottom:"1px solid rgba(201,168,76,0.12)",
       animation:"fadeUp 0.5s ease both",
@@ -79,7 +78,7 @@ export default function CartPage({ onAuth }) {
 
   if (cart.length === 0) return (
     <>
-      <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center" }}>
+      <div className="r-section" style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center" }}>
         <div style={{ textAlign:"center" }}>
           <div style={{ width:"80px", height:"80px", margin:"0 auto 28px", border:`1px solid rgba(201,168,76,0.3)`, display:"flex", alignItems:"center", justifyContent:"center" }}>
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round">
@@ -97,13 +96,13 @@ export default function CartPage({ onAuth }) {
   return (
     <>
       <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh" }}>
-        <div style={{ maxWidth:"1200px", margin:"0 auto", padding:"56px 48px" }}>
+        <div className="r-section r-section-v" style={{ maxWidth:"1200px", margin:"0 auto" }}>
           <div style={{ display:"flex", alignItems:"baseline", gap:"16px", marginBottom:"48px" }}>
             <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"42px", fontWeight:400, color:"#1a1208" }}>Your Bag</h1>
             <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", color:"#6b5c44" }}>{cart.length} {cart.length === 1 ? "item" : "items"}</span>
           </div>
 
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 380px", gap:"56px", alignItems:"start" }}>
+          <div className="r-grid-cart" style={{ gap:"56px", alignItems:"start" }}>
             {/* Cart Items */}
             <div>
               {cart.map(item => (

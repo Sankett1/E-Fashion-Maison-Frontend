@@ -325,9 +325,9 @@ export default function TrendingPage() {
       <style>{CSS}</style>
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div style={{
+      <div className="r-section" style={{
         background:"linear-gradient(135deg,#0d0a06 0%,#1a1208 50%,#0d0a06 100%)",
-        padding:"24px 28px 20px",textAlign:"center",position:"relative",overflow:"hidden",
+        paddingTop:"24px", paddingBottom:"20px", textAlign:"center",position:"relative",overflow:"hidden",
       }}>
         {/* Grid lines */}
         <div style={{position:"absolute",inset:0,pointerEvents:"none",opacity:.025,
@@ -359,7 +359,7 @@ export default function TrendingPage() {
         </p>
 
         {/* Stats */}
-        <div style={{display:"flex",justifyContent:"center",gap:36,
+        <div style={{display:"flex",justifyContent:"center",gap:"clamp(12px, 5vw, 36px)",flexWrap:"wrap",
           marginTop:16,position:"relative",zIndex:1}}>
           {[{n:50,s:"K+",l:"HAPPY CLIENTS"},{n:200,s:"+",l:"STYLES TRENDING"},{n:48,s:"HR",l:"NEW ARRIVALS"}]
             .map(({n,s,l})=>(
@@ -379,8 +379,8 @@ export default function TrendingPage() {
       <div style={{background:"#0d0a06",padding:"12px 0",overflow:"hidden",
         borderBottom:"1px solid rgba(201,168,76,.1)"}}>
         <div style={{display:"flex",alignItems:"center"}}>
-          <div style={{flexShrink:0,display:"flex",alignItems:"center",gap:8,
-            padding:"0 24px",borderRight:"1px solid rgba(201,168,76,.15)",
+          <div className="r-section" style={{flexShrink:0,display:"flex",alignItems:"center",gap:8,
+            borderRight:"1px solid rgba(201,168,76,.15)",
             fontFamily:"'Cormorant Garamond',serif",fontSize:"9px",
             letterSpacing:"0.28em",color:"rgba(201,168,76,.8)"}}>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="#c9a84c">
@@ -408,11 +408,11 @@ export default function TrendingPage() {
       </div>
 
       {/* ── FILTER BAR ───────────────────────────────────────────────────── */}
-      <div style={{background:"#fff",borderBottom:"1px solid rgba(201,168,76,.15)",
+      <div className="r-section" style={{background:"#fff",borderBottom:"1px solid rgba(201,168,76,.15)",
         position:"sticky",top:64,zIndex:100,
-        padding:"0 48px",display:"flex",alignItems:"center",
+        display:"flex",alignItems:"center",flexWrap:"wrap",
         justifyContent:"space-between",gap:16}}>
-        <div style={{display:"flex"}}>
+        <div className="r-tabs" style={{display:"flex",maxWidth:"100%"}}>
           {CATS.map(c=>(
             <button key={c} className={`tp-tab${cat===c?" on":""}`}
               onClick={()=>setCat(c)}>
@@ -420,7 +420,7 @@ export default function TrendingPage() {
             </button>
           ))}
         </div>
-        <div style={{display:"flex",alignItems:"center",gap:12,flexShrink:0}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,flexShrink:0,flexWrap:"wrap",paddingTop:8,paddingBottom:8}}>
           {!loading&&<span style={{fontFamily:"'Cormorant Garamond',serif",
             fontSize:12,color:"#6b5c44"}}>{total} pieces</span>}
           <div style={{display:"flex",gap:6}}>
@@ -435,7 +435,7 @@ export default function TrendingPage() {
       </div>
 
       {/* ── GRID ─────────────────────────────────────────────────────────── */}
-      <div style={{padding:"56px 48px",maxWidth:1400,margin:"0 auto"}}>
+      <div className="r-section r-section-v" style={{maxWidth:1400,margin:"0 auto"}}>
         {loading
           ? <div style={{display:"flex",justifyContent:"center",alignItems:"center",
               padding:"80px 0",gap:14}}>
@@ -467,7 +467,7 @@ export default function TrendingPage() {
 
         {/* Pagination */}
         {totalPages>1&&!loading&&(
-          <div style={{display:"flex",justifyContent:"center",
+          <div style={{display:"flex",justifyContent:"center",flexWrap:"wrap",
             alignItems:"center",gap:8,marginTop:64}}>
             <button onClick={()=>setPage(p=>Math.max(1,p-1))} disabled={page===1}
               style={{padding:"9px 20px",background:"none",

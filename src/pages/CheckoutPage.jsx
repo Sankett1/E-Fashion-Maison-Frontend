@@ -248,7 +248,7 @@ export default function CheckoutPage() {
   // Empty cart guard
   if (cart.length === 0 && step !== 2) {
     return (
-      <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center" }}>
+      <div className="r-section" style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh", display:"flex", alignItems:"center", justifyContent:"center" }}>
         <div style={{ textAlign:"center" }}>
           <div style={{ width:"80px", height:"80px", margin:"0 auto 28px", border:"1px solid rgba(201,168,76,0.3)", display:"flex", alignItems:"center", justifyContent:"center" }}>
             <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round">
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
 
   return (
     <div style={{ paddingTop:"64px", background:"#f5f0eb", minHeight:"100vh" }}>
-      <div style={{ maxWidth:"1100px", margin:"0 auto", padding:"56px 48px" }}>
+      <div className="r-section r-section-v" style={{ maxWidth:"1100px", margin:"0 auto" }}>
 
         {/* Header */}
         <div style={{ textAlign:"center", marginBottom:"48px" }}>
@@ -275,7 +275,7 @@ export default function CheckoutPage() {
 
         <StepIndicator current={step} />
 
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 360px", gap:"48px", alignItems:"start" }}>
+        <div className="r-grid-checkout" style={{ gap:"48px", alignItems:"start" }}>
           {/* ── Main Panel ────────────────────────────────────────────────── */}
           <div style={{ background:"#fff", padding:"40px", border:"1px solid rgba(201,168,76,0.12)" }}>
 
@@ -283,18 +283,18 @@ export default function CheckoutPage() {
             {step === 0 && (
               <>
                 <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"32px" }}>Delivery Details</h2>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px", marginBottom:"16px" }}>
+                <div className="r-grid-2" style={{ gap:"16px", marginBottom:"16px" }}>
                   <Field label="First Name"    placeholder="Arjun"        value={form.firstName} onChange={set("firstName")} error={errors.firstName}/>
                   <Field label="Last Name"     placeholder="Kapoor"       value={form.lastName}  onChange={set("lastName")}/>
                 </div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"16px", marginBottom:"16px" }}>
+                <div className="r-grid-2" style={{ gap:"16px", marginBottom:"16px" }}>
                   <Field label="Email Address" placeholder="arjun@example.com" type="email" value={form.email}   onChange={set("email")}   error={errors.email}/>
                   <Field label="Phone"         placeholder="9876543210"         value={form.phone}   onChange={set("phone")}   error={errors.phone}/>
                 </div>
                 <div style={{ marginBottom:"16px" }}>
                   <Field label="Delivery Address" placeholder="Flat / House No., Street, Area" value={form.address} onChange={set("address")} error={errors.address}/>
                 </div>
-                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"16px" }}>
+                <div className="r-grid-3" style={{ gap:"16px" }}>
                   <Field label="City"     placeholder="Mumbai"      value={form.city}  onChange={set("city")}  error={errors.city}/>
                   <Field label="State"    placeholder="Maharashtra" value={form.state} onChange={set("state")} error={errors.state}/>
                   <Field label="PIN Code" placeholder="400001"      value={form.pin}   onChange={set("pin")}   error={errors.pin}/>

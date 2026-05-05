@@ -18,6 +18,7 @@ export default function AdminLayout({ children, title }) {
   const location  = useLocation();
   const { user, logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "#060402", fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
@@ -28,15 +29,30 @@ export default function AdminLayout({ children, title }) {
         ::-webkit-scrollbar { width: 3px; }
         ::-webkit-scrollbar-track { background: #0a0803; }
         ::-webkit-scrollbar-thumb { background: #c9a84c; }
+        
+        .admin-sidebar { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), width 0.3s cubic-bezier(0.4,0,0.2,1); }
+        .admin-hamburger { display: none; background: none; border: none; cursor: pointer; color: #fff; font-size: 20px; }
+        .admin-overlay { display: none; }
+        
+        @media (max-width: 768px) {
+          .admin-sidebar { position: fixed !important; z-index: 200; transform: translateX(-100%); width: 240px !important; }
+          .admin-sidebar.mobile-open { transform: translateX(0); }
+          .admin-overlay.mobile-open { display: block; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199; }
+          .admin-hamburger { display: block; }
+          .collapse-btn { display: none; }
+          .admin-main-padding { padding: 16px !important; }
+          .admin-topbar { padding: 0 16px !important; }
+        }
       `}</style>
+      
+      <div className={`admin-overlay ${mobileOpen ? 'mobile-open' : ''}`} onClick={() => setMobileOpen(false)} />
 
       {/* Sidebar */}
-      <aside style={{
+      <aside className={`admin-sidebar ${mobileOpen ? 'mobile-open' : ''}`} style={{
         width: collapsed ? "64px" : "240px", flexShrink: 0,
         background: "linear-gradient(180deg, #0d0a06 0%, #080502 100%)",
         borderRight: "1px solid rgba(201,168,76,0.12)",
         display: "flex", flexDirection: "column",
-        transition: "width 0.3s cubic-bezier(0.4,0,0.2,1)",
         position: "sticky", top: 0, height: "100vh", overflow: "hidden",
       }}>
         {/* Logo */}
@@ -49,7 +65,7 @@ export default function AdminLayout({ children, title }) {
             </div>
           )}
           {collapsed && <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", color: C.gold }}>M</div>}
-          <button onClick={e => { e.stopPropagation(); setCollapsed(c => !c); }} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", fontSize: "16px", flexShrink: 0 }}>
+          <button className="collapse-btn" onClick={e => { e.stopPropagation(); setCollapsed(c => !c); }} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", fontSize: "16px", flexShrink: 0 }}>
             {collapsed ? "→" : "←"}
           </button>
         </div>
@@ -62,7 +78,7 @@ export default function AdminLayout({ children, title }) {
             return (
               <div
                 key={item.path}
-                onClick={() => navigate(item.path)}
+                onClick={() => { navigate(item.path); setMobileOpen(false); }}
                 style={{
                   display: "flex", alignItems: "center", gap: "12px",
                   padding: collapsed ? "12px 0" : "12px 20px",
@@ -104,8 +120,9 @@ export default function AdminLayout({ children, title }) {
       {/* Main content */}
       <main style={{ flex: 1, background: "#080502", minHeight: "100vh", overflowY: "auto" }}>
         {/* Top bar */}
-        <div style={{ height: "64px", borderBottom: "1px solid rgba(201,168,76,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 32px", background: "rgba(8,5,2,0.95)", position: "sticky", top: 0, zIndex: 100 }}>
-          <div>
+        <div className="admin-topbar" style={{ height: "64px", borderBottom: "1px solid rgba(201,168,76,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 32px", background: "rgba(8,5,2,0.95)", position: "sticky", top: 0, zIndex: 100 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+            <button className="admin-hamburger" onClick={() => setMobileOpen(true)}>☰</button>
             <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "22px", fontWeight: 400, color: "#fff" }}>{title}</h1>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
@@ -118,7 +135,7 @@ export default function AdminLayout({ children, title }) {
             </div>
           </div>
         </div>
-        <div style={{ padding: "32px" }}>
+        <div className="admin-main-padding" style={{ padding: "32px" }}>
           {children}
         </div>
       </main>

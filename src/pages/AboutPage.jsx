@@ -76,9 +76,9 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             HERO — with background image
         ════════════════════════════════════════════ */}
-        <section style={{
+        <section className="r-section" style={{
           minHeight:"75vh", display:"flex", alignItems:"center", justifyContent:"center",
-          position:"relative", overflow:"hidden", padding:"80px 48px",
+          position:"relative", overflow:"hidden", paddingTop:"80px", paddingBottom:"80px",
         }}>
           {/* Background image */}
           <div style={{ position:"absolute", inset:0, zIndex:0 }}>
@@ -113,8 +113,8 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             ORIGIN STORY — with image grid
         ════════════════════════════════════════════ */}
-        <section style={{ padding:"110px 48px", background:"#f5f0eb" }}>
-          <div style={{ maxWidth:"1200px", margin:"0 auto", display:"grid", gridTemplateColumns:"1fr 1fr", gap:"80px", alignItems:"center" }}>
+        <section className="r-section r-section-v" style={{ background:"#f5f0eb" }}>
+          <div className="r-grid-2" style={{ maxWidth:"1200px", margin:"0 auto", gap:"80px", alignItems:"center" }}>
             <div className="m-reveal-left">
               <div style={{ width:"56px", height:"1px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)`, marginBottom:"28px" }}/>
               <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(30px,3.5vw,46px)", fontWeight:400, color:"#1a1208", marginBottom:"24px", lineHeight:1.2 }}>
@@ -169,7 +169,7 @@ export default function AboutPage({ onAuth }) {
             ATELIER GALLERY — fullbleed image strip
         ════════════════════════════════════════════ */}
         <section style={{ padding:"0", overflow:"hidden" }}>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:0, height:"clamp(240px,28vw,380px)" }}>
+          <div className="r-grid-4" style={{ gap:0, height:"clamp(240px,28vw,380px)" }}>
             {ATELIER_GALLERY.map((src, i) => (
               <div key={i} style={{ overflow:"hidden", position:"relative" }}>
                 <img
@@ -186,7 +186,7 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             OUR JOURNEY — Timeline with images
         ════════════════════════════════════════════ */}
-        <section style={{ padding:"110px 48px", background:"#f5f0eb", position:"relative" }}>
+        <section className="r-section r-section-v" style={{ background:"#f5f0eb", position:"relative" }}>
           <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
             <div style={{ textAlign:"center", marginBottom:"64px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
@@ -199,8 +199,8 @@ export default function AboutPage({ onAuth }) {
               <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:"1px", background:`linear-gradient(to bottom,transparent,${C.gold}30,${C.gold}30,transparent)`, transform:"translateX(-50%)" }}/>
               
               {JOURNEY_IMAGES.map((item, i) => (
-                <div key={item.year} className={`m-reveal ${i % 2 === 0 ? "m-reveal-left" : "m-reveal-right"}`} style={{
-                  display:"grid", gridTemplateColumns:"1fr 1fr", gap:"48px", alignItems:"center",
+                <div key={item.year} className={`m-reveal ${i % 2 === 0 ? "m-reveal-left" : "m-reveal-right"} r-grid-2`} style={{
+                  gap:"48px", alignItems:"center",
                   marginBottom: i < JOURNEY_IMAGES.length - 1 ? "64px" : 0,
                   direction: i % 2 === 1 ? "rtl" : "ltr",
                 }}>
@@ -234,7 +234,7 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             VALUES — with background imagery
         ════════════════════════════════════════════ */}
-        <section style={{ padding:"100px 48px", background:"#1a1208", position:"relative", overflow:"hidden" }}>
+        <section className="r-section" style={{ paddingTop:"100px", paddingBottom:"100px", background:"#1a1208", position:"relative", overflow:"hidden" }}>
           <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.04),transparent)", pointerEvents:"none" }}/>
           {/* Subtle background image */}
           <div style={{ position:"absolute", inset:0, opacity:0.04, zIndex:0 }}>
@@ -246,7 +246,7 @@ export default function AboutPage({ onAuth }) {
               <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#fff", marginBottom:"12px" }}>What We Stand For</h2>
               <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.3)" }}>THE MAISON PRINCIPLES</p>
             </div>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"28px" }}>
+            <div className="r-grid-3" style={{ gap:"28px" }}>
               {VALUES.map((v, i) => (
                 <div key={v.title} className={`m-reveal m-d${i+1}`} style={{
                   border:"1px solid rgba(201,168,76,0.15)", background:"rgba(201,168,76,0.02)",
@@ -277,14 +277,14 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             TEAM — with portrait images
         ════════════════════════════════════════════ */}
-        <section style={{ padding:"100px 48px", background:"#f5f0eb" }}>
+        <section className="r-section" style={{ paddingTop:"100px", paddingBottom:"100px", background:"#f5f0eb" }}>
           <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
             <div style={{ textAlign:"center", marginBottom:"56px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
               <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>The Minds Behind MAISON</h2>
               <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44" }}>PEOPLE, CRAFT, VISION</p>
             </div>
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:"28px" }}>
+            <div className="r-grid-3" style={{ gap:"28px" }}>
               {TEAM.map((member, i) => (
                 <div key={member.name} className={`m-reveal m-d${i+1}`} style={{ textAlign:"center" }}>
                   <div style={{
@@ -313,7 +313,7 @@ export default function AboutPage({ onAuth }) {
         {/* ════════════════════════════════════════════
             CTA — with background image
         ════════════════════════════════════════════ */}
-        <section style={{ padding:"110px 48px", position:"relative", overflow:"hidden", textAlign:"center" }}>
+        <section className="r-section r-section-v" style={{ position:"relative", overflow:"hidden", textAlign:"center" }}>
           {/* Background image */}
           <div style={{ position:"absolute", inset:0, zIndex:0 }}>
             <img

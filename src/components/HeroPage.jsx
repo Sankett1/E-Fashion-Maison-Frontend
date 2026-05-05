@@ -715,11 +715,11 @@ export default function HeroPage({ onAuth }) {
 
 
       {/* ════════ CURATED COLLECTIONS — magnetic 3D + scroll stagger ═══════ */}
-      <section style={{background:"#f5f0eb",padding:"110px 48px",position:"relative",overflow:"hidden"}}>
+      <section className="r-section-v r-section" style={{background:"#f5f0eb",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,.045) 0%,transparent 65%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",zIndex:1}}>
           <AnimHeader title="Curated Collections" sub="DISCOVER WHAT DEFINES YOU"/>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"18px",maxWidth:"1260px",margin:"0 auto"}}>
+          <div className="r-grid-3" style={{gap:"18px",maxWidth:"1260px",margin:"0 auto"}}>
             {COLLECTION_CARDS.map(({eye,name,image,link},i)=>(
               <CollectionCard key={name} eye={eye} name={name} image={image} link={link||"/shop"} index={i}/>
             ))}
@@ -728,15 +728,14 @@ export default function HeroPage({ onAuth }) {
       </section>
 
       {/* ════════ TRENDING NOW — centered header + horizontal scroll ════════ */}
-      <section ref={trendingRef} style={{
+      <section ref={trendingRef} className="r-section-v" style={{
         background:"#f5f0eb",
-        padding:"80px 0 70px",
         position:"relative",
         overflow:"hidden",
       }}>
         
         {/* ── Centered header ── */}
-        <div style={{padding:"0 48px"}}>
+        <div className="r-section">
           <AnimHeader title="Trending Now" sub="MOST COVETED PIECES THIS SEASON"/>
         </div>
 
@@ -747,9 +746,9 @@ export default function HeroPage({ onAuth }) {
       {/* ════════════════════════════════════════════
           CRAFTED IN INDIA
       ════════════════════════════════════════════ */}
-      <section style={{background:"#1a1208",padding:"100px 48px",position:"relative",overflow:"hidden"}}>
+      <section className="r-section-v r-section" style={{background:"#1a1208",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:"50%",right:"-2%",transform:"translateY(-50%)",fontFamily:"'Playfair Display',serif",fontSize:"clamp(80px,14vw,180px)",fontWeight:700,color:"rgba(255,255,255,0.025)",lineHeight:1,userSelect:"none",pointerEvents:"none",whiteSpace:"nowrap"}}>INDIA</div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px",alignItems:"center",maxWidth:"1300px",margin:"0 auto"}}>
+        <div className="r-grid-2" style={{gap:"clamp(40px, 6vw, 80px)",alignItems:"center",maxWidth:"1300px",margin:"0 auto"}}>
           <div className="m-reveal-left">
             <div style={{width:"64px",height:"1px",marginBottom:"32px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)"}}/>
             <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(32px,4vw,50px)",fontWeight:500,color:"#fff",marginBottom:"28px",lineHeight:1.15}}>
@@ -763,7 +762,7 @@ export default function HeroPage({ onAuth }) {
             </p>
             <button className="m-btn-outline-light" onClick={() => navigate("/about")}>OUR STORY</button>
           </div>
-          <div className="m-reveal-right" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"20px"}}>
+          <div className="m-reveal-right r-grid-2" style={{gap:"20px"}}>
             {[
               { id:"hStat1", init:"12+",  label:"YEARS OF CRAFT"  },
               { id:"hStat2", init:"50K+", label:"HAPPY CLIENTS"   },
@@ -780,11 +779,11 @@ export default function HeroPage({ onAuth }) {
       </section>
 
       {/* ════════ TESTIMONIALS — depth snap carousel + auto-advance ══════════ */}
-      <section style={{background:"#0c0905",padding:"110px 0 90px",position:"relative",overflow:"hidden"}}>
+      <section className="r-section-v" style={{background:"#0c0905",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:0,left:"50%",transform:"translateX(-50%)",
           width:"65%",height:"100%",pointerEvents:"none",
           background:"radial-gradient(ellipse 100% 55% at 50% 50%,rgba(201,168,76,.04) 0%,transparent 70%)"}}/>
-        <div style={{padding:"0 48px",position:"relative",zIndex:1}}>
+        <div className="r-section" style={{position:"relative",zIndex:1}}>
           <AnimHeader title="What Our Clients Say" sub="STORIES FROM THE MAISON COMMUNITY" dark/>
         </div>
         <TestCarousel items={[
@@ -801,7 +800,7 @@ export default function HeroPage({ onAuth }) {
       {/* ════════════════════════════════════════════
           NEWSLETTER
       ════════════════════════════════════════════ */}
-      <section style={{background:"#1a1208",padding:"56px 48px 40px",textAlign:"center",position:"relative",overflow:"hidden"}}>
+      <section className="r-section-v r-section" style={{background:"#1a1208",textAlign:"center",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse 60% 50% at 50% 50%,rgba(201,168,76,0.06) 0%,transparent 65%)",pointerEvents:"none"}}/>
         <div style={{position:"relative",zIndex:1}}>
           <div className="m-reveal" style={{width:"48px",height:"1px",margin:"0 auto",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)"}}/>
@@ -835,18 +834,16 @@ export default function HeroPage({ onAuth }) {
       {/* ════════════════════════════════════════════
           TRUST BAR — below newsletter
       ════════════════════════════════════════════ */}
-      <section style={{
+      <section className="r-section" style={{
         background:"#1a1208",
         borderTop:"1px solid rgba(201,168,76,0.12)",
-        padding:"36px 48px",
+        paddingTop:"36px", paddingBottom:"36px",
         position:"relative",
         overflow:"hidden",
       }}>
         <div style={{position:"absolute",inset:0,pointerEvents:"none",
           background:"radial-gradient(ellipse 80% 60% at 50% 50%,rgba(201,168,76,0.05) 0%,transparent 70%)"}}/>
-        <div style={{
-          display:"grid",
-          gridTemplateColumns:"repeat(6,1fr)",
+        <div className="r-grid-6" style={{
           gap:"20px",
           maxWidth:"1300px",
           margin:"0 auto",
@@ -916,8 +913,8 @@ export default function HeroPage({ onAuth }) {
       {/* ════════════════════════════════════════════
           FOOTER
       ════════════════════════════════════════════ */}
-      <footer style={{background:"#f5f0eb",padding:"72px 48px 40px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"1.6fr 1fr 1fr 1fr",gap:"48px",maxWidth:"1300px",margin:"0 auto 56px"}}>
+      <footer className="r-section" style={{background:"#f5f0eb",paddingTop:"72px",paddingBottom:"40px"}}>
+        <div className="r-grid-4" style={{gap:"48px",maxWidth:"1300px",margin:"0 auto 56px"}}>
           {/* Brand col */}
           <div>
             <div style={{fontFamily:"'Playfair Display',serif",fontSize:"20px",letterSpacing:"0.35em",fontWeight:600,color:"#1a1208",marginBottom:"16px"}}>MAISON</div>
@@ -941,7 +938,7 @@ export default function HeroPage({ onAuth }) {
 
         <hr style={{border:"none",borderTop:"1px solid rgba(201,168,76,0.18)",maxWidth:"1300px",margin:"0 auto 32px"}}/>
 
-        <div style={{maxWidth:"1300px",margin:"0 auto",display:"flex",flexDirection:"column",gap:"20px"}}>
+        <div className="r-footer-bottom" style={{maxWidth:"1300px",margin:"0 auto"}}>
           <div>
             <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8.5px",letterSpacing:"0.25em",color:"#6b5c44",marginBottom:"12px"}}>SECURE PAYMENT METHODS</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>

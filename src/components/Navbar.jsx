@@ -55,7 +55,6 @@ function DropdownPanel({ items, visible, alignRight = false }) {
         <div
           key={item.label}
           onMouseDown={(e) => {
-            // Use onMouseDown instead of onClick so it fires before parent onMouseLeave
             e.preventDefault();
             e.stopPropagation();
             navigate(item.path);
@@ -95,7 +94,6 @@ function DropdownPanel({ items, visible, alignRight = false }) {
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Nav item — hover AND click opens dropdown
-// FIX: use a leaveTimer so dropdown stays open long enough for mouse to enter it
 // ─────────────────────────────────────────────────────────────────────────────
 function NavItem({ item, active, setActive, alignRight }) {
   const navigate = useNavigate();
@@ -107,7 +105,6 @@ function NavItem({ item, active, setActive, alignRight }) {
     setActive(item.label);
   };
   const handleLeave = () => {
-    // Delay closing so the mouse can travel from button into the dropdown panel
     leaveTimer.current = setTimeout(() => setActive(null), 120);
   };
 
@@ -159,7 +156,6 @@ function NavItem({ item, active, setActive, alignRight }) {
       </button>
 
       {item.items?.length > 0 && (
-        // The dropdown panel itself also pauses the close timer when hovered
         <div
           onMouseEnter={() => clearTimeout(leaveTimer.current)}
           onMouseLeave={handleLeave}
@@ -173,7 +169,7 @@ function NavItem({ item, active, setActive, alignRight }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Search dropdown — compact, slides from under the navbar
+// Search dropdown
 // ─────────────────────────────────────────────────────────────────────────────
 function SearchBar({ onClose }) {
   const [query, setQuery] = useState("");
@@ -191,6 +187,7 @@ function SearchBar({ onClose }) {
   return (
     <div
       onClick={e => e.stopPropagation()}
+      className="r-search-bar"
       style={{
         position: "fixed",
         top: "64px",
@@ -200,7 +197,6 @@ function SearchBar({ onClose }) {
         background: "rgba(8,5,2,0.97)",
         borderBottom: `1px solid ${C.border}`,
         backdropFilter: "blur(20px)",
-        padding: "14px 48px",
         display: "flex",
         alignItems: "center",
         gap: "14px",
@@ -227,6 +223,7 @@ function SearchBar({ onClose }) {
           letterSpacing: "0.05em",
           padding: "6px 4px",
           outline: "none",
+          minWidth: 0,
         }}
       />
       {query.trim() && (
@@ -274,6 +271,8 @@ export default function Navbar({ onAuth }) {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userDrop, setUserDrop] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
   const userLeaveTimer = useRef(null);
   const navigate = useNavigate();
   const { user, isAuthenticated, isAdmin, logout } = useAuth();
@@ -285,24 +284,27 @@ export default function Navbar({ onAuth }) {
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  // Close all menus on outside click
   useEffect(() => {
     const close = () => { setActive(null); setUserDrop(false); setSearchOpen(false); };
     document.addEventListener("click", close);
     return () => document.removeEventListener("click", close);
   }, []);
 
-  const LEFT  = NAV_ITEMS.slice(0, 3);   // NEW IN, WOMEN, MEN
-  const RIGHT = NAV_ITEMS.slice(3);      // ACCESSORIES, SALE
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileOpen]);
 
+  const LEFT  = NAV_ITEMS.slice(0, 3);
+  const RIGHT = NAV_ITEMS.slice(3);
   const divider = <div style={{ width: 1, height: 18, background: "rgba(255,255,255,0.1)", flexShrink: 0 }} />;
-
   const iconBtn = (isActive) => ({
     background: "none", border: "none", cursor: "pointer",
     display: "flex", alignItems: "center", padding: "6px",
     color: isActive ? C.gold : "rgba(255,255,255,0.5)",
     transition: "color 0.18s",
   });
+  const mobileNav = (path) => { navigate(path); setMobileOpen(false); setMobileExpanded(null); };
 
   return (
     <>
@@ -311,11 +313,10 @@ export default function Navbar({ onAuth }) {
         style={{
           position: "fixed", top: 0, left: 0, right: 0, zIndex: 500,
           height: "64px",
-          // 3-column grid guarantees logo stays centred regardless of side content width
           display: "grid",
           gridTemplateColumns: "1fr auto 1fr",
           alignItems: "center",
-          padding: "0 40px",
+          padding: "0 clamp(16px, 4vw, 40px)",
           background: scrolled ? "rgba(8,5,2,0.98)" : "rgba(8,5,2,0.95)",
           borderBottom: scrolled ? `1px solid ${C.border}` : "1px solid rgba(255,255,255,0.04)",
           backdropFilter: "blur(24px)",
@@ -325,166 +326,147 @@ export default function Navbar({ onAuth }) {
           animation: "slideDown 0.8s cubic-bezier(0.4,0,0.2,1) forwards",
         }}
       >
-        {/* ── LEFT: NEW IN · WOMEN · MEN ───────────────────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "28px", justifyContent: "flex-start" }}>
-          {LEFT.map(item => (
-            <NavItem key={item.label} item={item} active={active} setActive={setActive} />
-          ))}
+        {/* LEFT */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-start" }}>
+          <button className="m-hamburger" onClick={() => setMobileOpen(true)} aria-label="Open menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+          <div className="m-nav-desktop" style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+            {LEFT.map(item => (
+              <NavItem key={item.label} item={item} active={active} setActive={setActive} />
+            ))}
+          </div>
         </div>
 
-        {/* ── CENTRE: MAISON logo ───────────────────────────────────── */}
-        <div
-          onClick={() => navigate("/")}
-          style={{ cursor: "pointer", userSelect: "none", textAlign: "center", padding: "0 24px", flexShrink: 0 }}
-        >
-          <div style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "20px", letterSpacing: "0.46em",
-            fontWeight: 600, color: "#fff", lineHeight: 1,
-          }}>MAISON</div>
+        {/* CENTRE */}
+        <div onClick={() => navigate("/")} style={{ cursor: "pointer", userSelect: "none", textAlign: "center", padding: "0 clamp(12px,2vw,24px)", flexShrink: 0 }}>
+          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(16px,2.5vw,20px)", letterSpacing: "0.46em", fontWeight: 600, color: "#fff", lineHeight: 1 }}>MAISON</div>
           <div style={{ height: "1px", marginTop: "4px", background: "linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)" }} />
         </div>
 
-        {/* ── RIGHT: ACCESSORIES · SALE · icons · auth ─────────────── */}
-        <div style={{ display: "flex", alignItems: "center", gap: "14px", justifyContent: "flex-end" }}>
-          {RIGHT.map(item => (
-            <NavItem key={item.label} item={item} active={active} setActive={setActive} alignRight />
-          ))}
+        {/* RIGHT */}
+        <div style={{ display: "flex", alignItems: "center", gap: "clamp(8px,1.5vw,14px)", justifyContent: "flex-end" }}>
+          <div className="m-nav-desktop" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            {RIGHT.map(item => (
+              <NavItem key={item.label} item={item} active={active} setActive={setActive} alignRight />
+            ))}
+            {divider}
+          </div>
 
-          {divider}
-
-          {/* Search */}
-          <button
-            onClick={() => setSearchOpen(s => !s)}
-            style={iconBtn(searchOpen)}
+          <button onClick={() => setSearchOpen(s => !s)} style={iconBtn(searchOpen)}
             onMouseEnter={e => e.currentTarget.style.color = C.gold}
             onMouseLeave={e => e.currentTarget.style.color = searchOpen ? C.gold : "rgba(255,255,255,0.5)"}
-          >
-            <SearchIcon />
-          </button>
+          ><SearchIcon /></button>
 
-          {/* Cart */}
-          <button
-            onClick={() => navigate("/cart")}
-            style={{ ...iconBtn(false), position: "relative" }}
+          <button onClick={() => navigate("/cart")} style={{ ...iconBtn(false), position: "relative" }}
             onMouseEnter={e => e.currentTarget.style.color = C.gold}
             onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
           >
             <BagIcon />
             {cartCount > 0 && (
-              <span style={{
-                position: "absolute", top: 0, right: 0,
-                width: 14, height: 14, background: C.gold, borderRadius: "50%",
-                fontSize: "8px", color: "#0f0c08", fontWeight: 700,
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>{cartCount}</span>
+              <span style={{ position: "absolute", top: 0, right: 0, width: 14, height: 14, background: C.gold, borderRadius: "50%", fontSize: "8px", color: "#0f0c08", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{cartCount}</span>
             )}
           </button>
 
-          {divider}
-
-          {/* ── Auth ─────────────────────────────────────────────────── */}
-          {isAuthenticated ? (
-            <div
-              style={{ position: "relative" }}
-              onMouseEnter={() => { clearTimeout(userLeaveTimer.current); setUserDrop(true); }}
-              onMouseLeave={() => { userLeaveTimer.current = setTimeout(() => setUserDrop(false), 120); }}
-            >
-              <button style={{
-                background: "none", border: `1px solid ${C.border}`, cursor: "pointer",
-                display: "flex", alignItems: "center", gap: "7px",
-                padding: "6px 13px", color: C.gold, fontSize: "10px",
-                letterSpacing: "0.14em", fontFamily: "inherit", whiteSpace: "nowrap",
-              }}>
-                <UserIcon />
-                {user?.name?.split(" ")[0] || "Account"}
-              </button>
-
-              {userDrop && (
-                <div
-                  onMouseEnter={() => clearTimeout(userLeaveTimer.current)}
-                  onMouseLeave={() => { userLeaveTimer.current = setTimeout(() => setUserDrop(false), 120); }}
-                  style={{
-                    position: "absolute", top: "calc(100% + 8px)", right: 0,
-                    minWidth: "178px", background: "#0d0a06",
-                    border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}`,
-                    boxShadow: "0 20px 50px rgba(0,0,0,0.7)", zIndex: 9999,
-                  }}
-                >
-                  {[
-                    { label: "MY ACCOUNT", path: "/account" },
-                    { label: "MY ORDERS",  path: "/account?tab=orders" },
-                    ...(isAdmin ? [{ label: "⚙ ADMIN PANEL", path: "/admin", gold: true }] : []),
-                  ].map(item => (
-                    <div
-                      key={item.label}
-                      onMouseDown={() => { navigate(item.path); setUserDrop(false); }}
-                      style={{
-                        padding: "11px 18px", fontSize: "10px", letterSpacing: "0.14em",
-                        color: item.gold ? C.gold : "rgba(255,255,255,0.6)",
-                        cursor: "pointer", borderBottom: "1px solid rgba(255,255,255,0.05)",
-                        transition: "all 0.14s",
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.color = C.gold; e.currentTarget.style.background = "rgba(201,168,76,0.07)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.color = item.gold ? C.gold : "rgba(255,255,255,0.6)"; e.currentTarget.style.background = ""; }}
-                    >
-                      {item.label}
-                    </div>
-                  ))}
-                  <div
-                    onMouseDown={() => { logout(); setUserDrop(false); }}
-                    style={{
-                      padding: "11px 18px", fontSize: "10px", letterSpacing: "0.14em",
-                      color: "rgba(255,80,80,0.7)", cursor: "pointer",
-                      display: "flex", alignItems: "center", gap: "8px", transition: "all 0.14s",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.color = "#ff5050"; e.currentTarget.style.background = "rgba(255,80,80,0.05)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,80,80,0.7)"; e.currentTarget.style.background = ""; }}
+          <div className="m-nav-desktop" style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            {divider}
+            {isAuthenticated ? (
+              <div style={{ position: "relative" }}
+                onMouseEnter={() => { clearTimeout(userLeaveTimer.current); setUserDrop(true); }}
+                onMouseLeave={() => { userLeaveTimer.current = setTimeout(() => setUserDrop(false), 120); }}
+              >
+                <button style={{ background: "none", border: `1px solid ${C.border}`, cursor: "pointer", display: "flex", alignItems: "center", gap: "7px", padding: "6px 13px", color: C.gold, fontSize: "10px", letterSpacing: "0.14em", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+                  <UserIcon />{user?.name?.split(" ")[0] || "Account"}
+                </button>
+                {userDrop && (
+                  <div onMouseEnter={() => clearTimeout(userLeaveTimer.current)} onMouseLeave={() => { userLeaveTimer.current = setTimeout(() => setUserDrop(false), 120); }}
+                    style={{ position: "absolute", top: "calc(100% + 8px)", right: 0, minWidth: "178px", background: "#0d0a06", border: `1px solid ${C.border}`, borderTop: `2px solid ${C.gold}`, boxShadow: "0 20px 50px rgba(0,0,0,0.7)", zIndex: 9999 }}
                   >
-                    <LogoutIcon /> SIGN OUT
+                    {[
+                      { label: "MY ACCOUNT", path: "/account" },
+                      { label: "MY ORDERS", path: "/account?tab=orders" },
+                      ...(isAdmin ? [{ label: "⚙ ADMIN PANEL", path: "/admin", gold: true }] : []),
+                    ].map(item => (
+                      <div key={item.label} onMouseDown={() => { navigate(item.path); setUserDrop(false); }}
+                        style={{ padding: "11px 18px", fontSize: "10px", letterSpacing: "0.14em", color: item.gold ? C.gold : "rgba(255,255,255,0.6)", cursor: "pointer", borderBottom: "1px solid rgba(255,255,255,0.05)", transition: "all 0.14s" }}
+                        onMouseEnter={e => { e.currentTarget.style.color = C.gold; e.currentTarget.style.background = "rgba(201,168,76,0.07)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = item.gold ? C.gold : "rgba(255,255,255,0.6)"; e.currentTarget.style.background = ""; }}
+                      >{item.label}</div>
+                    ))}
+                    <div onMouseDown={() => { logout(); setUserDrop(false); }}
+                      style={{ padding: "11px 18px", fontSize: "10px", letterSpacing: "0.14em", color: "rgba(255,80,80,0.7)", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.14s" }}
+                      onMouseEnter={e => { e.currentTarget.style.color = "#ff5050"; e.currentTarget.style.background = "rgba(255,80,80,0.05)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,80,80,0.7)"; e.currentTarget.style.background = ""; }}
+                    ><LogoutIcon /> SIGN OUT</div>
                   </div>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div style={{ display: "flex", alignItems: "stretch", border: `1px solid rgba(201,168,76,0.25)`, overflow: "hidden", flexShrink: 0 }}>
-              <button
-                onClick={() => onAuth("signin")}
-                style={{
-                  display: "flex", alignItems: "center", gap: "6px",
-                  padding: "0 14px", height: "34px", fontSize: "9.5px",
-                  letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif",
-                  cursor: "pointer", border: "none",
-                  color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.04)",
-                  transition: "all 0.2s", whiteSpace: "nowrap",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = C.gold; e.currentTarget.style.background = "rgba(201,168,76,0.08)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
-              >
-                <UserIcon /> SIGN IN
-              </button>
-              <div style={{ width: "1px", background: "rgba(255,255,255,0.1)" }} />
-              <button
-                onClick={() => onAuth("signup")}
-                style={{
-                  display: "flex", alignItems: "center", gap: "6px",
-                  padding: "0 14px", height: "34px", fontSize: "9.5px",
-                  letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif",
-                  cursor: "pointer", border: "none", color: "#0f0c08",
-                  background: `linear-gradient(90deg,${C.gold},${C.goldDark})`,
-                  transition: "all 0.2s", whiteSpace: "nowrap",
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.goldLight},${C.gold})`}
-                onMouseLeave={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.gold},${C.goldDark})`}
-              >
-                <UserIcon /> JOIN
-              </button>
-            </div>
-          )}
+                )}
+              </div>
+            ) : (
+              <div style={{ display: "flex", alignItems: "stretch", border: `1px solid rgba(201,168,76,0.25)`, overflow: "hidden", flexShrink: 0 }}>
+                <button onClick={() => onAuth("signin")}
+                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif", cursor: "pointer", border: "none", color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.04)", transition: "all 0.2s", whiteSpace: "nowrap" }}
+                  onMouseEnter={e => { e.currentTarget.style.color = C.gold; e.currentTarget.style.background = "rgba(201,168,76,0.08)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
+                ><UserIcon /> SIGN IN</button>
+                <div style={{ width: "1px", background: "rgba(255,255,255,0.1)" }} />
+                <button onClick={() => onAuth("signup")}
+                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif", cursor: "pointer", border: "none", color: "#0f0c08", background: `linear-gradient(90deg,${C.gold},${C.goldDark})`, transition: "all 0.2s", whiteSpace: "nowrap" }}
+                  onMouseEnter={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.goldLight},${C.gold})`}
+                  onMouseLeave={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.gold},${C.goldDark})`}
+                ><UserIcon /> JOIN</button>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
-      {/* Search bar — compact strip below navbar */}
+      {/* MOBILE DRAWER */}
+      {mobileOpen && (
+        <div onClick={() => setMobileOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(4,2,0,0.7)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}>
+          <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "min(340px, 85vw)", background: "linear-gradient(180deg, #0d0a06 0%, #080502 100%)", borderLeft: `1px solid ${C.border}`, animation: "mobileSlideIn 0.3s cubic-bezier(0.4,0,0.2,1) forwards", overflowY: "auto", display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", letterSpacing: "0.36em", color: "#fff" }}>MAISON</div>
+              <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.4)", fontSize: "24px", padding: "4px", lineHeight: 1 }}>×</button>
+            </div>
+            <div style={{ flex: 1, padding: "8px 0" }}>
+              {NAV_ITEMS.map(item => (
+                <div key={item.label}>
+                  <div onClick={() => { if (item.items?.length) setMobileExpanded(mobileExpanded === item.label ? null : item.label); else mobileNav(item.path); }}
+                    style={{ padding: "16px 24px", fontSize: "11px", letterSpacing: "0.2em", color: mobileExpanded === item.label ? C.gold : "rgba(255,255,255,0.65)", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.04)", transition: "color 0.15s" }}>
+                    {item.label}
+                    {item.items?.length > 0 && <span style={{ transform: mobileExpanded === item.label ? "rotate(180deg)" : "none", transition: "transform 0.2s", opacity: 0.5 }}><ChevDown /></span>}
+                  </div>
+                  {mobileExpanded === item.label && item.items?.map(sub => (
+                    <div key={sub.label} onClick={() => mobileNav(sub.path)}
+                      style={{ padding: "12px 24px 12px 40px", fontSize: "10px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.4)", cursor: "pointer", borderBottom: "1px solid rgba(255,255,255,0.02)", transition: "color 0.14s" }}>
+                      {sub.label.toUpperCase()}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div style={{ padding: "20px 24px", borderTop: `1px solid ${C.border}` }}>
+              {isAuthenticated ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  <div style={{ fontSize: "10px", letterSpacing: "0.14em", color: C.gold, marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px" }}><UserIcon /> {user?.name || "Account"}</div>
+                  <div onClick={() => mobileNav("/account")} style={{ padding: "10px 0", fontSize: "10px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.5)", cursor: "pointer" }}>MY ACCOUNT</div>
+                  <div onClick={() => mobileNav("/account?tab=orders")} style={{ padding: "10px 0", fontSize: "10px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.5)", cursor: "pointer" }}>MY ORDERS</div>
+                  {isAdmin && <div onClick={() => mobileNav("/admin")} style={{ padding: "10px 0", fontSize: "10px", letterSpacing: "0.14em", color: C.gold, cursor: "pointer" }}>⚙ ADMIN PANEL</div>}
+                  <div onClick={() => { logout(); setMobileOpen(false); }} style={{ padding: "10px 0", fontSize: "10px", letterSpacing: "0.14em", color: "rgba(255,80,80,0.7)", cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}><LogoutIcon /> SIGN OUT</div>
+                </div>
+              ) : (
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button onClick={() => { setMobileOpen(false); onAuth("signin"); }} style={{ flex: 1, padding: "13px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "inherit", cursor: "pointer", border: "1px solid rgba(201,168,76,0.3)", color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.04)" }}>SIGN IN</button>
+                  <button onClick={() => { setMobileOpen(false); onAuth("signup"); }} style={{ flex: 1, padding: "13px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "inherit", cursor: "pointer", border: "none", color: "#0f0c08", background: C.gold }}>JOIN</button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {searchOpen && <SearchBar onClose={() => setSearchOpen(false)} />}
     </>
   );
