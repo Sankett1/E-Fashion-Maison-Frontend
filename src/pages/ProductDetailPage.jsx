@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
 import { useCart } from "../context/CartContext";
-import { getProductById } from "../api/productApi";
+import { useAuth } from "../context/AuthContext";
+import { getProductById, toggleWishlist } from "../api/productApi";
 
 const StarIcon = ({ filled }) => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill={filled ? C.gold : "none"} stroke={C.gold} strokeWidth="1.5">
@@ -40,6 +41,7 @@ export default function ProductDetailPage({ onAuth }) {
   const [selectedSize, setSelectedSize]   = useState(null);
   const [qty, setQty]                     = useState(1);
   const [activeImg, setActiveImg]         = useState(0);
+  const { user, refreshUser, isAuthenticated } = useAuth();
   const [wishlist, setWishlist]           = useState(false);
   const [cartMsg, setCartMsg]             = useState(null);
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -52,7 +54,14 @@ export default function ProductDetailPage({ onAuth }) {
     setSelectedSize(null);
 
     getProductById(id)
-      .then(data => setProduct(data.product))
+      .then(data => {
+        setProduct(data.product);
+        // Sync wishlist state from auth user
+        if (user?.wishlist) {
+          const ids = user.wishlist.map(w => w._id || w);
+          setWishlist(ids.includes(id));
+        }
+      })
       .catch(err => {
         console.error("[ProductDetail] Failed to load product:", err.message);
         setError("Product not found or unavailable.");
@@ -316,7 +325,14 @@ export default function ProductDetailPage({ onAuth }) {
               onMouseLeave={e => { e.currentTarget.style.backgroundPosition="0 0"; e.currentTarget.style.boxShadow="none"; }}>
               {product.stock === 0 ? "OUT OF STOCK" : "ADD TO CART"}
             </button>
-            <button onClick={() => setWishlist(w => !w)}
+            <button onClick={async () => {
+                if (!isAuthenticated) { navigate("/login"); return; }
+                try {
+                  await toggleWishlist(product._id);
+                  await refreshUser();
+                  setWishlist(w => !w);
+                } catch { /* silent */ }
+              }}
               style={{ width:52, height:52,
                 border:`1px solid ${wishlist ? "#e07070" : "rgba(201,168,76,0.3)"}`,
                 background: wishlist ? "rgba(220,100,100,0.06)" : "transparent",
