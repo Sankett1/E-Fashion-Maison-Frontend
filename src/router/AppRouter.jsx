@@ -32,6 +32,9 @@ import AdminCustomers  from "../pages/admin/AdminCustomers";
 import AdminAnalytics  from "../pages/admin/AdminAnalytics";
 import AdminSettings   from "../pages/admin/AdminSettings";
 import AdminHero       from "../pages/admin/AdminHero";
+import Adminstory      from "../pages/admin/Adminstory";
+import AdminNotifications from "../pages/admin/AdminNotifications";
+import { NotificationProvider } from "../context/NotificationContext";
 
 // ── Layout wrappers ───────────────────────────────────────────────────────────
 function WithNavbar({ Page }) {
@@ -183,15 +186,18 @@ const router = createBrowserRouter([
 
   // Admin — protected, waits for hydration
   {
-    element: <AdminGuardOutlet />,
+    element: <NotificationProvider><AdminGuardOutlet /></NotificationProvider>,
     children: [
       { path: "/admin",            element: <AdminDashboard /> },
       { path: "/admin/products",   element: <AdminProducts /> },
       { path: "/admin/orders",     element: <AdminOrders /> },
       { path: "/admin/customers",  element: <AdminCustomers /> },
       { path: "/admin/analytics",  element: <AdminAnalytics /> },
+      { path: "/admin/story",      element: <Adminstory /> },
       { path: "/admin/settings",   element: <AdminSettings /> },
       { path: "/admin/hero",       element: <AdminHero /> },
+      { path: "/admin/notifications",    element: <AdminNotifications /> },
+      
     ],
   },
 
