@@ -24,7 +24,7 @@ const MENU = [
   { label: "Customers",     path: "/admin/customers",     icon: UsersIconEl },
   { label: "Analytics",     path: "/admin/analytics",     icon: ChartIcon   },
   { label: "Hero Images",   path: "/admin/hero",          icon: PlayIcon    },
-  { label: "Our Story",     path: "/admin/story",         icon: StoryIcon   },
+  { label: "Our Story",     path: "/admin/our-story",         icon: StoryIcon   },
   { label: "Notifications", path: "/admin/notifications", icon: NotifIcon   },
   { label: "Settings",      path: "/admin/settings",      icon: SettingsIcon},
 ];

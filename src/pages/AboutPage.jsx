@@ -1,62 +1,41 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
+import { getAboutContent } from "../api/adminApi";
 
-const _ls = (key, def) => { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; } };
-
-const TEAM_DEFAULT = [
+const TEAM = [
   { name:"Aarav Shah",   title:"Founder & Creative Director", image:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&q=80&fit=crop" },
   { name:"Meera Pillai", title:"Head of Design",              image:"https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=600&q=80&fit=crop" },
   { name:"Rahul Desai",  title:"Master Tailor",               image:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop" },
 ];
-const _savedTeam = _ls("maison_story_team", null);
-const TEAM = _savedTeam
-  ? TEAM_DEFAULT.map((m, i) => ({ ...m, image: _savedTeam[i]?.image || m.image }))
-  : TEAM_DEFAULT;
 
-const VALUES_DEFAULT = [
+const VALUES = [
   { icon:"🧵", title:"Artisan First",      text:"Every garment is conceived in close collaboration with Indian master craftspeople, ensuring techniques developed over generations continue to thrive.", image:"https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80&fit=crop" },
-  { icon:"🌿", title:"Responsible Craft",  text:"We partner exclusively with GOTS-certified farms and use low-impact dyes. Our packaging is 100% compostable, and we offset every shipment.",         image:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop" },
-  { icon:"♾️", title:"Timeless by Design", text:"We design against trends. Each MAISON piece is built to outlast seasons — in quality, construction, and aesthetic relevance.",                       image:"https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
+  { icon:"🌿", title:"Responsible Craft",  text:"We partner exclusively with GOTS-certified farms and use low-impact dyes. Our packaging is 100% compostable, and we offset every shipment.",      image:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop" },
+  { icon:"♾️", title:"Timeless by Design", text:"We design against trends. Each MAISON piece is built to outlast seasons — in quality, construction, and aesthetic relevance.",                     image:"https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
 ];
-const _savedValues = _ls("maison_story_values", null);
-const VALUES = _savedValues
-  ? VALUES_DEFAULT.map((v, i) => ({ ...v, image: _savedValues[i]?.image || v.image }))
-  : VALUES_DEFAULT;
 
-// ── localStorage loader (falls back to default if not set) ────────────────────
-const loadStory = (key, def) => {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; } catch { return def; }
+// Fallback images (used when CMS has no upload yet)
+const FALLBACK = {
+  hero:        "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80&fit=crop",
+  storyMain:   "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80&fit=crop",
+  storyTop:    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+  storyBot:    "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop",
+  cta:         "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&q=80&fit=crop",
+  atelier: [
+    "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop",
+    "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80&fit=crop",
+    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
+    "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop",
+  ],
+  journey: [
+    { year:"2014", title:"The Beginning",    text:"A small studio in Bandra, a big vision — Aarav Shah begins sourcing India's finest textiles.",                         image:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop" },
+    { year:"2016", title:"First Collection", text:"Our debut collection of 12 pieces sells out in 48 hours, validating the demand for Indian luxury.",                     image:"https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop" },
+    { year:"2019", title:"BKC Atelier",      text:"MAISON moves to its flagship atelier in Mumbai's Bandra-Kurla Complex, housing 40 artisans.",                          image:"https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
+    { year:"2022", title:"Going Global",     text:"International shipping launches. MAISON pieces find homes across 28 countries.",                                        image:"https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&q=80&fit=crop" },
+    { year:"2024", title:"50K Community",    text:"Our community crosses 50,000 discerning clients. Sustainability certification achieved.",                               image:"https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&fit=crop" },
+  ],
 };
-
-// Origin story images
-const STORY_IMAGES = {
-  main:        loadStory("maison_story_main",         "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=800&q=80&fit=crop"),
-  topRight:    loadStory("maison_story_top_right",    "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop"),
-  bottomRight: loadStory("maison_story_bottom_right", "https://images.unsplash.com/photo-1445205170230-053b83016050?w=600&q=80&fit=crop"),
-};
-
-// Journey / milestone images
-const JOURNEY_IMAGES_DEFAULT = [
-  { year: "2014", title: "The Beginning",    text: "A small studio in Bandra, a big vision — Aarav Shah begins sourcing India's finest textiles.",                           image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop" },
-  { year: "2016", title: "First Collection", text: "Our debut collection of 12 pieces sells out in 48 hours, validating the demand for Indian luxury.",                      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop" },
-  { year: "2019", title: "BKC Atelier",      text: "MAISON moves to its flagship atelier in Mumbai's Bandra-Kurla Complex, housing 40 artisans.",                            image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop" },
-  { year: "2022", title: "Going Global",     text: "International shipping launches. MAISON pieces find homes across 28 countries.",                                          image: "https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?w=600&q=80&fit=crop" },
-  { year: "2024", title: "50K Community",    text: "Our community crosses 50,000 discerning clients. Sustainability certification achieved.",                                  image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&fit=crop" },
-];
-const _savedJourney = loadStory("maison_story_journey", null);
-const JOURNEY_IMAGES = _savedJourney
-  ? JOURNEY_IMAGES_DEFAULT.map((item, i) => ({ ...item, image: _savedJourney[i]?.image || item.image }))
-  : JOURNEY_IMAGES_DEFAULT;
-
-// Atelier gallery images
-const _savedGallery = loadStory("maison_story_gallery", null);
-const ATELIER_GALLERY = _savedGallery || [
-  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&fit=crop",
-  "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=600&q=80&fit=crop",
-  "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&q=80&fit=crop",
-  "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=600&q=80&fit=crop",
-];
 
 function ImgWithFallback({ src, alt, style, grad }) {
   const [err, setErr] = useState(false);
@@ -67,6 +46,35 @@ function ImgWithFallback({ src, alt, style, grad }) {
 
 export default function AboutPage({ onAuth }) {
   const navigate = useNavigate();
+  const [cms, setCms] = useState(null); // CMS content from API
+
+  // Fetch CMS content; silently fall back to defaults if API is offline
+  useEffect(() => {
+    getAboutContent().then(d => setCms(d.content)).catch(() => {});
+  }, []);
+
+  // Merge CMS images with fallback
+  const heroImg     = cms?.heroImage?.url      || FALLBACK.hero;
+  const ctaImg      = cms?.ctaImage?.url       || FALLBACK.cta;
+  const storyMain   = cms?.storyImages?.main?.url        || FALLBACK.storyMain;
+  const storyTop    = cms?.storyImages?.topRight?.url    || FALLBACK.storyTop;
+  const storyBot    = cms?.storyImages?.bottomRight?.url || FALLBACK.storyBot;
+
+  const atelierGallery = cms?.atelierGallery?.length
+    ? cms.atelierGallery.map(img => img.url)
+    : FALLBACK.atelier;
+
+  const journeyItems = cms?.journeyItems?.length
+    ? cms.journeyItems.map(item => ({
+        ...item,
+        image: item.image?.url || FALLBACK.journey.find(f => f.year === item.year)?.image || FALLBACK.journey[0].image,
+      }))
+    : FALLBACK.journey;
+
+  // Merge team & values images from CMS if available
+  const teamData   = TEAM.map((m, i)   => ({ ...m,   image: cms?.team?.[i]?.image?.url   || m.image }));
+  const valuesData = VALUES.map((v, i) => ({ ...v, image: cms?.values?.[i]?.image?.url || v.image }));
+
   useEffect(() => {
     window.scrollTo(0, 0);
     const els = document.querySelectorAll(".m-reveal, .m-reveal-left, .m-reveal-right");
@@ -75,7 +83,7 @@ export default function AboutPage({ onAuth }) {
     }, { threshold: 0.1 });
     els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
-  }, []);
+  }, [cms]); // re-run after cms loads so new elements get observed
 
   return (
     <>
@@ -103,7 +111,7 @@ export default function AboutPage({ onAuth }) {
           {/* Background image */}
           <div style={{ position:"absolute", inset:0, zIndex:0 }}>
             <img
-              src={_ls("maison_story_hero_bg", "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&q=80&fit=crop")}
+              src={heroImg}
               alt="Maison atelier"
               style={{ width:"100%", height:"100%", objectFit:"cover", animation:"aboutKen 20s ease infinite alternate" }}
             />
@@ -155,7 +163,7 @@ export default function AboutPage({ onAuth }) {
                 {/* Main tall image */}
                 <div style={{ aspectRatio:"3/4", gridRow:"span 2", overflow:"hidden", position:"relative" }}>
                   <ImgWithFallback
-                    src={STORY_IMAGES.main}
+                    src={storyMain}
                     alt="MAISON atelier craftsmanship"
                     style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
                     grad="linear-gradient(160deg,#c8b080 0%,#a89060 50%,#806840 100%)"
@@ -165,7 +173,7 @@ export default function AboutPage({ onAuth }) {
                 {/* Top right */}
                 <div style={{ aspectRatio:"1/1", overflow:"hidden", position:"relative" }}>
                   <ImgWithFallback
-                    src={STORY_IMAGES.topRight}
+                    src={storyTop}
                     alt="Fashion fabric detail"
                     style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
                     grad="linear-gradient(160deg,#2a2a2a 0%,#1a1a1a 100%)"
@@ -174,7 +182,7 @@ export default function AboutPage({ onAuth }) {
                 {/* Bottom right */}
                 <div style={{ aspectRatio:"1/1", overflow:"hidden", position:"relative" }}>
                   <ImgWithFallback
-                    src={STORY_IMAGES.bottomRight}
+                    src={storyBot}
                     alt="Luxury fashion showcase"
                     style={{ width:"100%", height:"100%", objectFit:"cover", position:"absolute", inset:0 }}
                     grad="linear-gradient(160deg,#f0ebe0 0%,#e0d8c8 100%)"
@@ -190,7 +198,7 @@ export default function AboutPage({ onAuth }) {
         ════════════════════════════════════════════ */}
         <section style={{ padding:"0", overflow:"hidden" }}>
           <div className="r-grid-4" style={{ gap:0, height:"clamp(240px,28vw,380px)" }}>
-            {ATELIER_GALLERY.map((src, i) => (
+            {atelierGallery.map((src, i) => (
               <div key={i} style={{ overflow:"hidden", position:"relative" }}>
                 <img
                   className="gallery-img"
@@ -218,10 +226,10 @@ export default function AboutPage({ onAuth }) {
             <div style={{ position:"relative" }}>
               <div style={{ position:"absolute", left:"50%", top:0, bottom:0, width:"1px", background:`linear-gradient(to bottom,transparent,${C.gold}30,${C.gold}30,transparent)`, transform:"translateX(-50%)" }}/>
               
-              {JOURNEY_IMAGES.map((item, i) => (
+              {journeyItems.map((item, i) => (
                 <div key={item.year} className={`m-reveal ${i % 2 === 0 ? "m-reveal-left" : "m-reveal-right"} r-grid-2`} style={{
                   gap:"48px", alignItems:"center",
-                  marginBottom: i < JOURNEY_IMAGES.length - 1 ? "64px" : 0,
+                  marginBottom: i < journeyItems.length - 1 ? "64px" : 0,
                   direction: i % 2 === 1 ? "rtl" : "ltr",
                 }}>
                   {/* Image side */}
@@ -267,7 +275,7 @@ export default function AboutPage({ onAuth }) {
               <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.3)" }}>THE MAISON PRINCIPLES</p>
             </div>
             <div className="r-grid-3" style={{ gap:"28px" }}>
-              {VALUES.map((v, i) => (
+              {valuesData.map((v, i) => (
                 <div key={v.title} className={`m-reveal m-d${i+1}`} style={{
                   border:"1px solid rgba(201,168,76,0.15)", background:"rgba(201,168,76,0.02)",
                   transition:"all 0.4s", overflow:"hidden",
@@ -305,7 +313,7 @@ export default function AboutPage({ onAuth }) {
               <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44" }}>PEOPLE, CRAFT, VISION</p>
             </div>
             <div className="r-grid-3" style={{ gap:"28px" }}>
-              {TEAM.map((member, i) => (
+              {teamData.map((member, i) => (
                 <div key={member.name} className={`m-reveal m-d${i+1}`} style={{ textAlign:"center" }}>
                   <div style={{
                     aspectRatio:"3/4", overflow:"hidden", position:"relative", marginBottom:"20px",
@@ -337,7 +345,7 @@ export default function AboutPage({ onAuth }) {
           {/* Background image */}
           <div style={{ position:"absolute", inset:0, zIndex:0 }}>
             <img
-              src={_ls("maison_story_cta_bg", "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&q=80&fit=crop")}
+              src={ctaImg}
               alt="Collection showcase"
               style={{ width:"100%", height:"100%", objectFit:"cover" }}
             />

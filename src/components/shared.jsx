@@ -61,7 +61,7 @@ import {
   PlayIcon as HeroPlayIcon, XMarkIcon, EnvelopeIcon, LockClosedIcon,
   HomeIcon, ShoppingCartIcon, UsersIcon, ChartBarIcon, Cog6ToothIcon,
   TagIcon, ClipboardDocumentListIcon, ArrowRightOnRectangleIcon,
-  BellIcon, CheckCircleIcon,
+  BellIcon, CheckCircleIcon, PhotoIcon,
 } from "@heroicons/react/24/outline";
 
 export const SearchIcon   = () => <MagnifyingGlassIcon className="w-5 h-5" />;
@@ -85,6 +85,7 @@ export const OrdersIcon   = () => <ClipboardDocumentListIcon className="w-5 h-5"
 export const LogoutIcon   = () => <ArrowRightOnRectangleIcon className="w-5 h-5" />;
 export const BellIconEl   = () => <BellIcon className="w-5 h-5" />;
 export const CheckIcon    = () => <CheckCircleIcon className="w-5 h-5" />;
+export const StoryIcon    = () => <PhotoIcon className="w-5 h-5" />;
 
 export const GlobalStyles = () => (
   <style>{`

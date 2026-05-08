@@ -100,23 +100,7 @@ export default function AdminNotifications() {
           );
         })}
       </div>
-
-      {/* Demo inject — dev helper */}
-      <div style={{ marginBottom: 20, padding: "12px 16px", background: "rgba(201,168,76,0.04)", border: "1px solid rgba(201,168,76,0.12)", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.14em" }}>ADD TEST:</span>
-        {[
-          ["📦 Order",    () => addNotification("order",    "New Order Received", "Anika Sharma placed an order for ₹24,900.", { link: "/admin/orders" })],
-          ["⚠️ Low Stock", () => addNotification("lowstock", "Low Stock Alert",    "Cashmere Cardigan has only 2 units left.",   { link: "/admin/products" })],
-          ["👤 Customer",  () => addNotification("user",     "New Customer",       "Rohan Mehta just created an account.",       { link: "/admin/customers" })],
-          ["🔔 System",    () => addNotification("system",   "System Notice",      "Backend is running normally.",               {})],
-        ].map(([lbl, fn]) => (
-          <button key={lbl} onClick={fn} style={btnStyle("#0f0c08", "rgba(201,168,76,0.15)", "rgba(255,255,255,0.5)")}>
-            {lbl}
-          </button>
-        ))}
-      </div>
-
-      {/* Notification list */}
+      
       {filtered.length === 0 ? (
         <div style={{ textAlign: "center", padding: "80px 0", fontFamily: "'Cormorant Garamond',serif", fontSize: 16, color: "rgba(255,255,255,0.2)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔔</div>
