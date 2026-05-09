@@ -71,7 +71,7 @@ function DropdownPanel({ items, visible, alignRight = false }) {
             justifyContent: "space-between",
             gap: "12px",
             transition: "all 0.14s ease",
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "'DM Sans', serif",
           }}
           onMouseEnter={e => {
             e.currentTarget.style.background = "rgba(201,168,76,0.07)";
@@ -219,7 +219,7 @@ function SearchBar({ onClose }) {
           borderBottom: `1px solid rgba(201,168,76,0.25)`,
           color: "#fff",
           fontSize: "14px",
-          fontFamily: "'Cormorant Garamond', Georgia, serif",
+          fontFamily: "'DM Sans', Georgia, serif",
           letterSpacing: "0.05em",
           padding: "6px 4px",
           outline: "none",
@@ -342,7 +342,7 @@ export default function Navbar({ onAuth }) {
 
         {/* CENTRE */}
         <div onClick={() => navigate("/")} style={{ cursor: "pointer", userSelect: "none", textAlign: "center", padding: "0 clamp(12px,2vw,24px)", flexShrink: 0 }}>
-          <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(16px,2.5vw,20px)", letterSpacing: "0.46em", fontWeight: 600, color: "#fff", lineHeight: 1 }}>MAISON</div>
+          <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(16px,2.5vw,20px)", letterSpacing: "0.46em", fontWeight: 600, color: "#fff", lineHeight: 1 }}>MAISON</div>
           <div style={{ height: "1px", marginTop: "4px", background: "linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)" }} />
         </div>
 
@@ -406,13 +406,13 @@ export default function Navbar({ onAuth }) {
             ) : (
               <div style={{ display: "flex", alignItems: "stretch", border: `1px solid rgba(201,168,76,0.25)`, overflow: "hidden", flexShrink: 0 }}>
                 <button onClick={() => onAuth("signin")}
-                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif", cursor: "pointer", border: "none", color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.04)", transition: "all 0.2s", whiteSpace: "nowrap" }}
+                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'DM Sans', serif", cursor: "pointer", border: "none", color: "rgba(255,255,255,0.75)", background: "rgba(255,255,255,0.04)", transition: "all 0.2s", whiteSpace: "nowrap" }}
                   onMouseEnter={e => { e.currentTarget.style.color = C.gold; e.currentTarget.style.background = "rgba(201,168,76,0.08)"; }}
                   onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.75)"; e.currentTarget.style.background = "rgba(255,255,255,0.04)"; }}
                 ><UserIcon /> SIGN IN</button>
                 <div style={{ width: "1px", background: "rgba(255,255,255,0.1)" }} />
                 <button onClick={() => onAuth("signup")}
-                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'Cormorant Garamond', serif", cursor: "pointer", border: "none", color: "#0f0c08", background: `linear-gradient(90deg,${C.gold},${C.goldDark})`, transition: "all 0.2s", whiteSpace: "nowrap" }}
+                  style={{ display: "flex", alignItems: "center", gap: "6px", padding: "0 14px", height: "34px", fontSize: "9.5px", letterSpacing: "0.16em", fontFamily: "'DM Sans', serif", cursor: "pointer", border: "none", color: "#0f0c08", background: `linear-gradient(90deg,${C.gold},${C.goldDark})`, transition: "all 0.2s", whiteSpace: "nowrap" }}
                   onMouseEnter={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.goldLight},${C.gold})`}
                   onMouseLeave={e => e.currentTarget.style.background = `linear-gradient(90deg,${C.gold},${C.goldDark})`}
                 ><UserIcon /> JOIN</button>
@@ -427,7 +427,7 @@ export default function Navbar({ onAuth }) {
         <div onClick={() => setMobileOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(4,2,0,0.7)", backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)" }}>
           <div onClick={e => e.stopPropagation()} style={{ position: "absolute", top: 0, right: 0, bottom: 0, width: "min(340px, 85vw)", background: "linear-gradient(180deg, #0d0a06 0%, #080502 100%)", borderLeft: `1px solid ${C.border}`, animation: "mobileSlideIn 0.3s cubic-bezier(0.4,0,0.2,1) forwards", overflowY: "auto", display: "flex", flexDirection: "column" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 24px", borderBottom: `1px solid ${C.border}` }}>
-              <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "16px", letterSpacing: "0.36em", color: "#fff" }}>MAISON</div>
+              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "16px", letterSpacing: "0.36em", color: "#fff" }}>MAISON</div>
               <button onClick={() => setMobileOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.4)", fontSize: "24px", padding: "4px", lineHeight: 1 }}>×</button>
             </div>
             <div style={{ flex: 1, padding: "8px 0" }}>

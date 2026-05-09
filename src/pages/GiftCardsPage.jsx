@@ -38,8 +38,8 @@ export default function GiftCardsPage() {
   return (
     <div style={{ minHeight:"100vh", background:C.bg, paddingTop:"100px" }}>
       <div className="r-section" style={{ textAlign:"center", paddingTop:"48px", paddingBottom:"60px" }}>
-        <div style={{ fontSize:"9.5px", letterSpacing:"0.28em", color:C.gold, marginBottom:"14px" }}>THE PERFECT GIFT</div>
-        <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"52px", fontWeight:400, color:"#fff", marginBottom:"16px" }}>Gift Cards</h1>
+        <div style={{ fontSize:"12px", letterSpacing:"0.14em", color:C.gold, marginBottom:"14px" }}>THE PERFECT GIFT</div>
+        <h1 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"52px", fontWeight:400, color:"#fff", marginBottom:"16px" }}>Gift Cards</h1>
         <GoldBar centered />
         <p style={{ fontSize:"15px", color:"rgba(255,255,255,0.45)", maxWidth:"480px", margin:"0 auto", lineHeight:1.8 }}>
           Give the gift of impeccable style. Redeemable on everything at MAISON.
@@ -53,11 +53,11 @@ export default function GiftCardsPage() {
             <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse at 70% 30%,rgba(201,168,76,0.08),transparent 60%)" }}/>
             <div style={{ position:"absolute", bottom:"-20px", right:"-20px", width:"160px", height:"160px", border:"1px solid rgba(201,168,76,0.1)", borderRadius:"50%" }}/>
             <div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", letterSpacing:"0.38em", color:"#fff" }}>MAISON</div>
-              <div style={{ fontSize:"9px", letterSpacing:"0.2em", color:"rgba(201,168,76,0.6)", marginTop:"3px" }}>GIFT CARD</div>
+              <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"22px", letterSpacing:"0.12em", color:"#fff" }}>MAISON</div>
+              <div style={{ fontSize:"12px", letterSpacing:"0.10em", color:"rgba(201,168,76,0.6)", marginTop:"3px" }}>GIFT CARD</div>
             </div>
             <div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"36px", color:C.gold }}>
+              <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"36px", color:C.gold }}>
                 ₹{finalAmount.toLocaleString("en-IN")}
               </div>
               {recipient.name && (
@@ -66,7 +66,7 @@ export default function GiftCardsPage() {
             </div>
           </div>
 
-          <div style={{ fontSize:"9.5px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:"14px" }}>SELECT AMOUNT</div>
+          <div style={{ fontSize:"12px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:"14px" }}>SELECT AMOUNT</div>
           <div style={{ display:"flex", gap:"10px", flexWrap:"wrap", marginBottom:"16px" }}>
             {AMOUNTS.map(a => (
               <button key={a} onClick={() => { setAmount(a); setCustom(""); }}
@@ -76,7 +76,7 @@ export default function GiftCardsPage() {
             ))}
           </div>
           <div>
-            <label style={{ display:"block", fontSize:"9px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>CUSTOM AMOUNT (₹)</label>
+            <label style={{ display:"block", fontSize:"12px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>CUSTOM AMOUNT (₹)</label>
             <input type="number" value={custom} onChange={e => { setCustom(e.target.value); setAmount(0); }} placeholder="Enter amount…"
               style={{ width:"160px", padding:"10px 14px", background:"rgba(255,255,255,0.04)", border:`1px solid ${custom ? C.gold : "rgba(201,168,76,0.2)"}`, color:"#fff", fontSize:"13px", outline:"none", fontFamily:"inherit" }}/>
           </div>
@@ -84,28 +84,28 @@ export default function GiftCardsPage() {
 
         {/* Form */}
         <div style={{ background:C.surface, border:"1px solid rgba(201,168,76,0.12)", padding:"36px" }}>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", color:"#fff", marginBottom:"28px" }}>Recipient Details</div>
+          <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"20px", color:"#fff", marginBottom:"28px" }}>Recipient Details</div>
           {[
             { key:"name",    label:"Recipient's Name",  ph:"Full name" },
             { key:"email",   label:"Recipient's Email", ph:"email@example.com" },
           ].map(f => (
             <div key={f.key} style={{ marginBottom:"18px" }}>
-              <label style={{ display:"block", fontSize:"9px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>{f.label.toUpperCase()}</label>
+              <label style={{ display:"block", fontSize:"12px", letterSpacing:"0.08em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>{f.label.toUpperCase()}</label>
               <input value={recipient[f.key]} onChange={e => setRecipient(v => ({ ...v, [f.key]: e.target.value }))} placeholder={f.ph}
                 style={{ width:"100%", padding:"12px 16px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontSize:"13px", outline:"none", fontFamily:"inherit", boxSizing:"border-box" }}/>
             </div>
           ))}
           <div style={{ marginBottom:"28px" }}>
-            <label style={{ display:"block", fontSize:"9px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>PERSONAL MESSAGE (OPTIONAL)</label>
+            <label style={{ display:"block", fontSize:"12px", letterSpacing:"0.08em", color:"rgba(255,255,255,0.35)", marginBottom:"8px" }}>PERSONAL MESSAGE (OPTIONAL)</label>
             <textarea value={recipient.message} onChange={e => setRecipient(v => ({ ...v, message: e.target.value }))} rows={3} placeholder="A note to the recipient…"
               style={{ width:"100%", padding:"12px 16px", background:"rgba(255,255,255,0.03)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontSize:"13px", outline:"none", fontFamily:"inherit", resize:"vertical", boxSizing:"border-box" }}/>
           </div>
           <div style={{ padding:"16px", background:"rgba(201,168,76,0.05)", border:"1px solid rgba(201,168,76,0.15)", marginBottom:"24px", display:"flex", justifyContent:"space-between" }}>
             <span style={{ fontSize:"10px", letterSpacing:"0.14em", color:"rgba(255,255,255,0.45)" }}>GIFT CARD VALUE</span>
-            <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"18px", color:C.gold }}>₹{finalAmount.toLocaleString("en-IN")}</span>
+            <span style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"18px", color:C.gold }}>₹{finalAmount.toLocaleString("en-IN")}</span>
           </div>
           {finalAmount < 100 && (
-            <div style={{ padding:"10px 14px", background:"rgba(220,100,100,0.06)", border:"1px solid rgba(220,100,100,0.2)", fontFamily:"'Cormorant Garamond',serif", fontSize:"12px", color:"#e07070", marginBottom:14 }}>
+            <div style={{ padding:"10px 14px", background:"rgba(220,100,100,0.06)", border:"1px solid rgba(220,100,100,0.2)", fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", color:"#e07070", marginBottom:14 }}>
               Minimum gift card value is ₹100
             </div>
           )}

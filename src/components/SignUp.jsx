@@ -77,10 +77,10 @@ function AuthInput({ placeholder, value, onChange, onKeyDown, type = "text", ico
             flex: 1,
             padding: icon ? "13px 12px" : "13px 16px",
             paddingRight: rightSlot ? "46px" : "16px",
-            fontSize: "13px", fontWeight: 300, letterSpacing: "0.03em",
+            fontSize: "13px", fontWeight: 400, letterSpacing: "0.03em",
             background: "transparent", border: "none", outline: "none",
             color: "rgba(255,255,255,0.85)",
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "'DM Sans', serif",
           }}
         />
         {rightSlot && (
@@ -294,7 +294,7 @@ export default function SignUp({ onClose, onSwitchToSignIn }) {
             <GoldBar width="44px" centered />
             <div style={{ marginTop: "18px" }} />
             <h2 style={{
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'DM Serif Display', serif",
               fontSize: "27px", fontWeight: 500,
               color: "#fff", margin: "0 0 8px",
             }}>
@@ -444,7 +444,7 @@ export default function SignUp({ onClose, onSwitchToSignIn }) {
           </div>
 
           {/* Switch */}
-          <p style={{ textAlign: "center", fontSize: "12px", color: "rgba(255,255,255,0.3)", margin: 0, fontWeight: 300 }}>
+          <p style={{ textAlign: "center", fontSize: "12px", color: "rgba(255,255,255,0.3)", margin: 0, fontWeight: 400 }}>
             Already have an account?{" "}
             <button
               onClick={onSwitchToSignIn}

@@ -165,7 +165,7 @@ function LineChart({ series, height=200, showDots=true, showGrid=true, xLabels=[
           background:"#1a1208", border:`1px solid ${C.gold}40`,
           padding:"8px 12px", pointerEvents:"none", zIndex:10, minWidth:100,
         }}>
-          {xLabels[hovered] && <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", marginBottom:4 }}>{xLabels[hovered]}</div>}
+          {xLabels[hovered] && <div style={{ fontSize:12, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", marginBottom:4 }}>{xLabels[hovered]}</div>}
           {series.map((s,si) => (
             <div key={si} style={{ fontSize:11, color:s.color, marginBottom:2 }}>
               {s.label}: {s.format ? s.format(s.data[hovered]) : s.data[hovered]?.toLocaleString("en-IN")}
@@ -177,7 +177,7 @@ function LineChart({ series, height=200, showDots=true, showGrid=true, xLabels=[
       {xLabels.length > 0 && (
         <div style={{ display:"flex", justifyContent:"space-between", marginTop:6 }}>
           {xLabels.filter((_,i) => i===0 || i===Math.floor(n/2) || i===n-1).map((l,i) => (
-            <span key={i} style={{ fontSize:9, color:"rgba(255,255,255,0.25)", letterSpacing:"0.05em" }}>{l}</span>
+            <span key={i} style={{ fontSize:12, color:"rgba(255,255,255,0.25)", letterSpacing:"0.05em" }}>{l}</span>
           ))}
         </div>
       )}
@@ -196,7 +196,7 @@ function HBar({ label, value, max, color, sub }) {
         <span style={{ fontSize:12, color:"rgba(255,255,255,0.65)" }}>{label}</span>
         <div style={{ textAlign:"right" }}>
           <span style={{ fontSize:12, color:"#fff" }}>{fmt(value)}</span>
-          {sub && <span style={{ fontSize:9, color:"rgba(255,255,255,0.3)", marginLeft:6 }}>{sub}</span>}
+          {sub && <span style={{ fontSize:12, color:"rgba(255,255,255,0.3)", marginLeft:6 }}>{sub}</span>}
         </div>
       </div>
       <div style={{ height:6, background:"rgba(255,255,255,0.06)", borderRadius:0 }}>
@@ -213,10 +213,10 @@ function KpiCard({ label, value, color=C.gold, icon, sub }) {
       <div style={{ position:"absolute", top:0, left:0, right:0, height:2, background:`linear-gradient(90deg,transparent,${color},transparent)` }}/>
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
         <div>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:26, color:"#fff", marginBottom:4 }}>
+          <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:26, color:"#fff", marginBottom:4 }}>
             {typeof value === "number" ? <CountUp to={value} prefix={value > 10000 ? "₹" : ""}/> : value}
           </div>
-          <div style={{ fontSize:"9px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.3)" }}>{label.toUpperCase()}</div>
+          <div style={{ fontSize:"12px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.3)" }}>{label.toUpperCase()}</div>
           {sub && <div style={{ fontSize:11, color, marginTop:4 }}>{sub}</div>}
         </div>
         <div style={{ fontSize:22, opacity:0.7 }}>{icon}</div>
@@ -229,7 +229,7 @@ function KpiCard({ label, value, color=C.gold, icon, sub }) {
 const Section = ({ title, children, action }) => (
   <div style={{ background:"linear-gradient(135deg,#0f0c08,#110e08)", border:"1px solid rgba(201,168,76,0.15)", padding:24, marginBottom:20 }}>
     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:20 }}>
-      <div style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#fff" }}>{title}</div>
+      <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:17, color:"#fff" }}>{title}</div>
       {action}
     </div>
     {children}
@@ -261,8 +261,8 @@ export default function AdminAnalytics() {
     <AdminLayout title="Analytics">
       <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", paddingTop:120, gap:20 }}>
         <div style={{ fontSize:48, opacity:0.3 }}>📈</div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, color:"rgba(255,255,255,0.3)" }}>No data loaded yet</div>
-        <div style={{ fontSize:12, color:"rgba(255,255,255,0.2)", fontFamily:"'Cormorant Garamond',serif" }}>Click the Refresh button to load analytics data</div>
+        <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, color:"rgba(255,255,255,0.3)" }}>No data loaded yet</div>
+        <div style={{ fontSize:12, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>Click the Refresh button to load analytics data</div>
         <button onClick={() => load()} style={{ marginTop:8, padding:"12px 32px", background:"rgba(201,168,76,0.1)", border:`1px solid ${C.gold}`, color:C.gold, fontSize:"10px", letterSpacing:"0.2em", cursor:"pointer", fontFamily:"inherit" }}>
           ↻ LOAD DATA
         </button>
@@ -298,7 +298,7 @@ export default function AdminAnalytics() {
               padding:"8px 16px", background: tab===t ? C.gold : "none",
               border:`1px solid ${tab===t ? C.gold : "rgba(201,168,76,0.2)"}`,
               color: tab===t ? "#0f0c08" : "rgba(255,255,255,0.45)",
-              fontSize:"9px", letterSpacing:"0.14em", cursor:"pointer", fontFamily:"inherit",
+              fontSize:"12px", letterSpacing:"0.14em", cursor:"pointer", fontFamily:"inherit",
               transition:"all 0.2s",
             }}>{t.toUpperCase()}</button>
           ))}
@@ -310,10 +310,10 @@ export default function AdminAnalytics() {
               padding:"6px 12px", background: period===p.value ? "rgba(201,168,76,0.15)" : "none",
               border:`1px solid ${period===p.value ? C.gold : "rgba(201,168,76,0.15)"}`,
               color: period===p.value ? C.gold : "rgba(255,255,255,0.35)",
-              fontSize:"9px", letterSpacing:"0.12em", cursor:"pointer", fontFamily:"inherit",
+              fontSize:"12px", letterSpacing:"0.12em", cursor:"pointer", fontFamily:"inherit",
             }}>{p.label}</button>
           ))}
-          <button onClick={() => load()} disabled={loading} style={{ padding:"6px 14px", background:"none", border:"1px solid rgba(201,168,76,0.2)", color:C.gold, fontSize:"9px", letterSpacing:"0.14em", cursor:"pointer", fontFamily:"inherit", opacity:loading?0.5:1 }}>
+          <button onClick={() => load()} disabled={loading} style={{ padding:"6px 14px", background:"none", border:"1px solid rgba(201,168,76,0.2)", color:C.gold, fontSize:"12px", letterSpacing:"0.14em", cursor:"pointer", fontFamily:"inherit", opacity:loading?0.5:1 }}>
             {loading ? "…" : "↻"}
           </button>
         </div>
@@ -363,7 +363,7 @@ export default function AdminAnalytics() {
                   </div>
                   <div style={{ textAlign:"right" }}>
                     <div style={{ fontSize:13, color:"#fff" }}>{fmt(p.revenue)}</div>
-                    <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em" }}>{p.count} TRANSACTIONS</div>
+                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em" }}>{p.count} TRANSACTIONS</div>
                   </div>
                 </div>
               ))}
@@ -431,7 +431,7 @@ export default function AdminAnalytics() {
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
               {d.topProducts.map((p,i) => (
                 <div key={p._id} style={{ display:"flex", alignItems:"center", gap:14, padding:"12px 0", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
-                  <div style={{ width:28, height:28, background:PALETTE[i%PALETTE.length]+"22", border:`1px solid ${PALETTE[i%PALETTE.length]}40`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:PALETTE[i%PALETTE.length], fontFamily:"'Playfair Display',serif", flexShrink:0 }}>
+                  <div style={{ width:28, height:28, background:PALETTE[i%PALETTE.length]+"22", border:`1px solid ${PALETTE[i%PALETTE.length]}40`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:PALETTE[i%PALETTE.length], fontFamily:"'DM Serif Display',serif", flexShrink:0 }}>
                     {i+1}
                   </div>
                   <div style={{ flex:1, minWidth:0 }}>
@@ -441,7 +441,7 @@ export default function AdminAnalytics() {
                     </div>
                   </div>
                   <div style={{ textAlign:"right", flexShrink:0 }}>
-                    <div style={{ fontSize:12, color:"#fff", fontFamily:"'Playfair Display',serif" }}>{p.unitsSold} <span style={{ fontSize:9, color:"rgba(255,255,255,0.3)" }}>UNITS</span></div>
+                    <div style={{ fontSize:12, color:"#fff", fontFamily:"'DM Serif Display',serif" }}>{p.unitsSold} <span style={{ fontSize:12, color:"rgba(255,255,255,0.3)" }}>UNITS</span></div>
                     <div style={{ fontSize:10, color:PALETTE[i%PALETTE.length] }}>{fmt(p.revenue)}</div>
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export default function AdminAnalytics() {
                           <div style={{ width:8, height:8, borderRadius:"50%", background:color }}/>
                           <span style={{ fontSize:12, color:"rgba(255,255,255,0.65)" }}>{o._id}</span>
                         </div>
-                        <span style={{ fontSize:12, color:"#fff" }}>{o.count} <span style={{ fontSize:9, color:"rgba(255,255,255,0.3)" }}>({pct}%)</span></span>
+                        <span style={{ fontSize:12, color:"#fff" }}>{o.count} <span style={{ fontSize:12, color:"rgba(255,255,255,0.3)" }}>({pct}%)</span></span>
                       </div>
                       <div style={{ height:6, background:"rgba(255,255,255,0.06)" }}>
                         <div style={{ height:"100%", width:`${w}%`, background:`linear-gradient(90deg,${color},${color}88)`, transition:"width 0.9s cubic-bezier(0.34,1.56,0.64,1)" }}/>

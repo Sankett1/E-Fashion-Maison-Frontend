@@ -46,12 +46,12 @@ function StepIndicator({ current }) {
               background: i < current ? C.gold : i === current ? "rgba(201,168,76,0.1)" : "transparent",
               display:"flex", alignItems:"center", justifyContent:"center",
               color: i < current ? "#0f0c08" : i === current ? C.gold : "#6b5c44",
-              fontFamily:"'Playfair Display',serif", fontSize:"14px", fontWeight:500,
+              fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"14px", fontWeight:500,
               transition:"all 0.3s",
             }}>
               {i < current ? "✓" : i + 1}
             </div>
-            <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"10px", letterSpacing:"0.14em", color: i <= current ? C.gold : "#b0a08a" }}>
+            <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"10px", letterSpacing:"0.14em", color: i <= current ? C.gold : "#b0a08a" }}>
               {step.toUpperCase()}
             </span>
           </div>
@@ -68,7 +68,7 @@ function Field({ label, placeholder, value, onChange, type = "text", error }) {
   const [focused, setFocused] = useState(false);
   return (
     <div>
-      <label style={{ display:"block", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.18em", color:"#6b5c44", marginBottom:"8px" }}>
+      <label style={{ display:"block", fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.08em", color:"#6b5c44", marginBottom:"8px" }}>
         {label.toUpperCase()}
       </label>
       <input
@@ -78,7 +78,7 @@ function Field({ label, placeholder, value, onChange, type = "text", error }) {
           width:"100%", padding:"13px 16px", boxSizing:"border-box",
           border:`1px solid ${error ? "rgba(220,100,100,0.5)" : focused ? C.gold : "rgba(201,168,76,0.25)"}`,
           background: focused ? "rgba(201,168,76,0.02)" : "#fff",
-          fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", color:"#1a1208",
+          fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"14px", color:"#1a1208",
           outline:"none", transition:"all 0.2s",
         }}
       />
@@ -255,8 +255,8 @@ export default function CheckoutPage() {
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
             </svg>
           </div>
-          <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Your bag is empty</h2>
-          <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", color:"#6b5c44", marginBottom:"28px" }}>Add items to your bag before checking out</p>
+          <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Your bag is empty</h2>
+          <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"14px", color:"#6b5c44", marginBottom:"28px" }}>Add items to your bag before checking out</p>
           <button className="m-btn-gold" onClick={() => navigate("/shop")}>EXPLORE COLLECTION</button>
         </div>
       </div>
@@ -270,7 +270,7 @@ export default function CheckoutPage() {
         {/* Header */}
         <div style={{ textAlign:"center", marginBottom:"48px" }}>
           <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"38px", fontWeight:400, color:"#1a1208" }}>Checkout</h1>
+          <h1 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"38px", fontWeight:400, color:"#1a1208" }}>Checkout</h1>
         </div>
 
         <StepIndicator current={step} />
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
             {/* STEP 0 — Delivery */}
             {step === 0 && (
               <>
-                <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"32px" }}>Delivery Details</h2>
+                <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"32px" }}>Delivery Details</h2>
                 <div className="r-grid-2" style={{ gap:"16px", marginBottom:"16px" }}>
                   <Field label="First Name"    placeholder="Arjun"        value={form.firstName} onChange={set("firstName")} error={errors.firstName}/>
                   <Field label="Last Name"     placeholder="Kapoor"       value={form.lastName}  onChange={set("lastName")}/>
@@ -305,15 +305,15 @@ export default function CheckoutPage() {
             {/* STEP 1 — Payment */}
             {step === 1 && (
               <>
-                <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"8px" }}>Choose Payment Method</h2>
-                <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44", marginBottom:"28px", lineHeight:1.7 }}>
+                <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"24px", fontWeight:400, color:"#1a1208", marginBottom:"8px" }}>Choose Payment Method</h2>
+                <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#6b5c44", marginBottom:"28px", lineHeight:1.7 }}>
                   Select a method below — you'll be securely redirected to Razorpay (Test Mode) to complete payment.
                 </p>
 
                 {/* Test mode banner */}
                 <div style={{ padding:"10px 16px", background:"rgba(255,200,0,0.08)", border:"1px solid rgba(255,200,0,0.3)", borderRadius:"2px", marginBottom:"20px", display:"flex", alignItems:"center", gap:"10px" }}>
                   <span style={{ fontSize:"14px" }}>🧪</span>
-                  <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"12px", color:"#a08830" }}>
+                  <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", color:"#a08830" }}>
                     <strong>TEST MODE</strong> — Use card <code>4111 1111 1111 1111</code>, any future expiry, any CVV. UPI: <code>success@razorpay</code>
                   </span>
                 </div>
@@ -353,8 +353,8 @@ export default function CheckoutPage() {
                         }}>{m.icon}</div>
                         {/* Labels */}
                         <div style={{ flex:1 }}>
-                          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"15px", color: sel ? "#1a1208" : "#3a2e1e", marginBottom:"2px" }}>{m.title}</div>
-                          <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", color:"#b0a08a" }}>{m.desc}</div>
+                          <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"15px", color: sel ? "#1a1208" : "#3a2e1e", marginBottom:"2px" }}>{m.title}</div>
+                          <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11px", color:"#b0a08a" }}>{m.desc}</div>
                         </div>
                         {sel && <span style={{ color:C.gold, fontWeight:600, fontSize:"14px" }}>✓</span>}
                       </button>
@@ -366,13 +366,13 @@ export default function CheckoutPage() {
                 <div style={{ display:"flex", alignItems:"center", gap:"12px", padding:"14px 18px", background:"rgba(201,168,76,0.03)", border:"1px solid rgba(201,168,76,0.12)" }}>
                   <span style={{ fontSize:"18px" }}>🔒</span>
                   <div>
-                    <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"10.5px", letterSpacing:"0.14em", color:"#6b5c44", marginBottom:"2px" }}>SECURED BY RAZORPAY</div>
-                    <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"10.5px", color:"#b0a08a" }}>256-bit SSL · PCI DSS compliant · RBI regulated</div>
+                    <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"10.5px", letterSpacing:"0.14em", color:"#6b5c44", marginBottom:"2px" }}>SECURED BY RAZORPAY</div>
+                    <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"10.5px", color:"#b0a08a" }}>256-bit SSL · PCI DSS compliant · RBI regulated</div>
                   </div>
                 </div>
 
                 {apiError && (
-                  <div style={{ marginTop:"20px", padding:"12px 16px", background:"rgba(220,100,100,0.06)", border:"1px solid rgba(220,100,100,0.3)", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#c0504d" }}>
+                  <div style={{ marginTop:"20px", padding:"12px 16px", background:"rgba(220,100,100,0.06)", border:"1px solid rgba(220,100,100,0.3)", fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#c0504d" }}>
                     ⚠ {apiError}
                   </div>
                 )}
@@ -383,11 +383,11 @@ export default function CheckoutPage() {
             {step === 2 && (
               <div style={{ textAlign:"center", padding:"20px 0" }}>
                 <div style={{ width:"72px", height:"72px", margin:"0 auto 24px", borderRadius:"50%", background:"rgba(122,184,122,0.12)", border:"2px solid rgba(122,184,122,0.4)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"28px" }}>✓</div>
-                <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Order Confirmed!</h2>
-                <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"#6b5c44", lineHeight:1.7, marginBottom:"10px" }}>
+                <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"28px", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Order Confirmed!</h2>
+                <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15px", color:"#6b5c44", lineHeight:1.7, marginBottom:"10px" }}>
                   Thank you! Your order <strong style={{ color:C.gold }}>#{orderNum}</strong> has been placed and payment received.
                 </p>
-                <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#b0a08a", marginBottom:"36px" }}>
+                <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#b0a08a", marginBottom:"36px" }}>
                   Confirmation sent to {form.email}. Expected delivery: 3–5 business days.
                 </p>
                 <div style={{ display:"flex", gap:"14px", justifyContent:"center" }}>
@@ -418,10 +418,10 @@ export default function CheckoutPage() {
 
           {/* ── Order Summary Sidebar ──────────────────────────────────────── */}
           <div style={{ background:"#fff", padding:"32px", border:"1px solid rgba(201,168,76,0.12)", position:"sticky", top:"90px" }}>
-            <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"24px" }}>Order Summary</h3>
+            <h3 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"24px" }}>Order Summary</h3>
 
             {step === 2 ? (
-              <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44", fontStyle:"italic", padding:"12px 0" }}>
+              <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#6b5c44", fontStyle:"italic", padding:"12px 0" }}>
                 Order completed — thank you!
               </div>
             ) : (
@@ -431,10 +431,10 @@ export default function CheckoutPage() {
                     {item.image && <img src={item.image} alt={item.name} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }}/>}
                   </div>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"13px", color:"#1a1208", marginBottom:"3px" }}>{item.name}</div>
-                    <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", color:"#b0a08a" }}>Size: {item.size} · Qty: {item.qty}</div>
+                    <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"13px", color:"#1a1208", marginBottom:"3px" }}>{item.name}</div>
+                    <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11px", color:"#b0a08a" }}>Size: {item.size} · Qty: {item.qty}</div>
                   </div>
-                  <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"13px", color:"#1a1208" }}>₹{(item.price * item.qty).toLocaleString("en-IN")}</div>
+                  <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"13px", color:"#1a1208" }}>₹{(item.price * item.qty).toLocaleString("en-IN")}</div>
                 </div>
               ))
             )}
@@ -442,23 +442,23 @@ export default function CheckoutPage() {
             <div style={{ height:"1px", background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.2),transparent)", margin:"16px 0" }}/>
 
             <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"8px" }}>
-              <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44" }}>Subtotal</span>
-              <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#1a1208" }}>₹{subtotal.toLocaleString("en-IN")}</span>
+              <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#6b5c44" }}>Subtotal</span>
+              <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#1a1208" }}>₹{subtotal.toLocaleString("en-IN")}</span>
             </div>
             <div style={{ display:"flex", justifyContent:"space-between", marginBottom:"16px" }}>
-              <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color:"#6b5c44" }}>Shipping</span>
-              <span style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"13px", color: shippingCharge === 0 ? "#7ab87a" : "#1a1208" }}>
+              <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color:"#6b5c44" }}>Shipping</span>
+              <span style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"13px", color: shippingCharge === 0 ? "#7ab87a" : "#1a1208" }}>
                 {shippingCharge === 0 ? "FREE" : `₹${shippingCharge}`}
               </span>
             </div>
 
             <div style={{ height:"1px", background:"rgba(201,168,76,0.12)", margin:"0 0 14px" }}/>
             <div style={{ display:"flex", justifyContent:"space-between" }}>
-              <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"16px", color:"#1a1208" }}>Total</span>
-              <span style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", color:"#1a1208" }}>₹{total.toLocaleString("en-IN")}</span>
+              <span style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"16px", color:"#1a1208" }}>Total</span>
+              <span style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"20px", color:"#1a1208" }}>₹{total.toLocaleString("en-IN")}</span>
             </div>
 
-            <div style={{ marginTop:"16px", fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11.5px", color:"#7ab87a", textAlign:"center" }}>
+            <div style={{ marginTop:"16px", fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11.5px", color:"#7ab87a", textAlign:"center" }}>
               🚚 Free shipping on orders ₹2000+ · 🔒 Razorpay Secured
             </div>
           </div>

@@ -23,7 +23,7 @@ export default function AdminSettings() {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
         {/* Store Settings */}
         <div style={{ background: "linear-gradient(135deg,#0f0c08,#110e08)", border: "1px solid rgba(201,168,76,0.15)", padding: "28px" }}>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "17px", color: "#fff", marginBottom: "24px" }}>Store Configuration</div>
+          <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "17px", color: "#fff", marginBottom: "24px" }}>Store Configuration</div>
           <Field label="Store Name" field="storeName" />
           <Field label="Store Email" field="storeEmail" />
           <Field label="Order ID Prefix" field="orderPrefix" />
@@ -43,7 +43,7 @@ export default function AdminSettings() {
 
         {/* Admin Info */}
         <div style={{ background: "linear-gradient(135deg,#0f0c08,#110e08)", border: "1px solid rgba(201,168,76,0.15)", padding: "28px" }}>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "17px", color: "#fff", marginBottom: "24px" }}>Admin Account</div>
+          <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "17px", color: "#fff", marginBottom: "24px" }}>Admin Account</div>
           <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: `linear-gradient(135deg,${C.gold},${C.goldDark})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "22px", color: "#0f0c08", fontWeight: 600, marginBottom: "20px" }}>
             {user?.name?.[0]?.toUpperCase() || "A"}
           </div>

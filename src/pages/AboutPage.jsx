@@ -121,20 +121,20 @@ export default function AboutPage({ onAuth }) {
           {/* Radial glow */}
           <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 70% 60% at 50% 50%,rgba(201,168,76,0.07),transparent)", pointerEvents:"none", zIndex:2 }}/>
           {/* Large watermark */}
-          <div style={{ position:"absolute", top:"30%", right:"5%", fontFamily:"'Playfair Display',serif", fontSize:"clamp(80px,15vw,200px)", fontWeight:700, color:"rgba(201,168,76,0.04)", lineHeight:1, userSelect:"none", pointerEvents:"none", zIndex:2 }}>MAISON</div>
+          <div style={{ position:"absolute", top:"30%", right:"5%", fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(80px,15vw,200px)", fontWeight:700, color:"rgba(201,168,76,0.04)", lineHeight:1, userSelect:"none", pointerEvents:"none", zIndex:2 }}>MAISON</div>
           
           <div style={{ maxWidth:"700px", textAlign:"center", position:"relative", zIndex:3 }}>
             <div style={{ width:"48px", height:"1px", margin:"0 auto 32px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-            <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(46px,7vw,88px)", fontWeight:400, color:"#fff", margin:"0 0 20px", lineHeight:1.05, animation:"aboutFadeUp 1s ease 0.3s both" }}>
+            <h1 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(46px,7vw,88px)", fontWeight:400, color:"#fff", margin:"0 0 20px", lineHeight:1.05, animation:"aboutFadeUp 1s ease 0.3s both" }}>
               Our Story
             </h1>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.35)", marginBottom:"32px", animation:"aboutFadeUp 1s ease 0.5s both" }}>
+            <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.14em", color:"rgba(255,255,255,0.35)", marginBottom:"32px", animation:"aboutFadeUp 1s ease 0.5s both" }}>
               MUMBAI, INDIA · FOUNDED 2014
             </p>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"18px", lineHeight:1.8, color:"rgba(255,255,255,0.6)", fontWeight:300, fontStyle:"italic", animation:"aboutFadeUp 1s ease 0.7s both" }}>
+            <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"18px", lineHeight:1.8, color:"rgba(255,255,255,0.6)", fontWeight:400, fontStyle:"italic", animation:"aboutFadeUp 1s ease 0.7s both" }}>
               "We didn't set out to build a fashion brand. We set out to prove that Indian luxury deserved a global audience."
             </p>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.16em", color:C.gold, marginTop:"16px", animation:"aboutFadeUp 1s ease 0.9s both" }}>— AARAV SHAH, FOUNDER</p>
+            <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11px", letterSpacing:"0.16em", color:C.gold, marginTop:"16px", animation:"aboutFadeUp 1s ease 0.9s both" }}>— AARAV SHAH, FOUNDER</p>
           </div>
         </section>
 
@@ -145,16 +145,16 @@ export default function AboutPage({ onAuth }) {
           <div className="r-grid-2" style={{ maxWidth:"1200px", margin:"0 auto", gap:"80px", alignItems:"center" }}>
             <div className="m-reveal-left">
               <div style={{ width:"56px", height:"1px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)`, marginBottom:"28px" }}/>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(30px,3.5vw,46px)", fontWeight:400, color:"#1a1208", marginBottom:"24px", lineHeight:1.2 }}>
+              <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(30px,3.5vw,46px)", fontWeight:400, color:"#1a1208", marginBottom:"24px", lineHeight:1.2 }}>
                 Born from a belief that<br/><em style={{ fontStyle:"italic", color:C.gold }}>heritage is the future</em>
               </h2>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:300, marginBottom:"20px" }}>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:400, marginBottom:"20px" }}>
                 MAISON began in 2014 when Aarav Shah returned from studying at Central Saint Martins in London and found himself frustrated. Indian textiles were among the finest in the world, yet were consistently positioned as inexpensive exports.
               </p>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:300, marginBottom:"20px" }}>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:400, marginBottom:"20px" }}>
                 Working out of a small studio in Bandra, he began sourcing Mysore silk, Rajasthani hand-woven wool, and Kanjeevaram weaves — fabrics that had clothed Indian royalty for centuries — and reimagining them through a contemporary lens.
               </p>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:300 }}>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15.5px", lineHeight:1.85, color:"#6b5c44", fontWeight:400 }}>
                 Today, MAISON operates from its flagship atelier in BKC, Mumbai, with a team of 40 artisans and a community of over 50,000 clients across India and internationally.
               </p>
             </div>
@@ -218,8 +218,8 @@ export default function AboutPage({ onAuth }) {
           <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
             <div style={{ textAlign:"center", marginBottom:"64px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Our Journey</h2>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44" }}>A DECADE OF CRAFTSMANSHIP</p>
+              <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>Our Journey</h2>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.14em", color:"#6b5c44" }}>A DECADE OF CRAFTSMANSHIP</p>
             </div>
 
             {/* Timeline line */}
@@ -243,15 +243,15 @@ export default function AboutPage({ onAuth }) {
                       style={{ width:"100%", height:"100%", objectFit:"cover" }}
                     />
                     <div style={{ position:"absolute", inset:0, background:"linear-gradient(to top,rgba(26,18,8,0.5) 0%,transparent 50%)" }}/>
-                    <div style={{ position:"absolute", bottom:16, left:20, fontFamily:"'Playfair Display',serif", fontSize:"clamp(36px,5vw,56px)", fontWeight:400, color:"rgba(255,255,255,0.12)", lineHeight:1 }}>
+                    <div style={{ position:"absolute", bottom:16, left:20, fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(36px,5vw,56px)", fontWeight:400, color:"rgba(255,255,255,0.12)", lineHeight:1 }}>
                       {item.year}
                     </div>
                   </div>
                   {/* Text side */}
                   <div style={{ padding:"20px 0", direction:"ltr" }}>
-                    <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.3em", color:C.gold, marginBottom:"12px" }}>{item.year}</div>
-                    <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(22px,2.5vw,32px)", fontWeight:400, color:"#1a1208", marginBottom:"14px", lineHeight:1.2 }}>{item.title}</h3>
-                    <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", lineHeight:1.8, color:"#6b5c44", fontWeight:300 }}>{item.text}</p>
+                    <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11px", letterSpacing:"0.14em", color:C.gold, marginBottom:"12px" }}>{item.year}</div>
+                    <h3 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(22px,2.5vw,32px)", fontWeight:400, color:"#1a1208", marginBottom:"14px", lineHeight:1.2 }}>{item.title}</h3>
+                    <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15px", lineHeight:1.8, color:"#6b5c44", fontWeight:400 }}>{item.text}</p>
                   </div>
                 </div>
               ))}
@@ -271,8 +271,8 @@ export default function AboutPage({ onAuth }) {
           <div style={{ maxWidth:"1200px", margin:"0 auto", position:"relative", zIndex:1 }}>
             <div style={{ textAlign:"center", marginBottom:"56px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#fff", marginBottom:"12px" }}>What We Stand For</h2>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"rgba(255,255,255,0.3)" }}>THE MAISON PRINCIPLES</p>
+              <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#fff", marginBottom:"12px" }}>What We Stand For</h2>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)" }}>THE MAISON PRINCIPLES</p>
             </div>
             <div className="r-grid-3" style={{ gap:"28px" }}>
               {valuesData.map((v, i) => (
@@ -293,8 +293,8 @@ export default function AboutPage({ onAuth }) {
                     <div style={{ position:"absolute", bottom:16, left:20, fontSize:"36px" }}>{v.icon}</div>
                   </div>
                   <div style={{ padding:"28px 28px 32px" }}>
-                    <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", fontWeight:400, color:C.gold, marginBottom:"14px" }}>{v.title}</h3>
-                    <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"14px", lineHeight:1.8, color:"rgba(255,255,255,0.5)", fontWeight:300 }}>{v.text}</p>
+                    <h3 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"22px", fontWeight:400, color:C.gold, marginBottom:"14px" }}>{v.title}</h3>
+                    <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"14px", lineHeight:1.8, color:"rgba(255,255,255,0.5)", fontWeight:400 }}>{v.text}</p>
                   </div>
                 </div>
               ))}
@@ -309,8 +309,8 @@ export default function AboutPage({ onAuth }) {
           <div style={{ maxWidth:"1200px", margin:"0 auto" }}>
             <div style={{ textAlign:"center", marginBottom:"56px" }} className="m-reveal">
               <div style={{ width:"40px", height:"1px", margin:"0 auto 20px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-              <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>The Minds Behind MAISON</h2>
-              <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44" }}>PEOPLE, CRAFT, VISION</p>
+              <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(32px,4vw,52px)", fontWeight:400, color:"#1a1208", marginBottom:"12px" }}>The Minds Behind MAISON</h2>
+              <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.14em", color:"#6b5c44" }}>PEOPLE, CRAFT, VISION</p>
             </div>
             <div className="r-grid-3" style={{ gap:"28px" }}>
               {teamData.map((member, i) => (
@@ -330,8 +330,8 @@ export default function AboutPage({ onAuth }) {
                     {/* Gold bottom line */}
                     <div style={{ position:"absolute", bottom:0, left:0, right:0, height:"2px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
                   </div>
-                  <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"6px" }}>{member.name}</h3>
-                  <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"11px", letterSpacing:"0.14em", color:C.gold }}>{member.title.toUpperCase()}</p>
+                  <h3 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"20px", fontWeight:400, color:"#1a1208", marginBottom:"6px" }}>{member.name}</h3>
+                  <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"11px", letterSpacing:"0.14em", color:C.gold }}>{member.title.toUpperCase()}</p>
                 </div>
               ))}
             </div>
@@ -355,10 +355,10 @@ export default function AboutPage({ onAuth }) {
           
           <div style={{ maxWidth:"600px", margin:"0 auto", position:"relative", zIndex:3 }}>
             <div style={{ width:"40px", height:"1px", margin:"0 auto 24px", background:`linear-gradient(90deg,transparent,${C.gold},transparent)` }}/>
-            <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(30px,4vw,48px)", fontWeight:400, color:"#fff", marginBottom:"16px" }}>
+            <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(30px,4vw,48px)", fontWeight:400, color:"#fff", marginBottom:"16px" }}>
               Discover the Collection
             </h2>
-            <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"15px", color:"rgba(255,255,255,0.45)", fontWeight:300, marginBottom:"36px", lineHeight:1.8 }}>
+            <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"15px", color:"rgba(255,255,255,0.45)", fontWeight:400, marginBottom:"36px", lineHeight:1.8 }}>
               Explore pieces crafted at the intersection of heritage and modernity.
             </p>
             <div style={{ display:"flex", gap:"14px", justifyContent:"center", flexWrap:"wrap" }}>

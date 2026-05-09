@@ -84,8 +84,8 @@ function SectionHeader({ title, sub }) {
   return (
     <div className="m-reveal" style={{ textAlign:"center", marginBottom:"56px" }}>
       <div style={{ width:"48px", height:"1px", margin:"0 auto 20px", background:"linear-gradient(90deg,transparent,#c9a84c,transparent)" }}/>
-      <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(36px,4.5vw,54px)", fontWeight:500, color:"#1a1208", margin:"0 0 14px", lineHeight:1.1 }}>{title}</h2>
-      <p style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.3em", color:"#6b5c44", fontWeight:300 }}>{sub}</p>
+      <h2 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"clamp(36px,4.5vw,54px)", fontWeight:500, color:"#1a1208", margin:"0 0 14px", lineHeight:1.1 }}>{title}</h2>
+      <p style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.14em", color:"#6b5c44", fontWeight:400 }}>{sub}</p>
     </div>
   );
 }
@@ -94,7 +94,7 @@ function SectionHeader({ title, sub }) {
 function FooterCol({ title, links }) {
   return (
     <div>
-      <div style={{ fontFamily:"'Cormorant Garamond',Georgia,serif", fontSize:"9.5px", letterSpacing:"0.25em", fontWeight:500, color:"#3a2e1e", marginBottom:"20px" }}>{title}</div>
+      <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.25em", fontWeight:500, color:"#3a2e1e", marginBottom:"20px" }}>{title}</div>
       {links.map(l => <a key={l} className="m-footer-link">{l}</a>)}
     </div>
   );
@@ -166,7 +166,7 @@ const MX_CSS = `
   .mxt-img{transition:transform .6s cubic-bezier(.23,1,.32,1);width:100%;height:100%;object-fit:cover}
   .mxt-hover .mxt-img{transform:scale(1.07)}
   .mxt-qadd{position:absolute;bottom:0;left:0;right:0;padding:12px 0;text-align:center;
-    font:300 9px/1 'Cormorant Garamond',serif;letter-spacing:.24em;color:#fff;
+    font:300 9px/1 'DM Sans',system-ui,sans-serif;letter-spacing:.24em;color:#fff;
     background:linear-gradient(to top,rgba(8,4,1,.95),rgba(8,4,1,.85));
     transform:translateY(102%);transition:transform .38s cubic-bezier(.23,1,.32,1);z-index:5}
   .mxt-hover .mxt-qadd{transform:translateY(0)}
@@ -256,14 +256,14 @@ function AnimHeader({title, sub, dark=false}) {
   return (
     <div ref={ref} style={{textAlign:"center",marginBottom:56}}>
       <div style={{width:40,height:1,margin:"0 auto 20px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)"}}/>
-      <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(34px,4.5vw,52px)",fontWeight:400,
+      <h2 style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(34px,4.5vw,52px)",fontWeight:400,
         color:dark?"#fff":"#1a1208",margin:"0 0 14px",lineHeight:1.1,overflow:"hidden"}}>
         {title.split(" ").map((w,i)=>(
           <span key={i} className="mxh-word" style={{marginRight:"0.26em"}}>{w}</span>
         ))}
       </h2>
-      <p className="mxh-sub" style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"9.5px",
-        letterSpacing:"0.3em",color:dark?"rgba(255,255,255,.35)":"#6b5c44",fontWeight:300}}>{sub}</p>
+      <p className="mxh-sub" style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",
+        letterSpacing:"0.14em",color:dark?"rgba(255,255,255,.35)":"#6b5c44",fontWeight:400}}>{sub}</p>
     </div>
   );
 }
@@ -290,14 +290,14 @@ function CollectionCard({eye,name,image,link}) {
           {/* Vertical eyebrow */}
           <div style={{position:"absolute",left:20,top:"28%",zIndex:10,display:"flex",flexDirection:"column",alignItems:"center",gap:8}}>
             <div style={{width:1,height:28,background:"rgba(201,168,76,.35)"}}/>
-            <span style={{fontSize:"12.5px",letterSpacing:"0.32em",color:"rgba(255,255,255,.4)",fontFamily:"'Cormorant Garamond',serif",writingMode:"vertical-rl",textOrientation:"sideways-right",fontWeight:500}}>{eye}</span>
+            <span style={{fontSize:"12.5px",letterSpacing:"0.14em",color:"rgba(255,255,255,.4)",fontFamily:"'DM Sans',system-ui,sans-serif",writingMode:"vertical-rl",textOrientation:"sideways-right",fontWeight:500}}>{eye}</span>
           </div>
 
           {/* Bottom */}
           <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:10,padding:"0 26px 30px"}}>
             <div style={{width:28,height:1,background:"rgba(201,168,76,.55)",marginBottom:12}}/>
-            <h3 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(22px,2.4vw,30px)",fontWeight:400,color:"#fff",margin:"0 0 16px",lineHeight:1.1,textShadow:"0 4px 24px rgba(0,0,0,.6)"}}>{name}</h3>
-            <div style={{display:"flex",alignItems:"center",gap:8,fontSize:"9px",letterSpacing:"0.22em",color:"rgba(201,168,76,.8)",fontFamily:"'Cormorant Garamond',serif"}}>
+            <h3 style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(22px,2.4vw,30px)",fontWeight:400,color:"#fff",margin:"0 0 16px",lineHeight:1.1,textShadow:"0 4px 24px rgba(0,0,0,.6)"}}>{name}</h3>
+            <div style={{display:"flex",alignItems:"center",gap:8,fontSize:"12px",letterSpacing:"0.12em",color:"rgba(201,168,76,.8)",fontFamily:"'DM Sans',system-ui,sans-serif"}}>
               EXPLORE
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
@@ -321,7 +321,7 @@ function TrendingCard({type,name,price,image,index,tag,originalPrice,productId,o
           <div ref={img} className={`mx-card ${hov?"mxt-hover":""}`} style={{width:"100%",height:"100%",background:"#e4e0d8"}}>
             <div className="mx-holo"/>
             {image&&<img className="mxt-img" src={image} alt={name} style={{position:"absolute",inset:0}} onError={e=>{e.target.style.display="none"}}/>}
-            {tag&&<div style={{position:"absolute",top:12,left:12,zIndex:10,padding:"4px 9px",fontSize:"8px",letterSpacing:"0.2em",fontWeight:600,background:tag==="SALE"?"#e07070":"#c9a84c",color:"#0f0c08"}}>{tag}</div>}
+            {tag&&<div style={{position:"absolute",top:12,left:12,zIndex:10,padding:"4px 9px",fontSize:"11px",letterSpacing:"0.10em",fontWeight:600,background:tag==="SALE"?"#e07070":"#c9a84c",color:"#0f0c08"}}>{tag}</div>}
             <div style={{position:"absolute",inset:0,zIndex:2,background:"rgba(0,0,0,.1)",opacity:hov?1:0,transition:"opacity .3s"}}/>
             <div style={{position:"absolute",top:0,left:0,right:0,height:"1.5px",zIndex:5,background:"linear-gradient(90deg,transparent,rgba(201,168,76,.55),transparent)"}}/>
             <button onClick={e=>{e.stopPropagation();setWish(w=>!w)}}
@@ -336,10 +336,10 @@ function TrendingCard({type,name,price,image,index,tag,originalPrice,productId,o
             <div className="mxt-qadd">ADD TO BAG</div>
           </div>
         </div>
-        <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"9.5px",letterSpacing:"0.18em",color:"#6b5c44",marginBottom:5}}>{type}</div>
-        <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,color:"#1a1208",marginBottom:7,lineHeight:1.3}}>{name}</div>
+        <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.08em",color:"#6b5c44",marginBottom:5}}>{type}</div>
+        <div style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:15,color:"#1a1208",marginBottom:7,lineHeight:1.3}}>{name}</div>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <span style={{fontFamily:"'Playfair Display',serif",fontSize:15,color:"#1a1208"}}>{price}</span>
+          <span style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:15,color:"#1a1208"}}>{price}</span>
           <div style={{flex:1,height:"0.5px",background:"linear-gradient(90deg,rgba(201,168,76,.4),transparent)"}}/>
         </div>
       </div>
@@ -398,21 +398,21 @@ function TestCarousel({items}) {
                   ?"linear-gradient(90deg,transparent,#c9a84c 30%,#e8c96e 50%,#c9a84c 70%,transparent)"
                   :"linear-gradient(90deg,transparent,rgba(201,168,76,.18),transparent)",
                 transition:"height .3s,background .3s"}}/>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:68,lineHeight:.75,
+              <div style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:68,lineHeight:.75,
                 color:"#c9a84c",opacity:i===active?.72:.2,marginBottom:22,userSelect:"none",
                 transition:"opacity .4s"}}>"</div>
-              <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"13.5px",lineHeight:1.8,
-                color:"#3a2e1e",fontWeight:300,fontStyle:"italic",marginBottom:22,minHeight:96}}>
+              <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"13.5px",lineHeight:1.8,
+                color:"#3a2e1e",fontWeight:400,fontStyle:"italic",marginBottom:22,minHeight:96}}>
                 "{item.text}"</p>
               <div style={{width:22,height:"0.5px",background:"rgba(201,168,76,.5)",marginBottom:14}}/>
               <div style={{display:"flex",gap:2,marginBottom:11}}>
                 {"★★★★★".split("").map((s,si)=><span key={si} style={{color:"#c9a84c",fontSize:10}}>{s}</span>)}
               </div>
-              <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,fontWeight:500,color:"#1a1208",marginBottom:3}}>{item.name}</div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8.5px",letterSpacing:"0.18em",color:"#6b5c44",marginBottom:9}}>{item.loc}</div>
+              <div style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:15,fontWeight:500,color:"#1a1208",marginBottom:3}}>{item.name}</div>
+              <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.08em",color:"#6b5c44",marginBottom:9}}>{item.loc}</div>
               <div style={{display:"flex",alignItems:"center",gap:8}}>
                 <div style={{width:14,height:"0.5px",background:"rgba(201,168,76,.4)"}}/>
-                <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8px",letterSpacing:"0.18em",color:"#c9a84c"}}>{item.purchase}</span>
+                <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",letterSpacing:"0.08em",color:"#c9a84c"}}>{item.purchase}</span>
               </div>
             </div>
           ))}
@@ -516,8 +516,8 @@ function HomeTrendingStrip() {
       gap:12,padding:"60px 0"}}>
       <div style={{width:26,height:26,border:"2px solid #c9a84c",borderTopColor:"transparent",
         borderRadius:"50%",animation:"htSpin .75s linear infinite"}}/>
-      <span style={{fontFamily:"'Cormorant Garamond',serif",fontSize:12,
-        letterSpacing:"0.18em",color:"#6b5c44"}}>LOADING…</span>
+      <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:12,
+        letterSpacing:"0.08em",color:"#6b5c44"}}>LOADING…</span>
     </div>
   );
 
@@ -531,8 +531,8 @@ function HomeTrendingStrip() {
 
       {/* Scroll hint */}
       <div style={{textAlign:"center",marginBottom:16,
-        fontFamily:"'Cormorant Garamond',serif",fontSize:"9px",
-        letterSpacing:"0.24em",color:"rgba(107,92,68,0.45)",
+        fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",
+        letterSpacing:"0.12em",color:"rgba(107,92,68,0.45)",
         display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
         <svg width="28" height="8" viewBox="0 0 28 8" fill="none">
           <path d="M1 4h22M18 1l4 3-4 3" stroke="rgba(201,168,76,0.45)" strokeWidth="1.2" strokeLinecap="round"/>
@@ -569,8 +569,8 @@ function HomeTrendingStrip() {
         <button
           onClick={()=>navigate("/trending")}
           style={{
-            fontFamily:"'Cormorant Garamond',Georgia,serif",
-            fontSize:"10px",letterSpacing:"0.24em",
+            fontFamily:"'DM Sans',system-ui,sans-serif",
+            fontSize:"10px",letterSpacing:"0.12em",
             color:"#c9a84c",background:"none",
             border:"1px solid rgba(201,168,76,0.4)",
             padding:"11px 28px",cursor:"pointer",
@@ -689,15 +689,15 @@ export default function HeroPage({ onAuth }) {
         <div ref={heroContentRef} style={{position:"relative",zIndex:10,paddingLeft:"clamp(32px,6vw,88px)",paddingTop:"80px",maxWidth:"580px",paddingBottom:"80px"}}>
           <div style={{width:"72px",height:"1px",marginBottom:"38px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)",animation:"hScaleX 0.8s ease 0.4s both",transformOrigin:"left"}}/>
           <div style={{overflow:"hidden"}}>
-            <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(52px,8.5vw,98px)",fontWeight:400,color:"#fff",margin:0,lineHeight:1,textShadow:"0 2px 50px rgba(0,0,0,0.18)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.55s forwards",opacity:0}}>Spring</h1>
+            <h1 style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(52px,8.5vw,98px)",fontWeight:400,color:"#fff",margin:0,lineHeight:1,textShadow:"0 2px 50px rgba(0,0,0,0.18)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.55s forwards",opacity:0}}>Spring</h1>
           </div>
           <div style={{overflow:"hidden"}}>
-            <h1 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(52px,8.5vw,98px)",fontStyle:"italic",fontWeight:400,color:"#fff",margin:0,lineHeight:1.05,textShadow:"0 2px 50px rgba(0,0,0,0.18)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.72s forwards",opacity:0}}>Collection</h1>
+            <h1 style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(52px,8.5vw,98px)",fontStyle:"italic",fontWeight:400,color:"#fff",margin:0,lineHeight:1.05,textShadow:"0 2px 50px rgba(0,0,0,0.18)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.72s forwards",opacity:0}}>Collection</h1>
           </div>
           <div style={{overflow:"hidden"}}>
-            <p style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(60px,10vw,118px)",fontWeight:400,color:"#fff",margin:"4px 0 20px",lineHeight:1,textShadow:"0 4px 60px rgba(0,0,0,0.15)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.88s forwards",opacity:0}}>2026</p>
+            <p style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(60px,10vw,118px)",fontWeight:400,color:"#fff",margin:"4px 0 20px",lineHeight:1,textShadow:"0 4px 60px rgba(0,0,0,0.15)",animation:"hFadeUp 1s cubic-bezier(0.4,0,0.2,1) 0.88s forwards",opacity:0}}>2026</p>
           </div>
-          <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"9.5px",letterSpacing:"0.35em",color:"rgba(255,255,255,0.65)",fontWeight:300,lineHeight:2.2,marginBottom:"44px",animation:"hFadeUp 0.8s ease 1.1s forwards",opacity:0}}>
+          <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.12em",color:"rgba(255,255,255,0.65)",fontWeight:400,lineHeight:2.2,marginBottom:"44px",animation:"hFadeUp 0.8s ease 1.1s forwards",opacity:0}}>
             REDEFINING ELEGANCE THROUGH<br/>MODERN SILHOUETTES
           </p>
           <div style={{display:"flex",gap:"14px",flexWrap:"wrap",animation:"hFadeUp 0.7s ease 1.3s forwards",opacity:0}}>
@@ -708,7 +708,7 @@ export default function HeroPage({ onAuth }) {
 
         {/* Scroll indicator */}
         <div style={{position:"absolute",bottom:"32px",left:"50%",transform:"translateX(-50%)",display:"flex",flexDirection:"column",alignItems:"center",gap:"8px",animation:"hFadeIn 0.6s ease 2.2s forwards",opacity:0}}>
-          <span style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8px",letterSpacing:"0.3em",color:"rgba(255,255,255,0.38)"}}>SCROLL</span>
+          <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",letterSpacing:"0.14em",color:"rgba(255,255,255,0.38)"}}>SCROLL</span>
           <div style={{width:"1px",height:"38px",background:"linear-gradient(to bottom,rgba(201,168,76,0.65),transparent)",animation:"hPulse 2s ease infinite"}}/>
         </div>
       </section>
@@ -747,17 +747,17 @@ export default function HeroPage({ onAuth }) {
           CRAFTED IN INDIA
       ════════════════════════════════════════════ */}
       <section className="r-section-v r-section" style={{background:"#1a1208",position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",top:"50%",right:"-2%",transform:"translateY(-50%)",fontFamily:"'Playfair Display',serif",fontSize:"clamp(80px,14vw,180px)",fontWeight:700,color:"rgba(255,255,255,0.025)",lineHeight:1,userSelect:"none",pointerEvents:"none",whiteSpace:"nowrap"}}>INDIA</div>
+        <div style={{position:"absolute",top:"50%",right:"-2%",transform:"translateY(-50%)",fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(80px,14vw,180px)",fontWeight:700,color:"rgba(255,255,255,0.025)",lineHeight:1,userSelect:"none",pointerEvents:"none",whiteSpace:"nowrap"}}>INDIA</div>
         <div className="r-grid-2" style={{gap:"clamp(40px, 6vw, 80px)",alignItems:"center",maxWidth:"1300px",margin:"0 auto"}}>
           <div className="m-reveal-left">
             <div style={{width:"64px",height:"1px",marginBottom:"32px",background:"linear-gradient(90deg,transparent,#c9a84c,transparent)"}}/>
-            <h2 style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(32px,4vw,50px)",fontWeight:500,color:"#fff",marginBottom:"28px",lineHeight:1.15}}>
+            <h2 style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(32px,4vw,50px)",fontWeight:500,color:"#fff",marginBottom:"28px",lineHeight:1.15}}>
               Crafted in India,<br/><em style={{fontStyle:"italic",color:"#e8c96e"}}>Made for the World</em>
             </h2>
-            <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"15px",lineHeight:1.85,color:"rgba(255,255,255,0.55)",fontWeight:300,marginBottom:"20px"}}>
+            <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"15px",lineHeight:1.85,color:"rgba(255,255,255,0.55)",fontWeight:400,marginBottom:"20px"}}>
               MAISON was born from a belief that Indian luxury deserves a global stage. We source only the finest fabrics — Mysore silk, Rajasthani wool, Kanjeevaram weaves — and transform them through precise, modern tailoring.
             </p>
-            <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"15px",lineHeight:1.85,color:"rgba(255,255,255,0.55)",fontWeight:300,marginBottom:"20px"}}>
+            <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"15px",lineHeight:1.85,color:"rgba(255,255,255,0.55)",fontWeight:400,marginBottom:"20px"}}>
               Every piece is designed in our Mumbai atelier, crafted by master artisans with decades of expertise, and delivered with the care that a luxury garment deserves.
             </p>
             <button className="m-btn-outline-light" onClick={() => navigate("/about")}>OUR STORY</button>
@@ -770,8 +770,8 @@ export default function HeroPage({ onAuth }) {
               { id:"hStat4", init:"100%", label:"ARTISAN MADE"    },
             ].map(({ id, init, label }) => (
               <div key={id} className="m-stat-card">
-                <div id={id} className="m-shimmer-text" style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(32px,4vw,52px)",fontWeight:500,lineHeight:1,marginBottom:"10px"}}>{init}</div>
-                <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8.5px",letterSpacing:"0.22em",color:"rgba(255,255,255,0.35)",fontWeight:300}}>{label}</div>
+                <div id={id} className="m-shimmer-text" style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(32px,4vw,52px)",fontWeight:500,lineHeight:1,marginBottom:"10px"}}>{init}</div>
+                <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.12em",color:"rgba(255,255,255,0.35)",fontWeight:400}}>{label}</div>
               </div>
             ))}
           </div>
@@ -805,10 +805,10 @@ export default function HeroPage({ onAuth }) {
         <div style={{position:"relative",zIndex:1}}>
           <div className="m-reveal" style={{width:"48px",height:"1px",margin:"0 auto",background:"linear-gradient(90deg,transparent,rgba(201,168,76,0.5),transparent)"}}/>
           <div style={{height:"20px"}}/>
-          <h2 className="m-reveal" style={{fontFamily:"'Playfair Display',serif",fontSize:"clamp(32px,4.5vw,52px)",fontWeight:500,color:"#fff",marginBottom:"14px",lineHeight:1.15}}>
+          <h2 className="m-reveal" style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"clamp(32px,4.5vw,52px)",fontWeight:500,color:"#fff",marginBottom:"14px",lineHeight:1.15}}>
             Stay in the <em style={{fontStyle:"italic",color:"#e8c96e"}}>Know</em>
           </h2>
-          <p className="m-reveal m-d1" style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"9.5px",letterSpacing:"0.28em",color:"rgba(255,255,255,0.38)",marginBottom:"44px"}}>
+          <p className="m-reveal m-d1" style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.14em",color:"rgba(255,255,255,0.38)",marginBottom:"44px"}}>
             EXCLUSIVE ACCESS TO NEW ARRIVALS &amp; PRIVATE SALES
           </p>
           <div className="m-reveal m-d2" style={{display:"flex",maxWidth:"520px",margin:"0 auto"}}>
@@ -891,16 +891,16 @@ export default function HeroPage({ onAuth }) {
               </div>
               <div>
                 <div style={{
-                  fontFamily:"'Cormorant Garamond',Georgia,serif",
-                  fontSize:"10px", letterSpacing:"0.22em", fontWeight:600,
+                  fontFamily:"'DM Sans',system-ui,sans-serif",
+                  fontSize:"10px", letterSpacing:"0.12em", fontWeight:600,
                   color:"rgba(255,255,255,0.88)", marginBottom:5,
                 }}>
                   {title}
                 </div>
                 <div style={{
-                  fontFamily:"'Cormorant Garamond',Georgia,serif",
+                  fontFamily:"'DM Sans',system-ui,sans-serif",
                   fontSize:"12px", color:"rgba(255,255,255,0.35)",
-                  fontWeight:300, lineHeight:1.55,
+                  fontWeight:400, lineHeight:1.55,
                 }}>
                   {sub}
                 </div>
@@ -917,8 +917,8 @@ export default function HeroPage({ onAuth }) {
         <div className="r-grid-4" style={{gap:"48px",maxWidth:"1300px",margin:"0 auto 56px"}}>
           {/* Brand col */}
           <div>
-            <div style={{fontFamily:"'Playfair Display',serif",fontSize:"20px",letterSpacing:"0.35em",fontWeight:600,color:"#1a1208",marginBottom:"16px"}}>MAISON</div>
-            <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"14px",lineHeight:1.7,color:"#6b5c44",fontWeight:300,marginBottom:"24px"}}>
+            <div style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:"20px",letterSpacing:"0.12em",fontWeight:600,color:"#1a1208",marginBottom:"16px"}}>MAISON</div>
+            <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"14px",lineHeight:1.7,color:"#6b5c44",fontWeight:400,marginBottom:"24px"}}>
               Redefining modern luxury through timeless design and exceptional Indian craftsmanship.
             </p>
             {[
@@ -926,7 +926,7 @@ export default function HeroPage({ onAuth }) {
               { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.12 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.63a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>, text:"+91 98765 43210" },
               { icon:<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>, text:"hello@maison.in" },
             ].map(({ icon, text }) => (
-              <div key={text} style={{display:"flex",alignItems:"flex-start",gap:"10px",fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"13px",color:"#6b5c44",marginBottom:"10px",fontWeight:300}}>
+              <div key={text} style={{display:"flex",alignItems:"flex-start",gap:"10px",fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"13px",color:"#6b5c44",marginBottom:"10px",fontWeight:400}}>
                 <span style={{color:"#c9a84c",flexShrink:0,marginTop:"2px"}}>{icon}</span>{text}
               </div>
             ))}
@@ -940,14 +940,14 @@ export default function HeroPage({ onAuth }) {
 
         <div className="r-footer-bottom" style={{maxWidth:"1300px",margin:"0 auto"}}>
           <div>
-            <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"8.5px",letterSpacing:"0.25em",color:"#6b5c44",marginBottom:"12px"}}>SECURE PAYMENT METHODS</div>
+            <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",letterSpacing:"0.25em",color:"#6b5c44",marginBottom:"12px"}}>SECURE PAYMENT METHODS</div>
             <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
               {["Razorpay","UPI","Net Banking","Visa","Mastercard","RuPay","EMI","PayTM","PhonePe","Google Pay"].map(p => (
                 <span key={p} className="m-pay-badge">{p}</span>
               ))}
             </div>
           </div>
-          <div style={{fontFamily:"'Cormorant Garamond',Georgia,serif",fontSize:"11px",color:"rgba(26,18,8,0.35)",letterSpacing:"0.1em",textAlign:"right"}}>
+          <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",color:"rgba(26,18,8,0.35)",letterSpacing:"0.1em",textAlign:"right"}}>
             © 2026 MAISON. All rights reserved.
           </div>
         </div>

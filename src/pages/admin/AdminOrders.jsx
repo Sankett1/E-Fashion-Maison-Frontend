@@ -70,7 +70,7 @@ export default function AdminOrders() {
                   <tr key={o._id} onClick={() => setSelected(o)} style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", cursor: "pointer", background: selected?._id === o._id ? "rgba(201,168,76,0.05)" : "", transition: "background 0.15s" }}
                     onMouseEnter={e => { if (selected?._id !== o._id) e.currentTarget.style.background = "rgba(255,255,255,0.02)"; }}
                     onMouseLeave={e => { if (selected?._id !== o._id) e.currentTarget.style.background = ""; }}>
-                    <td style={{ padding: "13px 16px", fontSize: "11px", color: C.gold, fontFamily: "'Cormorant Garamond',serif" }}>{o._id?.slice(-6) || o._id}</td>
+                    <td style={{ padding: "13px 16px", fontSize: "11px", color: C.gold, fontFamily: "'DM Sans',sans-serif" }}>{o._id?.slice(-6) || o._id}</td>
                     <td style={{ padding: "13px 16px" }}>
                       <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.75)" }}>{o.user?.name}</div>
                       <div style={{ fontSize: "10px", color: "rgba(255,255,255,0.3)" }}>{o.user?.email}</div>
@@ -101,7 +101,7 @@ export default function AdminOrders() {
         {selected && (
           <div style={{ background: "linear-gradient(135deg,#0f0c08,#110e08)", border: "1px solid rgba(201,168,76,0.15)", padding: "24px" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "20px" }}>
-              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", color: "#fff" }}>Order Detail</div>
+              <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "16px", color: "#fff" }}>Order Detail</div>
               <button onClick={() => setSelected(null)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: "18px" }}>×</button>
             </div>
             <div style={{ fontSize: "11px", color: C.gold, marginBottom: "16px", letterSpacing: "0.1em" }}>#{selected._id}</div>
@@ -117,7 +117,7 @@ export default function AdminOrders() {
             ))}
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "16px", paddingTop: "12px", borderTop: "1px solid rgba(201,168,76,0.2)" }}>
               <span style={{ fontSize: "11px", letterSpacing: "0.14em", color: "rgba(255,255,255,0.4)" }}>TOTAL</span>
-              <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "18px", color: "#fff" }}>₹{selected.totalAmount?.toLocaleString()}</span>
+              <span style={{ fontFamily: "'DM Serif Display',serif", fontSize: "18px", color: "#fff" }}>₹{selected.totalAmount?.toLocaleString()}</span>
             </div>
           </div>
         )}

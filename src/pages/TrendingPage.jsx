@@ -29,7 +29,7 @@ const CSS = `
   .tp-img .tp-bag {
     position:absolute;bottom:0;left:0;right:0;z-index:10;
     padding:12px 0;text-align:center;
-    font:300 9px/1 'Cormorant Garamond',serif;letter-spacing:.24em;color:#fff;
+    font:300 9px/1 'DM Sans',system-ui,sans-serif;letter-spacing:.24em;color:#fff;
     background:rgba(10,6,2,.93);
     transform:translateY(102%);
     transition:transform .35s cubic-bezier(.23,1,.32,1);
@@ -42,11 +42,11 @@ const CSS = `
   }
 
   .tp-tab { padding:18px 22px;background:none;border:none;cursor:pointer;
-    font:300 10px/1 'Cormorant Garamond',serif;letter-spacing:.18em;white-space:nowrap;
+    font:300 10px/1 'DM Sans',system-ui,sans-serif;letter-spacing:.18em;white-space:nowrap;
     border-bottom:2px solid transparent;color:#6b5c44;transition:all .2s; }
   .tp-tab.on { color:#c9a84c;border-bottom-color:#c9a84c; }
   .tp-sort { padding:7px 14px;background:transparent;cursor:pointer;
-    font:300 10px/1 'Cormorant Garamond',serif;letter-spacing:.14em;
+    font:300 10px/1 'DM Sans',system-ui,sans-serif;letter-spacing:.14em;
     border:1px solid rgba(201,168,76,.25);color:#6b5c44;transition:all .2s; }
   .tp-sort.on { background:rgba(201,168,76,.1);border-color:#c9a84c;color:#c9a84c; }
 
@@ -62,7 +62,7 @@ const CSS = `
     opacity:0;pointer-events:none;
     background:#1a1208;border:1px solid rgba(201,168,76,.4);
     padding:13px 28px;z-index:9999;
-    font:300 13px/1 'Cormorant Garamond',serif;
+    font:300 13px/1 'DM Sans',system-ui,sans-serif;
     letter-spacing:.14em;color:#e8c96e;
     box-shadow:0 12px 40px rgba(0,0,0,.4);
     transition:all .35s cubic-bezier(.23,1,.32,1);
@@ -199,7 +199,7 @@ function TrendCard({ product, index }) {
             {/* Tag */}
             {product.tag&&(
               <div style={{position:"absolute",top:13,left:13,zIndex:10,
-                padding:"4px 10px",fontSize:"8px",letterSpacing:"0.2em",fontWeight:600,
+                padding:"4px 10px",fontSize:"11px",letterSpacing:"0.10em",fontWeight:600,
                 background:product.tag==="SALE"?"#e07070":"#c9a84c",color:"#0f0c08"}}>
                 {product.tag}
               </div>
@@ -224,15 +224,15 @@ function TrendCard({ product, index }) {
                   ? <button
                       onClick={e=>{e.stopPropagation();setShowSizes(true);}}
                       style={{width:"100%",padding:"10px 0",background:"#c9a84c",border:"none",
-                        color:"#0f0c08",cursor:"pointer",fontFamily:"'Cormorant Garamond',serif",
-                        fontSize:"9px",letterSpacing:"0.24em",fontWeight:600}}
+                        color:"#0f0c08",cursor:"pointer",fontFamily:"'DM Sans',system-ui,sans-serif",
+                        fontSize:"12px",letterSpacing:"0.12em",fontWeight:600}}
                       onMouseEnter={e=>e.currentTarget.style.background="#e8c96e"}
                       onMouseLeave={e=>e.currentTarget.style.background="#c9a84c"}>
                       ADD TO CART
                     </button>
                   : <div>
-                      <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"8px",
-                        letterSpacing:"0.22em",color:"rgba(255,255,255,.45)",marginBottom:8,textAlign:"center"}}>
+                      <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",
+                        letterSpacing:"0.12em",color:"rgba(255,255,255,.45)",marginBottom:8,textAlign:"center"}}>
                         SELECT SIZE
                       </div>
                       <div style={{display:"flex",gap:6,justifyContent:"center",flexWrap:"wrap"}}>
@@ -240,7 +240,7 @@ function TrendCard({ product, index }) {
                           <button key={s} onClick={e=>doAdd(e,s)}
                             style={{width:36,height:36,background:"rgba(255,255,255,.07)",
                               border:"1px solid rgba(201,168,76,.35)",color:"rgba(255,255,255,.75)",
-                              cursor:"pointer",fontFamily:"'Cormorant Garamond',serif",fontSize:"11px",
+                              cursor:"pointer",fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",
                               transition:"all .15s"}}
                             onMouseEnter={e=>{e.currentTarget.style.background="#c9a84c";e.currentTarget.style.color="#0f0c08";e.currentTarget.style.borderColor="#c9a84c";}}
                             onMouseLeave={e=>{e.currentTarget.style.background="rgba(255,255,255,.07)";e.currentTarget.style.color="rgba(255,255,255,.75)";e.currentTarget.style.borderColor="rgba(201,168,76,.35)";}}>
@@ -257,25 +257,25 @@ function TrendCard({ product, index }) {
 
         {/* Info */}
         <div onClick={()=>navigate(`/shop/${product._id}`)} style={{cursor:"pointer"}}>
-          <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"9.5px",
+          <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",
             letterSpacing:"0.16em",color:"#6b5c44",marginBottom:4}}>
             {product.category?.toUpperCase()}
             {product.subCategory?` · ${product.subCategory.toUpperCase()}`:""}
           </div>
-          <div style={{fontFamily:"'Playfair Display',serif",fontSize:15,
+          <div style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:15,
             color:"#1a1208",marginBottom:7,lineHeight:1.3}}>
             {product.name}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <span style={{fontFamily:"'Playfair Display',serif",fontSize:15,color:"#1a1208"}}>
+            <span style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:15,color:"#1a1208"}}>
               ₹{Number(product.price).toLocaleString("en-IN")}
             </span>
             {hasOrig&&<>
               <span style={{fontSize:12,color:"#b0a08a",textDecoration:"line-through",
-                fontFamily:"'Cormorant Garamond',serif"}}>
+                fontFamily:"'DM Sans',system-ui,sans-serif"}}>
                 ₹{Number(product.originalPrice).toLocaleString("en-IN")}
               </span>
-              <span style={{fontSize:"9px",color:"#e07070",letterSpacing:"0.1em"}}>{disc}% OFF</span>
+              <span style={{fontSize:"12px",color:"#e07070",letterSpacing:"0.1em"}}>{disc}% OFF</span>
             </>}
           </div>
         </div>
@@ -347,13 +347,13 @@ export default function TrendingPage() {
         </div>
         <div style={{width:32,height:1,margin:"0 auto 10px",
           background:"linear-gradient(90deg,transparent,#c9a84c,transparent)",position:"relative",zIndex:1}}/>
-        <h1 style={{fontFamily:"'Playfair Display',serif",
+        <h1 style={{fontFamily:"'DM Serif Display',Georgia,serif",
           fontSize:"clamp(28px,4vw,44px)",fontWeight:400,color:"#fff",
           margin:"0 0 6px",lineHeight:1.1,position:"relative",zIndex:1}}>
           Trending Now
         </h1>
-        <p style={{fontFamily:"'Cormorant Garamond',Georgia,serif",
-          fontSize:"8.5px",letterSpacing:"0.3em",color:"rgba(255,255,255,.35)",
+        <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",
+          fontSize:"12px",letterSpacing:"0.14em",color:"rgba(255,255,255,.35)",
           position:"relative",zIndex:1}}>
           MOST COVETED PIECES THIS SEASON
         </p>
@@ -364,12 +364,12 @@ export default function TrendingPage() {
           {[{n:50,s:"K+",l:"HAPPY CLIENTS"},{n:200,s:"+",l:"STYLES TRENDING"},{n:48,s:"HR",l:"NEW ARRIVALS"}]
             .map(({n,s,l})=>(
             <div key={l} style={{textAlign:"center"}}>
-              <div className="tp-gold" style={{fontFamily:"'Playfair Display',serif",
+              <div className="tp-gold" style={{fontFamily:"'DM Serif Display',Georgia,serif",
                 fontSize:"clamp(20px,2.5vw,28px)",fontWeight:400}}>
                 <CountUp end={n} suffix={s}/>
               </div>
-              <div style={{fontFamily:"'Cormorant Garamond',serif",fontSize:"7.5px",
-                letterSpacing:"0.22em",color:"rgba(255,255,255,.28)",marginTop:2}}>{l}</div>
+              <div style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",
+                letterSpacing:"0.12em",color:"rgba(255,255,255,.28)",marginTop:2}}>{l}</div>
             </div>
           ))}
         </div>
@@ -381,8 +381,8 @@ export default function TrendingPage() {
         <div style={{display:"flex",alignItems:"center"}}>
           <div className="r-section" style={{flexShrink:0,display:"flex",alignItems:"center",gap:8,
             borderRight:"1px solid rgba(201,168,76,.15)",
-            fontFamily:"'Cormorant Garamond',serif",fontSize:"9px",
-            letterSpacing:"0.28em",color:"rgba(201,168,76,.8)"}}>
+            fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"12px",
+            letterSpacing:"0.14em",color:"rgba(201,168,76,.8)"}}>
             <svg width="10" height="10" viewBox="0 0 24 24" fill="#c9a84c">
               <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
             </svg>
@@ -396,8 +396,8 @@ export default function TrendingPage() {
                  "SILK SATIN BLOUSE","CASHMERE CARDIGAN","LEATHER CROSSBODY",
                  "DOUBLE-BREASTED SUIT","DRAPED MAXI DRESS","AVIATOR SUNGLASSES"]
                 .map((item,i)=>(
-                  <span key={`${ri}-${i}`} style={{fontFamily:"'Cormorant Garamond',serif",
-                    fontSize:"9px",letterSpacing:"0.2em",color:"rgba(255,255,255,.22)",flexShrink:0}}>
+                  <span key={`${ri}-${i}`} style={{fontFamily:"'DM Sans',system-ui,sans-serif",
+                    fontSize:"12px",letterSpacing:"0.10em",color:"rgba(255,255,255,.22)",flexShrink:0}}>
                     {item}&nbsp;&nbsp;·&nbsp;&nbsp;
                   </span>
                 ))
@@ -421,7 +421,7 @@ export default function TrendingPage() {
           ))}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:12,flexShrink:0,flexWrap:"wrap",paddingTop:8,paddingBottom:8}}>
-          {!loading&&<span style={{fontFamily:"'Cormorant Garamond',serif",
+          {!loading&&<span style={{fontFamily:"'DM Sans',system-ui,sans-serif",
             fontSize:12,color:"#6b5c44"}}>{total} pieces</span>}
           <div style={{display:"flex",gap:6}}>
             {SORTS.map((s,i)=>(
@@ -442,19 +442,19 @@ export default function TrendingPage() {
               <div style={{width:28,height:28,border:"2px solid #c9a84c",
                 borderTopColor:"transparent",borderRadius:"50%",
                 animation:"tpSpin .75s linear infinite"}}/>
-              <span style={{fontFamily:"'Cormorant Garamond',serif",
-                fontSize:12,letterSpacing:"0.2em",color:"#6b5c44"}}>
+              <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",
+                fontSize:12,letterSpacing:"0.10em",color:"#6b5c44"}}>
                 LOADING TRENDING ITEMS…
               </span>
             </div>
           : products.length===0
             ? <div style={{textAlign:"center",padding:"80px 0"}}>
                 <div style={{fontSize:48,marginBottom:16}}>🔍</div>
-                <p style={{fontFamily:"'Playfair Display',serif",fontSize:20,color:"#6b5c44"}}>No items found</p>
+                <p style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:20,color:"#6b5c44"}}>No items found</p>
                 <button onClick={()=>setCat("All")}
                   style={{marginTop:20,padding:"12px 28px",background:"#c9a84c",
                     border:"none",color:"#0f0c08",cursor:"pointer",
-                    fontFamily:"'Cormorant Garamond',serif",fontSize:11,letterSpacing:"0.2em"}}>
+                    fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,letterSpacing:"0.10em"}}>
                   VIEW ALL
                 </button>
               </div>
@@ -474,7 +474,7 @@ export default function TrendingPage() {
                 border:`1px solid ${page===1?"rgba(201,168,76,.2)":"#c9a84c"}`,
                 color:page===1?"rgba(201,168,76,.3)":"#c9a84c",
                 cursor:page===1?"not-allowed":"pointer",
-                fontFamily:"'Cormorant Garamond',serif",fontSize:11,letterSpacing:"0.14em"}}>
+                fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,letterSpacing:"0.14em"}}>
               ← PREV
             </button>
             {Array.from({length:totalPages},(_,i)=>i+1).map(pg=>(
@@ -483,7 +483,7 @@ export default function TrendingPage() {
                   background:pg===page?"#c9a84c":"transparent",
                   border:`1px solid ${pg===page?"#c9a84c":"rgba(201,168,76,.3)"}`,
                   color:pg===page?"#0f0c08":"#6b5c44",
-                  fontFamily:"'Cormorant Garamond',serif",fontSize:13,
+                  fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:13,
                   cursor:"pointer",transition:"all .2s"}}>
                 {pg}
               </button>
@@ -493,7 +493,7 @@ export default function TrendingPage() {
                 border:`1px solid ${page===totalPages?"rgba(201,168,76,.2)":"#c9a84c"}`,
                 color:page===totalPages?"rgba(201,168,76,.3)":"#c9a84c",
                 cursor:page===totalPages?"not-allowed":"pointer",
-                fontFamily:"'Cormorant Garamond',serif",fontSize:11,letterSpacing:"0.14em"}}>
+                fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,letterSpacing:"0.14em"}}>
               NEXT →
             </button>
           </div>
@@ -503,8 +503,8 @@ export default function TrendingPage() {
       {/* ── BACK ─────────────────────────────────────────────────────────── */}
       <div style={{textAlign:"center",padding:"0 0 64px"}}>
         <button onClick={()=>navigate("/shop")}
-          style={{fontFamily:"'Cormorant Garamond',serif",fontSize:11,
-            letterSpacing:"0.22em",color:"#6b5c44",background:"none",
+          style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,
+            letterSpacing:"0.12em",color:"#6b5c44",background:"none",
             border:"1px solid rgba(201,168,76,.3)",padding:"13px 30px",
             cursor:"pointer",transition:"all .22s"}}
           onMouseEnter={e=>{e.currentTarget.style.borderColor="#c9a84c";e.currentTarget.style.color="#c9a84c";}}

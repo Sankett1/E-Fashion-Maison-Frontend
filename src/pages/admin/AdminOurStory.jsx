@@ -51,7 +51,7 @@ const GOLD_LINE = (
 function SectionHeader({ title, sub }) {
   return (
     <div style={{ marginBottom:28 }}>
-      <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:22, fontWeight:400, color:"#fff", margin:"0 0 4px" }}>{title}</h2>
+      <h2 style={{ fontFamily:"'DM Serif Display',serif", fontSize:22, fontWeight:400, color:"#fff", margin:"0 0 4px" }}>{title}</h2>
       {sub && <p style={{ fontSize:11, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)" }}>{sub}</p>}
     </div>
   );
@@ -63,7 +63,7 @@ function Msg({ msg }) {
     <div style={{ padding:"10px 16px", marginTop:8,
       background: msg.type==="ok" ? "rgba(122,184,122,0.08)" : "rgba(220,100,100,0.08)",
       border:`1px solid ${msg.type==="ok" ? "rgba(122,184,122,0.3)" : "rgba(220,100,100,0.3)"}`,
-      fontFamily:"'Cormorant Garamond',serif", fontSize:13,
+      fontFamily:"'DM Sans',sans-serif", fontSize:13,
       color: msg.type==="ok" ? "#7ab87a" : "#e07070" }}>
       {msg.text}
     </div>
@@ -127,7 +127,7 @@ function ImageUploadCard({ label, currentUrl, fallbackUrl, onUpload, uploading, 
 
       <button onClick={() => fileRef.current?.click()} disabled={uploading}
         style={{ width:"100%", padding:"9px 0", background:"transparent", border:`1px solid ${C.gold}`,
-          color:C.gold, fontFamily:"'Cormorant Garamond',serif", fontSize:10, letterSpacing:"0.18em",
+          color:C.gold, fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:"0.18em",
           cursor: uploading ? "not-allowed" : "pointer", opacity: uploading ? 0.6 : 1, transition:"all 0.2s" }}
         onMouseEnter={e => { if(!uploading){ e.currentTarget.style.background="rgba(201,168,76,0.08)"; }}}
         onMouseLeave={e => e.currentTarget.style.background="transparent"}>
@@ -196,12 +196,12 @@ export default function AdminStory() {
     <AdminLayout title="Our Story — Image Manager">
       <style>{`
         @keyframes stSpin { to { transform: rotate(360deg); } }
-        .st-tab { padding:10px 20px; background:none; border:none; cursor:pointer; font:300 10px/1 'Cormorant Garamond',serif; letter-spacing:.16em; border-bottom:2px solid transparent; color:rgba(255,255,255,0.4); transition:all .2s; }
+        .st-tab { padding:10px 20px; background:none; border:none; cursor:pointer; font:300 10px/1 'DM Sans',sans-serif; letter-spacing:.16em; border-bottom:2px solid transparent; color:rgba(255,255,255,0.4); transition:all .2s; }
         .st-tab.on { color:#c9a84c; border-bottom-color:#c9a84c; }
         .st-tab:hover:not(.on) { color:rgba(255,255,255,0.7); }
-        .st-input { width:100%; padding:10px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); color:#fff; font-family:'Cormorant Garamond',serif; font-size:14px; outline:none; box-sizing:border-box; transition:border-color .2s; }
+        .st-input { width:100%; padding:10px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); color:#fff; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; box-sizing:border-box; transition:border-color .2s; }
         .st-input:focus { border-color:#c9a84c; }
-        .st-textarea { width:100%; padding:10px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); color:#fff; font-family:'Cormorant Garamond',serif; font-size:14px; outline:none; box-sizing:border-box; resize:vertical; transition:border-color .2s; }
+        .st-textarea { width:100%; padding:10px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(201,168,76,0.2); color:#fff; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; box-sizing:border-box; resize:vertical; transition:border-color .2s; }
         .st-textarea:focus { border-color:#c9a84c; }
       `}</style>
 
@@ -302,7 +302,7 @@ export default function AdminStory() {
                     <div key={img.public_id || i} style={{ position:"relative", aspectRatio:"4/3", overflow:"hidden",
                       border:"1px solid rgba(201,168,76,0.2)", background:"#111" }}>
                       <img src={img.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-                      <div style={{ position:"absolute", top:0, left:0, right:0, padding:"6px 8px", background:"linear-gradient(to bottom,rgba(0,0,0,0.7),transparent)", fontSize:9, letterSpacing:"0.14em", color:"rgba(255,255,255,0.6)" }}>
+                      <div style={{ position:"absolute", top:0, left:0, right:0, padding:"6px 8px", background:"linear-gradient(to bottom,rgba(0,0,0,0.7),transparent)", fontSize:12, letterSpacing:"0.14em", color:"rgba(255,255,255,0.6)" }}>
                         #{i+1}
                       </div>
                       <button
@@ -358,8 +358,8 @@ export default function AdminStory() {
                         {/* thumb */}
                         <div style={{ width:80, aspectRatio:"16/10", flexShrink:0, background:"#111", position:"relative", overflow:"hidden" }}>
                           {item.image?.url && <img src={item.image.url} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>}
-                          {!item.image?.url && item.image && <span style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:9, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em" }}>NO IMG</span>}
-                          <div style={{ position:"absolute", bottom:2, left:4, fontFamily:"'Playfair Display',serif", fontSize:16, color:"rgba(255,255,255,0.15)", fontWeight:400 }}>{item.year}</div>
+                          {!item.image?.url && item.image && <span style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em" }}>NO IMG</span>}
+                          <div style={{ position:"absolute", bottom:2, left:4, fontFamily:"'DM Serif Display',serif", fontSize:16, color:"rgba(255,255,255,0.15)", fontWeight:400 }}>{item.year}</div>
                         </div>
 
                         {isEditing ? (
@@ -380,7 +380,7 @@ export default function AdminStory() {
                         ) : (
                           <div style={{ flex:1 }}>
                             <div style={{ fontSize:10, letterSpacing:"0.22em", color:C.gold, marginBottom:4 }}>{item.year}</div>
-                            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:16, color:"#fff", marginBottom:4 }}>{item.title}</div>
+                            <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:16, color:"#fff", marginBottom:4 }}>{item.title}</div>
                             <div style={{ fontSize:13, color:"rgba(255,255,255,0.4)", lineHeight:1.6 }}>{item.text}</div>
                           </div>
                         )}
@@ -388,7 +388,7 @@ export default function AdminStory() {
                         {!isEditing && item._id && (
                           <div style={{ display:"flex", gap:8, flexShrink:0 }}>
                             <button onClick={() => { setJEdit(item._id); setJForm({ year:item.year, title:item.title, text:item.text }); }}
-                              style={{ padding:"6px 14px", background:"transparent", border:`1px solid ${C.gold}`, color:C.gold, fontSize:9, letterSpacing:"0.16em", cursor:"pointer", fontFamily:"'Cormorant Garamond',serif" }}>
+                              style={{ padding:"6px 14px", background:"transparent", border:`1px solid ${C.gold}`, color:C.gold, fontSize:12, letterSpacing:"0.16em", cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
                               EDIT
                             </button>
                             <button onClick={async () => {
@@ -396,7 +396,7 @@ export default function AdminStory() {
                               await deleteJourneyItem(item._id);
                               const fresh = await getAboutContent(); setContent(fresh.content);
                               setMsg("journey", "ok", "Item deleted.");
-                            }} style={{ padding:"6px 14px", background:"transparent", border:"1px solid rgba(220,100,100,0.4)", color:"#e07070", fontSize:9, letterSpacing:"0.16em", cursor:"pointer", fontFamily:"'Cormorant Garamond',serif" }}>
+                            }} style={{ padding:"6px 14px", background:"transparent", border:"1px solid rgba(220,100,100,0.4)", color:"#e07070", fontSize:12, letterSpacing:"0.16em", cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
                               DEL
                             </button>
                           </div>
@@ -447,7 +447,7 @@ export default function AdminStory() {
                       />
                       <div style={{ marginTop:12, padding:"12px 16px", background:"rgba(255,255,255,0.02)", border:"1px solid rgba(201,168,76,0.1)" }}>
                         <div style={{ fontSize:18, marginBottom:4 }}>{v.icon || "—"}</div>
-                        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, color:"#fff", marginBottom:3 }}>{v.title || "—"}</div>
+                        <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:14, color:"#fff", marginBottom:3 }}>{v.title || "—"}</div>
                         <div style={{ fontSize:11, color:"rgba(255,255,255,0.35)", lineHeight:1.5 }}>{v.text || "—"}</div>
                       </div>
                       <Msg msg={msgs[`val_${idx}`]} />
@@ -479,7 +479,7 @@ export default function AdminStory() {
                         onUpload={file => handleUpload(() => updateTeamMemberApi(idx, file), `team_${idx}`)}
                       />
                       <div style={{ marginTop:10, padding:"10px 14px", background:"rgba(255,255,255,0.02)", border:"1px solid rgba(201,168,76,0.1)" }}>
-                        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:14, color:"#fff" }}>{m.name || `Member ${idx+1}`}</div>
+                        <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:14, color:"#fff" }}>{m.name || `Member ${idx+1}`}</div>
                         <div style={{ fontSize:10, letterSpacing:"0.14em", color:C.gold, marginTop:2 }}>{m.title || "—"}</div>
                       </div>
                       <Msg msg={msgs[`team_${idx}`]} />
@@ -525,7 +525,7 @@ function AtelierUploader({ onUpload, uploading }) {
             ? <img src={preview} alt="preview" style={{ width:"100%", height:"100%", objectFit:"cover" }}/>
             : <div style={{ width:"100%", height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:6, color:"rgba(255,255,255,0.2)" }}>
                 <span style={{ fontSize:22 }}>+</span>
-                <span style={{ fontSize:9, letterSpacing:"0.14em" }}>SELECT IMAGE</span>
+                <span style={{ fontSize:12, letterSpacing:"0.14em" }}>SELECT IMAGE</span>
               </div>
           }
         </div>
@@ -533,11 +533,11 @@ function AtelierUploader({ onUpload, uploading }) {
       </div>
       <div style={{ flex:1, display:"flex", flexDirection:"column", gap:12 }}>
         <div>
-          <label style={{ display:"block", fontSize:9, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>LABEL (OPTIONAL)</label>
-          <input className="st-input" placeholder="e.g. Cutting room, Embroidery studio…" value={label} onChange={e => setLabel(e.target.value)} style={{ width:"100%", padding:"10px 14px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontFamily:"'Cormorant Garamond',serif", fontSize:14, outline:"none", boxSizing:"border-box" }}/>
+          <label style={{ display:"block", fontSize:12, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>LABEL (OPTIONAL)</label>
+          <input className="st-input" placeholder="e.g. Cutting room, Embroidery studio…" value={label} onChange={e => setLabel(e.target.value)} style={{ width:"100%", padding:"10px 14px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", boxSizing:"border-box" }}/>
         </div>
         <button onClick={handleSubmit} disabled={!file || uploading}
-          style={{ padding:"11px 24px", background: file ? C.gold : "rgba(201,168,76,0.2)", border:"none", color: file ? "#0f0c08" : "rgba(255,255,255,0.2)", fontFamily:"'Cormorant Garamond',serif", fontSize:10, letterSpacing:"0.18em", cursor: file && !uploading ? "pointer" : "not-allowed", alignSelf:"flex-start", transition:"all 0.2s" }}>
+          style={{ padding:"11px 24px", background: file ? C.gold : "rgba(201,168,76,0.2)", border:"none", color: file ? "#0f0c08" : "rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:"0.18em", cursor: file && !uploading ? "pointer" : "not-allowed", alignSelf:"flex-start", transition:"all 0.2s" }}>
           {uploading ? "UPLOADING…" : "ADD TO GALLERY"}
         </button>
       </div>
@@ -565,14 +565,14 @@ function JourneyAddForm({ onAdd, uploading }) {
     setForm({ year:"", title:"", text:"" }); setFile(null); setPreview(null);
   };
 
-  const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontFamily:"'Cormorant Garamond',serif", fontSize:14, outline:"none", boxSizing:"border-box" };
+  const inputStyle = { width:"100%", padding:"10px 14px", background:"rgba(255,255,255,0.04)", border:"1px solid rgba(201,168,76,0.2)", color:"#fff", fontFamily:"'DM Sans',sans-serif", fontSize:14, outline:"none", boxSizing:"border-box" };
 
   return (
     <div style={{ background:"rgba(255,255,255,0.02)", border:"1px solid rgba(201,168,76,0.15)", padding:24 }}>
       <div style={{ display:"grid", gridTemplateColumns:"120px 1fr", gap:20, alignItems:"flex-start" }}>
         {/* Image */}
         <div>
-          <div style={{ fontSize:9, letterSpacing:"0.14em", color:"rgba(255,255,255,0.35)", marginBottom:8 }}>IMAGE</div>
+          <div style={{ fontSize:12, letterSpacing:"0.14em", color:"rgba(255,255,255,0.35)", marginBottom:8 }}>IMAGE</div>
           <div style={{ aspectRatio:"16/10", background:"#0d0a06", border:`2px dashed ${preview?"rgba(201,168,76,0.5)":"rgba(201,168,76,0.2)"}`, cursor:"pointer", position:"relative", overflow:"hidden" }}
             onClick={() => fileRef.current?.click()}>
             {preview
@@ -581,26 +581,26 @@ function JourneyAddForm({ onAdd, uploading }) {
             }
           </div>
           <input ref={fileRef} type="file" accept="image/*" style={{ display:"none" }} onChange={e => handleFile(e.target.files[0])}/>
-          <div style={{ fontSize:8, color:"rgba(255,255,255,0.2)", marginTop:4, textAlign:"center" }}>click to pick</div>
+          <div style={{ fontSize:11, color:"rgba(255,255,255,0.2)", marginTop:4, textAlign:"center" }}>click to pick</div>
         </div>
         {/* Fields */}
         <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 2fr", gap:12 }}>
             <div>
-              <label style={{ display:"block", fontSize:9, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>YEAR *</label>
+              <label style={{ display:"block", fontSize:12, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>YEAR *</label>
               <input style={inputStyle} placeholder="2024" value={form.year} onChange={e => setForm(f=>({...f,year:e.target.value}))}/>
             </div>
             <div>
-              <label style={{ display:"block", fontSize:9, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>TITLE *</label>
+              <label style={{ display:"block", fontSize:12, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>TITLE *</label>
               <input style={inputStyle} placeholder="50K Community" value={form.title} onChange={e => setForm(f=>({...f,title:e.target.value}))}/>
             </div>
           </div>
           <div>
-            <label style={{ display:"block", fontSize:9, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>DESCRIPTION *</label>
+            <label style={{ display:"block", fontSize:12, letterSpacing:"0.16em", color:"rgba(255,255,255,0.35)", marginBottom:6 }}>DESCRIPTION *</label>
             <textarea style={{...inputStyle, resize:"vertical"}} rows={3} placeholder="Describe this milestone…" value={form.text} onChange={e => setForm(f=>({...f,text:e.target.value}))}/>
           </div>
           <button onClick={handleAdd} disabled={!form.year||!form.title||!form.text||uploading}
-            style={{ padding:"11px 28px", background:C.gold, border:"none", color:"#0f0c08", fontFamily:"'Cormorant Garamond',serif", fontSize:10, letterSpacing:"0.18em", cursor:"pointer", alignSelf:"flex-start", opacity:(!form.year||!form.title||!form.text)?0.5:1, transition:"all 0.2s" }}>
+            style={{ padding:"11px 28px", background:C.gold, border:"none", color:"#0f0c08", fontFamily:"'DM Sans',sans-serif", fontSize:10, letterSpacing:"0.18em", cursor:"pointer", alignSelf:"flex-start", opacity:(!form.year||!form.title||!form.text)?0.5:1, transition:"all 0.2s" }}>
             {uploading ? "ADDING…" : "+ ADD MILESTONE"}
           </button>
         </div>
@@ -616,34 +616,34 @@ function JourneyEditForm({ initial, onSave, onCancel, uploading }) {
   const [file,    setFile]    = useState(null);
   const [preview, setPreview] = useState(null);
 
-  const inputStyle = { width:"100%", padding:"8px 12px", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(201,168,76,0.25)", color:"#fff", fontFamily:"'Cormorant Garamond',serif", fontSize:13, outline:"none", boxSizing:"border-box" };
+  const inputStyle = { width:"100%", padding:"8px 12px", background:"rgba(255,255,255,0.05)", border:"1px solid rgba(201,168,76,0.25)", color:"#fff", fontFamily:"'DM Sans',sans-serif", fontSize:13, outline:"none", boxSizing:"border-box" };
 
   return (
     <div style={{ flex:1 }}>
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10, marginBottom:10 }}>
         <div>
-          <label style={{ display:"block", fontSize:8, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>YEAR</label>
+          <label style={{ display:"block", fontSize:11, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>YEAR</label>
           <input style={inputStyle} value={form.year} onChange={e => setForm(f=>({...f,year:e.target.value}))}/>
         </div>
         <div>
-          <label style={{ display:"block", fontSize:8, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>TITLE</label>
+          <label style={{ display:"block", fontSize:11, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>TITLE</label>
           <input style={inputStyle} value={form.title} onChange={e => setForm(f=>({...f,title:e.target.value}))}/>
         </div>
       </div>
       <div style={{ marginBottom:10 }}>
-        <label style={{ display:"block", fontSize:8, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>DESCRIPTION</label>
+        <label style={{ display:"block", fontSize:11, letterSpacing:"0.14em", color:"rgba(255,255,255,0.3)", marginBottom:4 }}>DESCRIPTION</label>
         <textarea style={{...inputStyle, resize:"vertical"}} rows={2} value={form.text} onChange={e => setForm(f=>({...f,text:e.target.value}))}/>
       </div>
       <div style={{ display:"flex", alignItems:"center", gap:10, flexWrap:"wrap" }}>
-        <button onClick={() => fileRef.current?.click()} style={{ padding:"6px 12px", background:"transparent", border:"1px solid rgba(201,168,76,0.3)", color:"rgba(255,255,255,0.6)", fontSize:9, letterSpacing:"0.14em", cursor:"pointer", fontFamily:"'Cormorant Garamond',serif" }}>
+        <button onClick={() => fileRef.current?.click()} style={{ padding:"6px 12px", background:"transparent", border:"1px solid rgba(201,168,76,0.3)", color:"rgba(255,255,255,0.6)", fontSize:12, letterSpacing:"0.14em", cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
           {preview ? "IMAGE SELECTED ✓" : "CHANGE IMAGE"}
         </button>
         <input ref={fileRef} type="file" accept="image/*" style={{ display:"none" }} onChange={e => { const f=e.target.files[0]; if(f){setFile(f);setPreview(URL.createObjectURL(f));} }}/>
         <button onClick={() => onSave(form, file)} disabled={uploading}
-          style={{ padding:"6px 16px", background:C.gold, border:"none", color:"#0f0c08", fontSize:9, letterSpacing:"0.16em", cursor:uploading?"not-allowed":"pointer", fontFamily:"'Cormorant Garamond',serif", opacity:uploading?0.7:1 }}>
+          style={{ padding:"6px 16px", background:C.gold, border:"none", color:"#0f0c08", fontSize:12, letterSpacing:"0.16em", cursor:uploading?"not-allowed":"pointer", fontFamily:"'DM Sans',sans-serif", opacity:uploading?0.7:1 }}>
           {uploading ? "SAVING…" : "SAVE"}
         </button>
-        <button onClick={onCancel} style={{ padding:"6px 14px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", color:"rgba(255,255,255,0.4)", fontSize:9, letterSpacing:"0.14em", cursor:"pointer", fontFamily:"'Cormorant Garamond',serif" }}>
+        <button onClick={onCancel} style={{ padding:"6px 14px", background:"transparent", border:"1px solid rgba(255,255,255,0.15)", color:"rgba(255,255,255,0.4)", fontSize:12, letterSpacing:"0.14em", cursor:"pointer", fontFamily:"'DM Sans',sans-serif" }}>
           CANCEL
         </button>
       </div>

@@ -72,7 +72,7 @@ export default function AdminHero() {
     <AdminLayout title="Hero Settings">
       <div style={{ marginBottom: 24, padding: "14px 18px",
         background: "rgba(201,168,76,0.05)", border: "1px solid rgba(201,168,76,0.2)",
-        fontFamily: "'Cormorant Garamond',serif", fontSize: "13px",
+        fontFamily: "'DM Sans',sans-serif", fontSize: "13px",
         color: "rgba(255,255,255,0.5)", lineHeight: 1.6 }}>
         ★ Changes here update the 3 collection cards on the homepage. Paste any image URL
         (Unsplash, Cloudinary, etc.) — the card will display it immediately.
@@ -82,7 +82,7 @@ export default function AdminHero() {
       {/* ── Hero Video Settings ──────────────────────────────────────────── */}
       <div style={{ background: "linear-gradient(135deg,#0f0c08,#110e08)",
         border: "1px solid rgba(201,168,76,0.15)", padding: 24, marginBottom: 24 }}>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 17,
+        <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: 17,
           color: "#fff", marginBottom: 16 }}>Hero Background Video</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 12, marginBottom: 16 }}>
           <div>
@@ -120,7 +120,7 @@ export default function AdminHero() {
           </div>
         </div>
         <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)",
-          fontFamily: "'Cormorant Garamond',serif" }}>
+          fontFamily: "'DM Sans',sans-serif" }}>
           Tip: You can also upload your own video to Cloudinary and paste its URL here.
           For best performance use MP4 format, max 10MB.
         </div>
@@ -148,10 +148,10 @@ export default function AdminHero() {
               <div style={{ position: "absolute", bottom: 20, left: 20, right: 20 }}>
                 <div style={{ fontSize: "8px", letterSpacing: "0.24em",
                   color: "rgba(255,255,255,0.6)", marginBottom: 6,
-                  fontFamily: "'Cormorant Garamond',serif" }}>
+                  fontFamily: "'DM Sans',sans-serif" }}>
                   {card.eye}
                 </div>
-                <div style={{ fontFamily: "'Playfair Display',serif",
+                <div style={{ fontFamily: "'DM Serif Display',serif",
                   fontSize: 22, fontWeight: 500, color: "#fff" }}>
                   {card.name}
                 </div>
@@ -177,7 +177,7 @@ export default function AdminHero() {
                   style={inputStyle}
                 />
                 <div style={{ marginTop: 6, fontSize: "10px", color: "rgba(255,255,255,0.25)",
-                  fontFamily: "'Cormorant Garamond',serif" }}>
+                  fontFamily: "'DM Sans',sans-serif" }}>
                   Paste any image URL — updates preview instantly
                 </div>
               </div>
@@ -223,7 +223,7 @@ export default function AdminHero() {
           RESET TO DEFAULTS
         </button>
         {saved && (
-          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13,
+          <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13,
             color: "#7ab87a", letterSpacing: "0.1em" }}>
             ✓ Changes saved — reload homepage to see them
           </div>
@@ -234,7 +234,7 @@ export default function AdminHero() {
       <div style={{ marginTop: 32, padding: "20px 24px",
         background: "linear-gradient(135deg,#0f0c08,#110e08)",
         border: "1px solid rgba(201,168,76,0.12)" }}>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 16,
+        <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: 16,
           color: "#fff", marginBottom: 16 }}>Quick Image Sources</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
           {[
@@ -254,7 +254,7 @@ export default function AdminHero() {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)",
-                  fontFamily: "'Cormorant Garamond',serif", marginBottom: 3 }}>
+                  fontFamily: "'DM Sans',sans-serif", marginBottom: 3 }}>
                   {item.label}
                 </div>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.25)",

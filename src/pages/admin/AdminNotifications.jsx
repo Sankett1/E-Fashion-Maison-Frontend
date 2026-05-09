@@ -43,7 +43,7 @@ export default function AdminNotifications() {
       {/* Header row */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>
+          <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>
             {unreadCount > 0 ? <span style={{ color: C.gold }}>{unreadCount} unread</span> : "All caught up"}
             {" "}· {notifications.length} total
           </div>
@@ -56,7 +56,7 @@ export default function AdminNotifications() {
           )}
           {confirmClear ? (
             <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <span style={{ fontSize: 11, color: "rgba(255,80,80,0.7)", fontFamily: "'Cormorant Garamond',serif" }}>Sure?</span>
+              <span style={{ fontSize: 11, color: "rgba(255,80,80,0.7)", fontFamily: "'DM Sans',sans-serif" }}>Sure?</span>
               <button onClick={() => { clearAll(); setConfirmClear(false); }} style={btnStyle("#200808", "rgba(255,80,80,0.3)", "#f09090")}>YES, CLEAR</button>
               <button onClick={() => setConfirmClear(false)} style={btnStyle("#0f0c08", "rgba(255,255,255,0.1)", "rgba(255,255,255,0.4)")}>CANCEL</button>
             </div>
@@ -102,7 +102,7 @@ export default function AdminNotifications() {
       </div>
       
       {filtered.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "80px 0", fontFamily: "'Cormorant Garamond',serif", fontSize: 16, color: "rgba(255,255,255,0.2)" }}>
+        <div style={{ textAlign: "center", padding: "80px 0", fontFamily: "'DM Sans',sans-serif", fontSize: 16, color: "rgba(255,255,255,0.2)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>🔔</div>
           No notifications{filter !== "All" ? ` in "${filter}"` : " yet"}
         </div>
@@ -147,24 +147,24 @@ export default function AdminNotifications() {
                 {/* Content */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    <span style={{ fontSize: "9px", letterSpacing: "0.16em", color: cfg.color, fontFamily: "'Cormorant Garamond',serif" }}>
+                    <span style={{ fontSize: "9px", letterSpacing: "0.16em", color: cfg.color, fontFamily: "'DM Sans',sans-serif" }}>
                       {cfg.label.toUpperCase()}
                     </span>
                     {!n.read && (
                       <span style={{ width: 6, height: 6, borderRadius: "50%", background: cfg.color, display: "inline-block" }} />
                     )}
                   </div>
-                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 14, color: n.read ? "rgba(255,255,255,0.6)" : "#fff", marginBottom: 4 }}>
+                  <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: 14, color: n.read ? "rgba(255,255,255,0.6)" : "#fff", marginBottom: 4 }}>
                     {n.title}
                   </div>
-                  <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>
+                  <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>
                     {n.message}
                   </div>
                 </div>
 
                 {/* Right side */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 10, flexShrink: 0 }}>
-                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", fontFamily: "'Cormorant Garamond',serif", whiteSpace: "nowrap" }}>
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", fontFamily: "'DM Sans',sans-serif", whiteSpace: "nowrap" }}>
                     {timeAgo(n.createdAt)}
                   </span>
                   <button
@@ -175,7 +175,7 @@ export default function AdminNotifications() {
                     title="Delete"
                   >✕</button>
                   {n.meta?.link && (
-                    <span style={{ fontSize: "9px", color: C.gold, letterSpacing: "0.1em", fontFamily: "'Cormorant Garamond',serif" }}>VIEW →</span>
+                    <span style={{ fontSize: "9px", color: C.gold, letterSpacing: "0.1em", fontFamily: "'DM Sans',sans-serif" }}>VIEW →</span>
                   )}
                 </div>
               </div>

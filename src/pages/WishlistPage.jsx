@@ -33,7 +33,7 @@ export default function WishlistPage() {
     <div style={{ paddingTop:"100px", minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center" }}>
       <div style={{ textAlign:"center" }}>
         <div style={{ fontSize:48, marginBottom:20 }}>🔒</div>
-        <p style={{ fontFamily:"'Playfair Display',serif", fontSize:22, color:"rgba(255,255,255,0.5)", marginBottom:24 }}>Sign in to view your wishlist</p>
+        <p style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:22, color:"rgba(255,255,255,0.5)", marginBottom:24 }}>Sign in to view your wishlist</p>
         <button className="m-btn-gold" onClick={() => navigate("/login")}>SIGN IN</button>
       </div>
     </div>
@@ -42,8 +42,8 @@ export default function WishlistPage() {
   return (
     <div style={{ paddingTop:"100px", minHeight:"100vh", background:C.bg, padding:"100px 80px 60px" }}>
       <div style={{ textAlign:"center", marginBottom:"48px" }}>
-        <div style={{ fontSize:"9.5px", letterSpacing:"0.28em", color:C.gold, marginBottom:"14px" }}>MY COLLECTION</div>
-        <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"40px", fontWeight:400, color:"#fff", marginBottom:"16px" }}>Wishlist</h1>
+        <div style={{ fontSize:"12px", letterSpacing:"0.14em", color:C.gold, marginBottom:"14px" }}>MY COLLECTION</div>
+        <h1 style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"40px", fontWeight:400, color:"#fff", marginBottom:"16px" }}>Wishlist</h1>
         <GoldBar centered />
         <p style={{ fontSize:"13px", color:"rgba(255,255,255,0.4)" }}>{items.length} saved {items.length === 1 ? "piece" : "pieces"}</p>
       </div>
@@ -51,7 +51,7 @@ export default function WishlistPage() {
       {items.length === 0 ? (
         <div style={{ textAlign:"center", padding:"80px 0" }}>
           <div style={{ fontSize:"48px", marginBottom:"20px" }}>🤍</div>
-          <p style={{ fontFamily:"'Playfair Display',serif", fontSize:"22px", color:"rgba(255,255,255,0.4)" }}>Your wishlist is empty</p>
+          <p style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"22px", color:"rgba(255,255,255,0.4)" }}>Your wishlist is empty</p>
           <button onClick={() => navigate("/shop")} className="m-btn-gold" style={{ marginTop:"24px" }}>EXPLORE THE COLLECTION</button>
         </div>
       ) : (
@@ -68,10 +68,10 @@ export default function WishlistPage() {
                 </button>
               </div>
               <div style={{ padding:"16px" }}>
-                <div style={{ fontSize:"9px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.3)", marginBottom:"6px" }}>
+                <div style={{ fontSize:"12px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.3)", marginBottom:"6px" }}>
                   {item.category?.toUpperCase()}
                 </div>
-                <div style={{ fontFamily:"'Playfair Display',serif", fontSize:"16px", color:"#fff", marginBottom:"8px" }}>{item.name}</div>
+                <div style={{ fontFamily:"'DM Serif Display',Georgia,serif", fontSize:"16px", color:"#fff", marginBottom:"8px" }}>{item.name}</div>
                 <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"14px" }}>
                   <span style={{ fontSize:"14px", color:C.gold }}>₹{Number(item.price).toLocaleString("en-IN")}</span>
                   {item.originalPrice && (

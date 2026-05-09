@@ -191,7 +191,7 @@ export default function AdminProducts() {
       {modal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.88)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }} onClick={() => setModal(null)}>
           <div style={{ background: "#0d0a06", border: "1px solid rgba(201,168,76,0.2)", borderTop: `3px solid ${C.gold}`, width: "100%", maxWidth: "640px", maxHeight: "90vh", overflowY: "auto", padding: "36px" }} onClick={e => e.stopPropagation()}>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "22px", color: "#fff", marginBottom: "28px" }}>
+            <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "22px", color: "#fff", marginBottom: "28px" }}>
               {modal === "add" ? "Add New Product" : `Edit — ${editing?.name}`}
             </div>
 

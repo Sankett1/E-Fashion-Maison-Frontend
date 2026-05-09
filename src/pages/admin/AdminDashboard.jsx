@@ -123,11 +123,11 @@ function KpiCard({ label, value, display, growth, color, sparkData, icon, onClic
           </div>
         )}
       </div>
-      <div style={{ fontFamily:"'Playfair Display',serif", fontSize:30, color:"#fff", marginBottom:4, lineHeight:1 }}>
+      <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:30, color:"#fff", marginBottom:4, lineHeight:1 }}>
         <CountUp to={typeof value === "number" ? value : 0} />
         {display && <span style={{ fontSize:15, color:"rgba(255,255,255,0.6)", marginLeft:4 }}>{display}</span>}
       </div>
-      <div style={{ fontSize:"9.5px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.35)", marginBottom:12 }}>{label.toUpperCase()}</div>
+      <div style={{ fontSize:"12px", letterSpacing:"0.18em", color:"rgba(255,255,255,0.35)", marginBottom:12 }}>{label.toUpperCase()}</div>
       {sparkData && <Sparkline data={sparkData} color={color} height={32} />}
     </div>
   );
@@ -149,14 +149,14 @@ function BarChart({ data, height = 160, color = C.gold }) {
             onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}>
             {isH && (
               <div style={{ position:"absolute", bottom: barH + 36, left:"50%", transform:"translateX(-50%)", background:"#1a1208", border:`1px solid ${color}40`, padding:"6px 10px", zIndex:10, whiteSpace:"nowrap", pointerEvents:"none" }}>
-                <div style={{ fontSize:11, color:"#fff", fontFamily:"'Playfair Display',serif" }}>₹{(d.revenue/1000).toFixed(0)}K</div>
-                <div style={{ fontSize:9, color:"rgba(255,255,255,0.4)", letterSpacing:"0.1em" }}>{d.orders} ORDERS</div>
+                <div style={{ fontSize:11, color:"#fff", fontFamily:"'DM Serif Display',serif" }}>₹{(d.revenue/1000).toFixed(0)}K</div>
+                <div style={{ fontSize:12, color:"rgba(255,255,255,0.4)", letterSpacing:"0.1em" }}>{d.orders} ORDERS</div>
               </div>
             )}
             <div style={{ width:"100%", height:barH, background: isH ? `linear-gradient(180deg,${color},${color}aa)` : `linear-gradient(180deg,${color}cc,${color}55)`, transition:"height 0.7s cubic-bezier(0.34,1.56,0.64,1), background 0.2s", position:"relative" }}>
               {isH && <div style={{ position:"absolute", inset:0, background:"rgba(255,255,255,0.06)" }}/>}
             </div>
-            <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)", position:"absolute", bottom:0, letterSpacing:"0.05em" }}>{month}/{year}</div>
+            <div style={{ fontSize:12, color:"rgba(255,255,255,0.3)", position:"absolute", bottom:0, letterSpacing:"0.05em" }}>{month}/{year}</div>
           </div>
         );
       })}
@@ -193,7 +193,7 @@ function DonutChart({ data, size = 120 }) {
       <circle cx={cx} cy={cy} r={r * 0.55} fill="#0f0c08"/>
       {hovered !== null && (
         <>
-          <text x={cx} y={cy - 6} textAnchor="middle" fill="#fff" fontSize={13} fontFamily="'Playfair Display',serif">{slices[hovered]?.count}</text>
+          <text x={cx} y={cy - 6} textAnchor="middle" fill="#fff" fontSize={13} fontFamily="'DM Serif Display',serif">{slices[hovered]?.count}</text>
           <text x={cx} y={cy + 8} textAnchor="middle" fill="rgba(255,255,255,0.4)" fontSize={8}>{((slices[hovered]?.count / total) * 100).toFixed(0)}%</text>
         </>
       )}
@@ -227,8 +227,8 @@ export default function AdminDashboard() {
     <AdminLayout title="Dashboard">
       <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", paddingTop:120, gap:20 }}>
         <div style={{ fontSize:48, opacity:0.3 }}>📊</div>
-        <div style={{ fontFamily:"'Playfair Display',serif", fontSize:20, color:"rgba(255,255,255,0.3)" }}>No data loaded yet</div>
-        <div style={{ fontSize:12, color:"rgba(255,255,255,0.2)", fontFamily:"'Cormorant Garamond',serif" }}>Click the Refresh button to load dashboard data</div>
+        <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:20, color:"rgba(255,255,255,0.3)" }}>No data loaded yet</div>
+        <div style={{ fontSize:12, color:"rgba(255,255,255,0.2)", fontFamily:"'DM Sans',sans-serif" }}>Click the Refresh button to load dashboard data</div>
         <button onClick={load} style={{ marginTop:8, padding:"12px 32px", background:"rgba(201,168,76,0.1)", border:`1px solid ${C.gold}`, color:C.gold, fontSize:"10px", letterSpacing:"0.2em", cursor:"pointer", fontFamily:"inherit" }}>
           ↻ LOAD DATA
         </button>
@@ -245,14 +245,14 @@ export default function AdminDashboard() {
     <AdminLayout title="Dashboard">
       {/* Top bar */}
       <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:28, flexWrap:"wrap", gap:12 }}>
-        <div style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, color:"rgba(255,255,255,0.3)" }}>
+        <div style={{ fontFamily:"'DM Sans',sans-serif", fontSize:13, color:"rgba(255,255,255,0.3)" }}>
           {lastRefresh ? `Last updated ${timeAgo(lastRefresh.toISOString())}` : "Loading…"}
         </div>
         <div style={{ display:"flex", gap:10 }}>
-          <button onClick={load} disabled={loading} style={{ padding:"8px 18px", background:"none", border:"1px solid rgba(201,168,76,0.25)", color:C.gold, fontSize:"9px", letterSpacing:"0.16em", cursor:"pointer", fontFamily:"inherit", opacity: loading ? 0.5 : 1 }}>
+          <button onClick={load} disabled={loading} style={{ padding:"8px 18px", background:"none", border:"1px solid rgba(201,168,76,0.25)", color:C.gold, fontSize:"12px", letterSpacing:"0.16em", cursor:"pointer", fontFamily:"inherit", opacity: loading ? 0.5 : 1 }}>
             {loading ? "REFRESHING…" : "↻ REFRESH"}
           </button>
-          <button onClick={() => navigate("/admin/analytics")} style={{ padding:"8px 18px", background:"rgba(201,168,76,0.08)", border:`1px solid ${C.gold}40`, color:C.gold, fontSize:"9px", letterSpacing:"0.16em", cursor:"pointer", fontFamily:"inherit" }}>
+          <button onClick={() => navigate("/admin/analytics")} style={{ padding:"8px 18px", background:"rgba(201,168,76,0.08)", border:`1px solid ${C.gold}40`, color:C.gold, fontSize:"12px", letterSpacing:"0.16em", cursor:"pointer", fontFamily:"inherit" }}>
             VIEW ANALYTICS →
           </button>
         </div>
@@ -275,8 +275,8 @@ export default function AdminDashboard() {
         ].map(k => (
           <div key={k.label} style={{ padding:"18px 22px", background:"linear-gradient(135deg,#0c0a06,#0f0c07)", border:"1px solid rgba(201,168,76,0.1)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
             <div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:22, color:"#fff", marginBottom:4 }}>{k.value}</div>
-              <div style={{ fontSize:"9px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.3)" }}>{k.label.toUpperCase()}</div>
+              <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:22, color:"#fff", marginBottom:4 }}>{k.value}</div>
+              <div style={{ fontSize:"12px", letterSpacing:"0.16em", color:"rgba(255,255,255,0.3)" }}>{k.label.toUpperCase()}</div>
             </div>
             {k.growth !== undefined && (
               <div style={{ fontSize:11, padding:"4px 10px", background: k.growth >= 0 ? "rgba(122,184,122,0.1)" : "rgba(240,144,144,0.1)", color: k.growth >= 0 ? "#7ab87a" : "#f09090", border:`1px solid ${k.growth >= 0 ? "rgba(122,184,122,0.2)" : "rgba(240,144,144,0.2)"}` }}>
@@ -292,18 +292,18 @@ export default function AdminDashboard() {
         {/* Chart */}
         <div style={{ background:"linear-gradient(135deg,#0f0c08,#110e08)", border:"1px solid rgba(201,168,76,0.15)", padding:24 }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }}>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#fff" }}>Revenue Overview</div>
+            <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:17, color:"#fff" }}>Revenue Overview</div>
             <div style={{ fontSize:10, color:"rgba(255,255,255,0.25)", letterSpacing:"0.1em" }}>{chart.length} MONTHS</div>
           </div>
           <BarChart data={chart} height={180} />
           <div style={{ display:"flex", justifyContent:"space-between", marginTop:8, paddingTop:12, borderTop:"1px solid rgba(255,255,255,0.05)" }}>
             <div>
               <div style={{ fontSize:11, color:"rgba(255,255,255,0.25)", letterSpacing:"0.12em", marginBottom:2 }}>TOTAL REVENUE</div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:18, color:C.gold }}>{fmt(chart.reduce((s,d)=>s+d.revenue,0))}</div>
+              <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:18, color:C.gold }}>{fmt(chart.reduce((s,d)=>s+d.revenue,0))}</div>
             </div>
             <div style={{ textAlign:"right" }}>
               <div style={{ fontSize:11, color:"rgba(255,255,255,0.25)", letterSpacing:"0.12em", marginBottom:2 }}>TOTAL ORDERS</div>
-              <div style={{ fontFamily:"'Playfair Display',serif", fontSize:18, color:"#7ab87a" }}>{chart.reduce((s,d)=>s+d.orders,0)}</div>
+              <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:18, color:"#7ab87a" }}>{chart.reduce((s,d)=>s+d.orders,0)}</div>
             </div>
           </div>
         </div>
@@ -311,8 +311,8 @@ export default function AdminDashboard() {
         {/* Recent Orders */}
         <div style={{ background:"linear-gradient(135deg,#0f0c08,#110e08)", border:"1px solid rgba(201,168,76,0.15)", padding:24, display:"flex", flexDirection:"column" }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#fff" }}>Recent Orders</div>
-            <span onClick={() => navigate("/admin/orders")} style={{ fontSize:"9px", letterSpacing:"0.14em", color:C.gold, cursor:"pointer" }}>VIEW ALL →</span>
+            <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:17, color:"#fff" }}>Recent Orders</div>
+            <span onClick={() => navigate("/admin/orders")} style={{ fontSize:"12px", letterSpacing:"0.14em", color:C.gold, cursor:"pointer" }}>VIEW ALL →</span>
           </div>
           <div style={{ flex:1, overflowY:"auto" }}>
             {(stats?.recentOrders||[]).map(o => {
@@ -326,16 +326,16 @@ export default function AdminDashboard() {
                 >
                   <div style={{ width:8, height:8, borderRadius:"50%", background:cfg.dot, flexShrink:0 }}/>
                   <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.8)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", fontFamily:"'Playfair Display',serif" }}>
+                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.8)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", fontFamily:"'DM Serif Display',serif" }}>
                       {o.user?.name || "Customer"}
                     </div>
-                    <div style={{ fontSize:9, color:"rgba(255,255,255,0.25)", marginTop:2, letterSpacing:"0.08em" }}>
+                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.25)", marginTop:2, letterSpacing:"0.08em" }}>
                       {o.orderNumber} · {timeAgo(o.createdAt)}
                     </div>
                   </div>
                   <div style={{ textAlign:"right", flexShrink:0 }}>
-                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", fontFamily:"'Playfair Display',serif" }}>₹{(o.totalAmount||0).toLocaleString("en-IN")}</div>
-                    <div style={{ fontSize:8, letterSpacing:"0.1em", color:cfg.color, marginTop:2 }}>{o.status?.toUpperCase()}</div>
+                    <div style={{ fontSize:12, color:"rgba(255,255,255,0.7)", fontFamily:"'DM Serif Display',serif" }}>₹{(o.totalAmount||0).toLocaleString("en-IN")}</div>
+                    <div style={{ fontSize:11, letterSpacing:"0.1em", color:cfg.color, marginTop:2 }}>{o.status?.toUpperCase()}</div>
                   </div>
                 </div>
               );
@@ -348,7 +348,7 @@ export default function AdminDashboard() {
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
         {/* Status donut */}
         <div style={{ background:"linear-gradient(135deg,#0f0c08,#110e08)", border:"1px solid rgba(201,168,76,0.15)", padding:24 }}>
-          <div style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color:"#fff", marginBottom:20 }}>Order Status</div>
+          <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:17, color:"#fff", marginBottom:20 }}>Order Status</div>
           <div style={{ display:"flex", alignItems:"center", gap:24 }}>
             <DonutChart data={stats?.statusBreakdown||[]} size={120} />
             <div style={{ flex:1 }}>
@@ -360,7 +360,7 @@ export default function AdminDashboard() {
                   </div>
                   <div style={{ display:"flex", alignItems:"center", gap:8 }}>
                     <span style={{ fontSize:11, color:"rgba(255,255,255,0.7)" }}>{d.count}</span>
-                    <span style={{ fontSize:9, color:"rgba(255,255,255,0.25)" }}>{totalStatusCount ? Math.round((d.count/totalStatusCount)*100) : 0}%</span>
+                    <span style={{ fontSize:12, color:"rgba(255,255,255,0.25)" }}>{totalStatusCount ? Math.round((d.count/totalStatusCount)*100) : 0}%</span>
                   </div>
                 </div>
               ))}
@@ -371,23 +371,23 @@ export default function AdminDashboard() {
         {/* Low stock */}
         <div style={{ background:"linear-gradient(135deg,#0f0c08,#110e08)", border:`1px solid ${(stats?.lowStockProducts||[]).length ? "rgba(240,144,144,0.25)" : "rgba(201,168,76,0.15)"}`, padding:24 }}>
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:18 }}>
-            <div style={{ fontFamily:"'Playfair Display',serif", fontSize:17, color: (stats?.lowStockProducts||[]).length ? "#f09090" : "#fff" }}>
+            <div style={{ fontFamily:"'DM Serif Display',serif", fontSize:17, color: (stats?.lowStockProducts||[]).length ? "#f09090" : "#fff" }}>
               {(stats?.lowStockProducts||[]).length ? "⚠ Low Stock Alert" : "Stock Status"}
             </div>
-            <span onClick={() => navigate("/admin/products")} style={{ fontSize:"9px", letterSpacing:"0.12em", color:C.gold, cursor:"pointer" }}>MANAGE →</span>
+            <span onClick={() => navigate("/admin/products")} style={{ fontSize:"12px", letterSpacing:"0.12em", color:C.gold, cursor:"pointer" }}>MANAGE →</span>
           </div>
           {(stats?.lowStockProducts||[]).length === 0 ? (
-            <div style={{ textAlign:"center", padding:"32px 0", fontFamily:"'Cormorant Garamond',serif", fontSize:15, color:"rgba(122,184,122,0.6)" }}>✓ All products well stocked</div>
+            <div style={{ textAlign:"center", padding:"32px 0", fontFamily:"'DM Sans',sans-serif", fontSize:15, color:"rgba(122,184,122,0.6)" }}>✓ All products well stocked</div>
           ) : (
             (stats?.lowStockProducts||[]).map(p => (
               <div key={p._id} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"11px 0", borderBottom:"1px solid rgba(255,255,255,0.04)" }}>
                 <div>
                   <div style={{ fontSize:12, color:"rgba(255,255,255,0.75)" }}>{p.name}</div>
-                  <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", marginTop:2 }}>{(p.category||"").toUpperCase()}</div>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", marginTop:2 }}>{(p.category||"").toUpperCase()}</div>
                 </div>
                 <div style={{ textAlign:"right" }}>
-                  <div style={{ fontSize:14, fontFamily:"'Playfair Display',serif", color: p.stock <= 1 ? "#f09090" : "#d4a04a" }}>{p.stock}</div>
-                  <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)", letterSpacing:"0.08em" }}>UNITS LEFT</div>
+                  <div style={{ fontSize:14, fontFamily:"'DM Serif Display',serif", color: p.stock <= 1 ? "#f09090" : "#d4a04a" }}>{p.stock}</div>
+                  <div style={{ fontSize:12, color:"rgba(255,255,255,0.3)", letterSpacing:"0.08em" }}>UNITS LEFT</div>
                 </div>
               </div>
             ))

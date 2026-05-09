@@ -24,7 +24,7 @@ export default function SizeGuidePage({ onAuth }) {
       <div style={{ minHeight: "100vh", background: C.bg, paddingTop: "100px" }}>
         <div style={{ textAlign: "center", padding: "48px 20px 60px" }}>
           <div style={{ fontSize: "9.5px", letterSpacing: "0.28em", color: C.gold, marginBottom: "14px" }}>FIND YOUR FIT</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "52px", fontWeight: 400, color: "#fff", marginBottom: "16px" }}>Size Guide</h1>
+          <h1 style={{ fontFamily: "'DM Serif Display',Georgia,serif", fontSize: "52px", fontWeight: 400, color: "#fff", marginBottom: "16px" }}>Size Guide</h1>
           <GoldBar centered />
           <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.45)", maxWidth: "480px", margin: "0 auto", lineHeight: 1.8 }}>
             All measurements are in centimetres. When between sizes, we recommend sizing up.
@@ -56,7 +56,7 @@ export default function SizeGuidePage({ onAuth }) {
                   <tr key={row.size} style={{ borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.04)" : "none", transition: "background 0.15s" }}
                     onMouseEnter={e => e.currentTarget.style.background = "rgba(201,168,76,0.04)"}
                     onMouseLeave={e => e.currentTarget.style.background = ""}>
-                    <td style={{ padding: "16px 24px", fontFamily: "'Playfair Display',serif", fontSize: "16px", color: C.gold }}>{row.size}</td>
+                    <td style={{ padding: "16px 24px", fontFamily: "'DM Serif Display',Georgia,serif", fontSize: "16px", color: C.gold }}>{row.size}</td>
                     {Object.entries(row).filter(([k]) => k !== "size").map(([k, v]) => (
                       <td key={k} style={{ padding: "16px 24px", fontSize: "14px", color: "rgba(255,255,255,0.65)" }}>{v}</td>
                     ))}
@@ -75,7 +75,7 @@ export default function SizeGuidePage({ onAuth }) {
             ].map(tip => (
               <div key={tip.title} style={{ padding: "24px", background: C.surface, border: "1px solid rgba(201,168,76,0.1)" }}>
                 <div style={{ fontSize: "24px", marginBottom: "12px" }}>{tip.icon}</div>
-                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "14px", color: "#fff", marginBottom: "8px" }}>{tip.title}</div>
+                <div style={{ fontFamily: "'DM Serif Display',Georgia,serif", fontSize: "14px", color: "#fff", marginBottom: "8px" }}>{tip.title}</div>
                 <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.7 }}>{tip.text}</div>
               </div>
             ))}

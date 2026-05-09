@@ -53,7 +53,7 @@ function BellDropdown({ onClose }) {
     }}>
       <div style={{ padding: "16px 18px 14px", borderBottom: "1px solid rgba(201,168,76,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: 15, color: "#fff" }}>Notifications</div>
+          <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: 15, color: "#fff" }}>Notifications</div>
           {unreadCount > 0 && (
             <div style={{ fontSize: 10, color: C.gold, letterSpacing: "0.12em", marginTop: 2 }}>{unreadCount} UNREAD</div>
           )}
@@ -70,7 +70,7 @@ function BellDropdown({ onClose }) {
 
       <div style={{ overflowY: "auto", flex: 1 }}>
         {recent.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "48px 24px", fontFamily: "'Cormorant Garamond',serif", fontSize: 14, color: "rgba(255,255,255,0.2)" }}>
+          <div style={{ textAlign: "center", padding: "48px 24px", fontFamily: "'DM Sans',sans-serif", fontSize: 14, color: "rgba(255,255,255,0.2)" }}>
             <div style={{ fontSize: 36, marginBottom: 12 }}>🔔</div>
             No notifications yet
           </div>
@@ -95,14 +95,14 @@ function BellDropdown({ onClose }) {
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", gap: 8, marginBottom: 2 }}>
-                  <span style={{ fontFamily: "'Playfair Display',serif", fontSize: 12, color: n.read ? "rgba(255,255,255,0.55)" : "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <span style={{ fontFamily: "'DM Serif Display',serif", fontSize: 12, color: n.read ? "rgba(255,255,255,0.55)" : "#fff", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {n.title}
                   </span>
-                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", flexShrink: 0, fontFamily: "'Cormorant Garamond',serif" }}>
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)", flexShrink: 0, fontFamily: "'DM Sans',sans-serif" }}>
                     {timeAgo(n.createdAt)}
                   </span>
                 </div>
-                <div style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 12, color: "rgba(255,255,255,0.35)", lineHeight: 1.4, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {n.message}
                 </div>
               </div>
@@ -151,7 +151,7 @@ export default function AdminLayout({ children, title }) {
   }, [bellOpen]);
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", background: "#060402", fontFamily: "'Cormorant Garamond', Georgia, serif" }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "#060402", fontFamily: "'DM Sans', Georgia, serif" }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600&family=Cormorant+Garamond:wght@300;400;500&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -188,11 +188,11 @@ export default function AdminLayout({ children, title }) {
           onClick={() => !collapsed && navigate("/")}>
           {!collapsed && (
             <div>
-              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "18px", letterSpacing: "0.36em", color: "#fff" }}>MAISON</div>
+              <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "18px", letterSpacing: "0.36em", color: "#fff" }}>MAISON</div>
               <div style={{ fontSize: "9px", letterSpacing: "0.2em", color: C.gold, marginTop: "2px" }}>ADMIN PANEL</div>
             </div>
           )}
-          {collapsed && <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "16px", color: C.gold }}>M</div>}
+          {collapsed && <div style={{ fontFamily: "'DM Serif Display',serif", fontSize: "16px", color: C.gold }}>M</div>}
           <button className="collapse-btn" onClick={e => { e.stopPropagation(); setCollapsed(c => !c); }} style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.3)", fontSize: "16px", flexShrink: 0 }}>
             {collapsed ? "→" : "←"}
           </button>
@@ -262,7 +262,7 @@ export default function AdminLayout({ children, title }) {
         <div className="admin-topbar" style={{ height: "64px", borderBottom: "1px solid rgba(201,168,76,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 32px", background: "rgba(8,5,2,0.95)", position: "sticky", top: 0, zIndex: 100 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
             <button className="admin-hamburger" onClick={() => setMobileOpen(true)}>☰</button>
-            <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "22px", fontWeight: 400, color: "#fff" }}>{title}</h1>
+            <h1 style={{ fontFamily: "'DM Serif Display',serif", fontSize: "22px", fontWeight: 400, color: "#fff" }}>{title}</h1>
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
