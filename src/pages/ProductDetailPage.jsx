@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { C } from "../components/shared";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { getProductById, toggleWishlist } from "../api/productApi";
+import { getProductById, getColorVariants, toggleWishlist } from "../api/productApi";
 
 /* ─── Scoped Styles ──────────────────────────────────────────────────────────── */
 const PdStyles = () => (
@@ -278,21 +278,113 @@ const RulerIcon = () => (
   </svg>
 );
 
-/* ─── Color name helper ─────────────────────────────────────────────────────── */
+/* ─── Color helpers ─────────────────────────────────────────────────────────── */
 const colorNameMap = {
-  "#000000":"Noir Black","#ffffff":"Ivory White","#fff":"Ivory White","#000":"Noir Black",
-  black:"Noir Black",white:"Ivory White","#1a1208":"Dark Mahogany","#c9a84c":"Maison Gold",
-  "#8a6228":"Caramel Brown","#f5f0eb":"Linen Cream","#d4a04a":"Warm Amber",navy:"Midnight Navy",
-  "#001f3f":"Midnight Navy",beige:"Sand Beige",cream:"Ivory Cream",ivory:"Ivory",
-  "#808080":"Slate Grey",grey:"Slate Grey",gray:"Slate Grey","#800020":"Burgundy",
-  "#722f37":"Wine",red:"Scarlet Red",blue:"Classic Blue",green:"Forest Green",
-  pink:"Blush Pink","#ff69b4":"Rose Pink","#a0522d":"Sienna","#8b4513":"Saddle Brown",
+  // Blacks
+  "#000000":"Noir Black","#000":"Noir Black","#0a0a0a":"Jet Black","#111111":"Rich Black",
+  "#1a1a1a":"Charcoal","#1c1714":"Dark Espresso","#1a1208":"Dark Mahogany","#0d0a06":"Ebony",
+  // Whites & creams
+  "#ffffff":"Ivory White","#fff":"Ivory White","#fafafa":"Snow","#f5f5f5":"Soft White",
+  "#f5f0eb":"Linen Cream","#faf8f5":"Warm White","#f7f4f0":"Antique White","#fffef0":"Cream",
+  // Greys
+  "#808080":"Slate Grey","#888888":"Medium Grey","#999999":"Stone Grey","#aaaaaa":"Silver Mist",
+  "#666666":"Steel Grey","#555555":"Charcoal Grey","#444444":"Gunmetal","#333333":"Graphite",
+  "#c0c0c0":"Silver","#d3d3d3":"Light Grey","#b0b0b0":"French Grey","#dcdcdc":"Gainsboro",
+  // Browns & tans
+  "#8b4513":"Saddle Brown","#a0522d":"Sienna","#8a6228":"Caramel Brown","#6b4c36":"Walnut",
+  "#c8a882":"Tan","#d2b48c":"Warm Tan","#c19a6b":"Camel","#a67c52":"Coffee","#7b5835":"Teak",
+  "#4a3728":"Dark Chocolate","#c8860a":"Amber Brown","#b8860b":"Dark Goldenrod","#9c6b30":"Hazel",
+  "#6f4e37":"Coffee Brown","#c4a35a":"Biscuit","#deb887":"Burlywood","#d2691e":"Chocolate",
+  // Reds
+  "#ff0000":"Red","#cc0000":"Deep Red","#990000":"Dark Red","#800000":"Maroon",
+  "#800020":"Burgundy","#722f37":"Wine","#dc143c":"Crimson","#b22222":"Firebrick",
+  "#e34234":"Vermillion","#cd5c5c":"Indian Red","#ff6347":"Tomato","#c41e3a":"Cardinal Red",
+  // Pinks
+  "#ff69b4":"Rose Pink","#ffb6c1":"Light Pink","#ff1493":"Deep Pink","#db7093":"Pale Violet Red",
+  "#f08080":"Coral Pink","#ffc0cb":"Pink Blush","#e75480":"Dark Pink","#ff007f":"Cerise",
+  "#f4c2c2":"Baby Pink","#c71585":"Medium Violet Red",
+  // Oranges
+  "#ff8c00":"Dark Orange","#ffa500":"Amber","#ff7f50":"Coral","#ff4500":"Orange Red",
+  "#e2725b":"Terracotta","#cc5500":"Burnt Orange","#b7410e":"Rust","#f4a460":"Sandy Brown",
+  // Yellows & golds
+  "#c9a84c":"Maison Gold","#d4a04a":"Warm Amber","#ffd700":"Gold","#ffdf00":"Canary Yellow",
+  "#f5c518":"Mustard","#e6be8a":"Champagne","#c8b560":"Straw","#e8c96e":"Light Gold",
+  "#b8963e":"Antique Gold","#cfb53b":"Old Gold",
+  // Greens
+  "#008000":"Forest Green","#228b22":"Forest","#006400":"Dark Green","#2e8b57":"Sea Green",
+  "#3cb371":"Medium Sea Green","#90ee90":"Light Green","#00fa9a":"Medium Spring Green",
+  "#556b2f":"Olive Green","#6b8e23":"Olive Drab","#808000":"Olive","#4a7c59":"Sage Green",
+  "#355e3b":"Hunter Green","#00a550":"Emerald","#50c878":"Emerald Green",
+  // Blues
+  "#0000ff":"Blue","#0000cd":"Medium Blue","#00008b":"Dark Blue","#000080":"Navy",
+  "#001f3f":"Midnight Navy","#4169e1":"Royal Blue","#4682b4":"Steel Blue","#87ceeb":"Sky Blue",
+  "#add8e6":"Light Blue","#1e90ff":"Dodger Blue","#00bfff":"Deep Sky Blue","#5f9ea0":"Cadet Blue",
+  "#6495ed":"Cornflower Blue","#191970":"Midnight Blue","#003153":"Prussian Blue",
+  // Purples
+  "#800080":"Purple","#8b008b":"Dark Magenta","#9400d3":"Dark Violet","#4b0082":"Indigo",
+  "#ee82ee":"Violet","#dda0dd":"Plum","#da70d6":"Orchid","#ff00ff":"Magenta","#c8a2c8":"Lilac",
+  "#967bb6":"Lavender Purple","#e6e6fa":"Lavender","#9b59b6":"Amethyst","#7b2d8b":"Grape",
+  // Other named
+  black:"Noir Black",white:"Ivory White",grey:"Slate Grey",gray:"Slate Grey",
+  navy:"Midnight Navy",beige:"Sand Beige",cream:"Ivory Cream",ivory:"Ivory White",
+  red:"Scarlet Red",blue:"Classic Blue",green:"Forest Green",pink:"Blush Pink",
+  purple:"Royal Purple",orange:"Burnt Orange",yellow:"Golden Yellow",brown:"Warm Brown",
+  gold:"Maison Gold",silver:"Silver",coral:"Coral",teal:"Teal",mint:"Mint Green",
+  lavender:"Lavender",maroon:"Deep Maroon",olive:"Olive",indigo:"Indigo",
+  violet:"Violet",cyan:"Cyan",magenta:"Magenta",khaki:"Khaki",tan:"Tan",
+  rose:"Rose","off-white":"Off White","off white":"Off White",
 };
+
+// Resolve any colour string → human-readable name
 const getColorName = (c) => {
-  if (!c) return "Color";
+  if (!c) return "Colour";
   const key = c.toLowerCase().trim();
-  return colorNameMap[key] || (c.startsWith("#") ? `Shade ${c.toUpperCase()}` : c.charAt(0).toUpperCase() + c.slice(1));
+  if (colorNameMap[key]) return colorNameMap[key];
+  // Try without '#' spaces
+  if (c.startsWith("#")) return nearestColorName(c) || `Shade ${c.toUpperCase()}`;
+  return c.charAt(0).toUpperCase() + c.slice(1);
 };
+
+// Find nearest named colour by Euclidean RGB distance
+const hexToRgb = (hex) => {
+  const h = hex.replace("#","");
+  if (h.length === 3) {
+    return [parseInt(h[0]+h[0],16), parseInt(h[1]+h[1],16), parseInt(h[2]+h[2],16)];
+  }
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+};
+const NAMED_PALETTE = [
+  ["#000000","Noir Black"],["#1a1208","Dark Mahogany"],["#3a2010","Dark Chocolate"],
+  ["#6b4c36","Walnut Brown"],["#8b4513","Saddle Brown"],["#a0522d","Sienna"],
+  ["#c8a882","Tan"],["#d2b48c","Warm Tan"],["#c9a84c","Maison Gold"],["#ffd700","Gold"],
+  ["#ffffff","Ivory White"],["#f5f0eb","Linen Cream"],["#dcdcdc","Light Grey"],
+  ["#808080","Slate Grey"],["#444444","Gunmetal"],["#222222","Charcoal"],
+  ["#800020","Burgundy"],["#cc0000","Deep Red"],["#ff0000","Red"],["#ff69b4","Rose Pink"],
+  ["#ffa500","Amber"],["#e2725b","Terracotta"],["#228b22","Forest Green"],
+  ["#000080","Navy"],["#4169e1","Royal Blue"],["#87ceeb","Sky Blue"],
+  ["#800080","Purple"],["#ee82ee","Violet"],["#c8a2c8","Lilac"],
+];
+const nearestColorName = (hex) => {
+  try {
+    const [r,g,b] = hexToRgb(hex);
+    let best = Infinity, name = null;
+    for (const [h,n] of NAMED_PALETTE) {
+      const [pr,pg,pb] = hexToRgb(h);
+      const d = (r-pr)**2 + (g-pg)**2 + (b-pb)**2;
+      if (d < best) { best = d; name = n; }
+    }
+    return best < 15000 ? name : null; // only return if close enough
+  } catch { return null; }
+};
+
+// Returns true if colour is light (needs dark tick/text)
+const isLightColor = (hex) => {
+  try {
+    const [r,g,b] = hexToRgb(hex.replace(/^(?!#)/,"#"));
+    return (r*299 + g*587 + b*114) / 1000 > 155;
+  } catch { return false; }
+};
+
 
 /* ─── Size chart data ───────────────────────────────────────────────────────── */
 const SIZE_DATA = {
@@ -484,24 +576,29 @@ export default function ProductDetailPage() {
   const [loading,       setLoading]       = useState(true);
   const [error,         setError]         = useState(null);
   const [selectedSize,  setSelectedSize]  = useState(null);
-  const [selectedColor, setSelectedColor] = useState(null);
   const [qty,           setQty]           = useState(1);
   const [activeImg,     setActiveImg]     = useState(0);
   const [wished,        setWished]        = useState(false);
   const [cartMsg,       setCartMsg]       = useState(null);
   const [openAcc,       setOpenAcc]       = useState(null);
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  // All products in the same colorGroup (includes current product)
+  const [colorVariants, setColorVariants] = useState([]);
 
   useEffect(() => {
-    window.scrollTo(0,0);
-    setLoading(true); setError(null); setActiveImg(0); setSelectedSize(null); setSelectedColor(null);
+    window.scrollTo(0, 0);
+    setLoading(true); setError(null);
+    setActiveImg(0); setSelectedSize(null); setColorVariants([]);
+
     getProductById(id)
       .then(data => {
-        setProduct(data.product);
-        if (data.product?.colors?.length) setSelectedColor(data.product.colors[0]);
-        if (user?.wishlist) {
-          setWished(user.wishlist.map(w => w._id||w).includes(id));
-        }
+        const p = data.product;
+        setProduct(p);
+        if (user?.wishlist) setWished(user.wishlist.map(w => w._id || w).includes(id));
+        // Fetch all colour variants in the same colorGroup
+        getColorVariants(id)
+          .then(res => setColorVariants(res.variants || []))
+          .catch(() => setColorVariants([]));
       })
       .catch(() => setError("Product not found or unavailable."))
       .finally(() => setLoading(false));
@@ -509,7 +606,11 @@ export default function ProductDetailPage() {
 
   const handleAddToCart = () => {
     if (!selectedSize) { setCartMsg({type:"err",text:"Please select a size to continue"}); return; }
-    addToCart({_id:product._id,name:product.name,price:product.price,category:product.category,images:product.images,color:selectedColor}, selectedSize, qty);
+    addToCart({
+      _id:product._id, name:product.name, price:product.price,
+      category:product.category, images:product.images,
+      color: product.colors?.[0] || null,
+    }, selectedSize, qty);
     setCartMsg({type:"ok",text:"✓  Added to your cart"});
     setTimeout(()=>setCartMsg(null), 2500);
   };
@@ -671,49 +772,108 @@ export default function ProductDetailPage() {
           {/* Divider */}
           <div style={{height:"1px",background:"var(--pd-bdr)",marginBottom:24}}/>
 
-          {/* ── Color picker ──────────────────────────────────────────── */}
-          {colors.length > 0 && (
-            <div style={{marginBottom:26}}>
-              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
-                <span className="pd-section-lbl">Colour</span>
-                {selectedColor && (
-                  <span style={{fontFamily:"'DM Sans',sans-serif",fontWeight:400,fontSize:14,color:"#8a7d70"}}>
-                    — {getColorName(selectedColor)}
+
+          {/* ── Colour (Amazon / Flipkart style) ──────────────────────── */}
+          {colorVariants.length > 0 && (() => {
+            // current product is always in the list; find it by _id
+            const currentColour = product.colors?.[0] || null;
+            const currentName   = currentColour ? getColorName(currentColour) : product.name;
+
+            return (
+              <div style={{marginBottom:26}}>
+                {/* Label row */}
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:14}}>
+                  <span className="pd-section-lbl">Colour</span>
+                  <span style={{fontFamily:"'DM Sans',sans-serif",fontWeight:400,
+                    fontSize:14,color:"#4a3f35"}}>
+                    — {currentName}
                   </span>
-                )}
-              </div>
-              <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:10}}>
-                {colors.map((col,i)=>{
-                  const isSel = selectedColor===col;
-                  return (
-                    <button key={i} className={`pd-swatch${isSel?" pd-selected":""}`}
-                      style={{background:col}} title={getColorName(col)}
-                      onClick={()=>setSelectedColor(col)}>
-                      {isSel && (
-                        <div style={{position:"relative",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                            <path d="M2 6l3 3 5-5" stroke={col.toLowerCase()==="white"||col==="#fff"||col==="#ffffff"?"#000":"#fff"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
+                </div>
+
+                {/* Swatch row */}
+                <div style={{display:"flex",gap:12,flexWrap:"wrap",alignItems:"flex-start"}}>
+                  {colorVariants.map(variant => {
+                    const isCurrent  = variant._id === id;
+                    const colHex     = variant.colors?.[0] || "#cccccc";
+                    const colName    = getColorName(colHex);
+                    const isLight    = isLightColor(colHex);
+
+                    return (
+                      <button
+                        key={variant._id}
+                        title={colName}
+                        onClick={() => !isCurrent && navigate(`/shop/${variant._id}`)}
+                        style={{
+                          display:"flex",flexDirection:"column",alignItems:"center",
+                          gap:6,padding:0,background:"none",border:"none",
+                          cursor: isCurrent ? "default" : "pointer",
+                          outline:"none",
+                        }}
+                      >
+                        {/* Outer ring (gold when selected) */}
+                        <div style={{
+                          width:42, height:42,
+                          borderRadius:"50%",
+                          padding:3,
+                          border: isCurrent
+                            ? "2px solid #c9a84c"
+                            : "2px solid transparent",
+                          transition:"border-color 0.2s",
+                        }}
+                        onMouseEnter={e => {
+                          if (!isCurrent) e.currentTarget.style.borderColor = "rgba(201,168,76,0.6)";
+                        }}
+                        onMouseLeave={e => {
+                          if (!isCurrent) e.currentTarget.style.borderColor = "transparent";
+                        }}
+                        >
+                          {/* Colour circle */}
+                          <div style={{
+                            width:"100%", height:"100%",
+                            borderRadius:"50%",
+                            background: colHex,
+                            border: isLight
+                              ? "1px solid rgba(0,0,0,0.15)"
+                              : "1px solid rgba(0,0,0,0.08)",
+                            display:"flex",alignItems:"center",justifyContent:"center",
+                            transition:"transform 0.15s, box-shadow 0.15s",
+                            boxShadow: isCurrent
+                              ? "0 2px 8px rgba(0,0,0,0.18)"
+                              : "0 1px 4px rgba(0,0,0,0.10)",
+                          }}>
+                            {/* Tick for current */}
+                            {isCurrent && (
+                              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M2 6l3 3 5-5"
+                                  stroke={isLight ? "#1c1714" : "#ffffff"}
+                                  strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
+                          </div>
                         </div>
-                      )}
-                    </button>
-                  );
-                })}
+
+                        {/* Colour name */}
+                        <span style={{
+                          fontFamily:"'DM Sans',sans-serif",
+                          fontWeight: isCurrent ? 700 : 400,
+                          fontSize:11,
+                          color: isCurrent ? "#a8863a" : "#8a7d70",
+                          textAlign:"center",
+                          maxWidth:64,
+                          lineHeight:1.3,
+                          wordBreak:"break-word",
+                          borderBottom: isCurrent ? "1.5px solid #c9a84c" : "none",
+                          paddingBottom: isCurrent ? 1 : 0,
+                        }}>
+                          {colName}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-              <div style={{display:"flex",flexWrap:"wrap",gap:"6px 18px"}}>
-                {colors.map((col,i)=>(
-                  <span key={i} onClick={()=>setSelectedColor(col)} style={{
-                    fontFamily:"'DM Sans',sans-serif", fontWeight:selectedColor===col?600:400,
-                    fontSize:12,
-                    color:selectedColor===col?"#a8863a":"#8a7d70",
-                    cursor:"pointer",
-                    borderBottom:selectedColor===col?"1.5px solid #a8863a":"1px solid transparent",
-                    paddingBottom:1, transition:"all 0.15s",
-                  }}>{getColorName(col)}</span>
-                ))}
-              </div>
-            </div>
-          )}
+            );
+          })()}
 
           {/* ── Size picker ───────────────────────────────────────────── */}
           <div style={{marginBottom:24}}>
@@ -798,7 +958,7 @@ export default function ProductDetailPage() {
           )}
 
           {/* Selection summary pill */}
-          {(selectedSize||selectedColor) && (
+          {selectedSize && (
             <div style={{
               padding:"10px 14px",marginBottom:14,
               background:"rgba(201,168,76,0.06)",
@@ -807,8 +967,10 @@ export default function ProductDetailPage() {
               fontFamily:"'DM Sans',sans-serif",fontWeight:500,fontSize:13,
               color:"#8a7d70",display:"flex",gap:18,flexWrap:"wrap",
             }}>
-              {selectedColor && <span>Colour: <strong style={{color:"#1c1714"}}>{getColorName(selectedColor)}</strong></span>}
-              {selectedSize  && <span>Size: <strong style={{color:"#1c1714"}}>{isNumeric?`${selectedSize}"`:selectedSize}</strong></span>}
+              {product.colors?.[0] && (
+                <span>Colour: <strong style={{color:"#1c1714"}}>{getColorName(product.colors[0])}</strong></span>
+              )}
+              <span>Size: <strong style={{color:"#1c1714"}}>{isNumeric?`${selectedSize}"`:selectedSize}</strong></span>
             </div>
           )}
 

@@ -24,7 +24,13 @@ export const addReview = async (productId, { rating, comment }) => {
   return data;
 };
 
-// ── Toggle wishlist ───────────────────────────────────────────────────────────
+// ── Get colour variants (products sharing the same colorGroup) ────────────────
+export const getColorVariants = async (id) => {
+  const { data } = await api.get(`/products/${id}/color-variants`);
+  return data; // { variants: [...] }
+};
+
+
 export const toggleWishlist = async (productId) => {
   const { data } = await api.put(`/products/${productId}/wishlist`);
   return data; // { wishlist: [...] }
