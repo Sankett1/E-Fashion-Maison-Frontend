@@ -1,7 +1,30 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ArrowRight } from "./shared";
 import { getProducts } from "../api/productApi";
+
+// ── Footer link map ───────────────────────────────────────────────────────────
+const FOOTER_LINKS = {
+  // SHOP — use query params so ShopPage filters correctly
+  "New Arrivals":        "/shop?tag=NEW",
+  "Women":               "/shop?category=Women",
+  "Men":                 "/shop?category=Men",
+  "Accessories":         "/shop?category=Accessories",
+  "Sale":                "/shop?tag=SALE",
+  // HELP
+  "Contact Us":          "/contact",
+  "Shipping Policy":     "/shipping-policy",
+  "Returns & Exchanges": "/returns",
+  "Size Guide":          "/size-guide",
+  "FAQ":                 "/faq",
+  "Track Order":         "/track-order",
+  // COMPANY
+  "About Us":            "/about",
+  "Careers":             "/careers",
+  "Press & Media":       "/press",
+  "Sustainability":      "/sustainability",
+  "Craftsmanship":       "/craftsmanship",
+};
 
 // ── Hero-only keyframes (h* prefix avoids conflict with shared.jsx) ───────────
 const HERO_CSS = `
@@ -95,7 +118,15 @@ function FooterCol({ title, links }) {
   return (
     <div>
       <div style={{ fontFamily:"'DM Sans',system-ui,sans-serif", fontSize:"12px", letterSpacing:"0.25em", fontWeight:500, color:"#3a2e1e", marginBottom:"20px" }}>{title}</div>
-      {links.map(l => <a key={l} className="m-footer-link">{l}</a>)}
+      {links.map(l => {
+        const href = FOOTER_LINKS[l] || "/";
+        return (
+          <Link key={l} to={href} className="m-footer-link"
+            style={{ display:"block", textDecoration:"none" }}>
+            {l}
+          </Link>
+        );
+      })}
     </div>
   );
 }
@@ -280,9 +311,25 @@ function CollectionCard({eye,name,image,link}) {
         <div ref={card} className="mx-card" onClick={()=>nav(link||"/shop")}
           style={{width:"100%",height:"100%",background:"#0a0603",cursor:"pointer"}}>
           <div className="mx-holo"/><div className="mx-edge"/>
-          {image&&<img src={image} alt={name}
-            style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",transition:"transform .7s cubic-bezier(.23,1,.32,1)"}}
-            onError={e=>{e.target.style.display="none"}}/>}
+          {image
+            ? <img src={image} alt={name}
+                style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",transition:"transform .7s cubic-bezier(.23,1,.32,1)"}}
+                onError={e=>{e.target.style.display="none"}}/>
+            : /* Placeholder shown until admin sets an image */
+              <div style={{position:"absolute",inset:0,display:"flex",flexDirection:"column",
+                alignItems:"center",justifyContent:"center",gap:10,
+                background:"linear-gradient(160deg,#1a1208 0%,#0a0603 100%)"}}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,76,.4)" strokeWidth="1.2" strokeLinecap="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:"11px",
+                  letterSpacing:"0.14em",color:"rgba(201,168,76,.35)",textAlign:"center",
+                  padding:"0 16px",lineHeight:1.6}}>
+                  Set image in<br/>Admin → Hero
+                </span>
+              </div>
+          }
           {/* Overlays */}
           <div style={{position:"absolute",inset:0,zIndex:2,background:"linear-gradient(to top,rgba(4,2,0,.94) 0%,rgba(4,2,0,.28) 45%,transparent 75%)"}}/>
           <div style={{position:"absolute",inset:0,zIndex:3,background:"linear-gradient(135deg,rgba(201,168,76,.04) 0%,transparent 50%,rgba(0,0,0,.18) 100%)"}}/>
@@ -441,17 +488,7 @@ function TestCarousel({items}) {
 }
 
 
-// ── Fallback data for strip ───────────────────────────────────────────────────
-const HT_FALLBACK = [
-  {_id:"ht1",name:"Navy Pinstripe Blazer",   category:"Men",         subCategory:"Suits",      price:18500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop"}]},
-  {_id:"ht2",name:"Belted Trench Coat",      category:"Women",       subCategory:"Outerwear",  price:24900, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop"}]},
-  {_id:"ht3",name:"Chelsea Leather Boots",   category:"Accessories", subCategory:"Shoes",      price:12750, originalPrice:18000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"}]},
-  {_id:"ht4",name:"Silk Satin Blouse",       category:"Women",       subCategory:"Tops",       price:8200,  tag:null,   images:[{url:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop"}]},
-  {_id:"ht5",name:"Shawl Collar Overcoat",   category:"Men",         subCategory:"Outerwear",  price:34500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1520975916090-8105d898b5a1?w=600&q=80&fit=crop"}]},
-  {_id:"ht6",name:"Cashmere Wrap Cardigan",  category:"Women",       subCategory:"Knitwear",   price:19500, originalPrice:26000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80&fit=crop"}]},
-  {_id:"ht7",name:"Leather Crossbody Bag",   category:"Accessories", subCategory:"Bags",       price:16800, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&fit=crop"}]},
-  {_id:"ht8",name:"Double-Breasted Suit",    category:"Men",         subCategory:"Suits",      price:48000, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80&fit=crop"}]},
-];
+// No hardcoded fallback — products come exclusively from the API (AdminProducts panel).
 
 // ── HomeTrendingStrip — horizontal scroll, wheel-driven, API-fetched ──────────
 function HomeTrendingStrip() {
@@ -461,11 +498,11 @@ function HomeTrendingStrip() {
   const trackEl  = useRef(null);
   const navigate = useNavigate();
 
-  // Fetch from API (8 newest), fall back to static
+  // Fetch from API (8 newest) — no static fallback
   useEffect(() => {
     getProducts({ sort:"-createdAt", limit:8, page:1 })
-      .then(d => { const p=d.products||[]; setItems(p.length ? p : HT_FALLBACK); })
-      .catch(() => setItems(HT_FALLBACK))
+      .then(d => { setItems(d.products||[]); })
+      .catch(() => setItems([]))
       .finally(() => setLoading(false));
   }, []);
 
@@ -518,6 +555,18 @@ function HomeTrendingStrip() {
         borderRadius:"50%",animation:"htSpin .75s linear infinite"}}/>
       <span style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:12,
         letterSpacing:"0.08em",color:"#6b5c44"}}>LOADING…</span>
+    </div>
+  );
+
+  if (!items.length) return (
+    <div style={{textAlign:"center",padding:"48px 24px"}}>
+      <div style={{fontSize:40,marginBottom:16}}>🛍️</div>
+      <p style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:20,color:"#1a1208",marginBottom:8}}>
+        No products yet
+      </p>
+      <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:13,color:"#6b5c44",maxWidth:340,margin:"0 auto"}}>
+        Add your first products via <strong>Admin → Products</strong> and they'll appear here automatically.
+      </p>
     </div>
   );
 
@@ -606,9 +655,9 @@ export default function HeroPage({ onAuth }) {
     "https://res.cloudinary.com/dt2hohaty/video/upload/v1775057702/9541951-hd_2048_1080_25fps_j9bwer.mp4";
 
   const COLLECTION_CARDS = heroCards || [
-    { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800&q=80&fit=crop", cls:"col-card-1", rev:"m-reveal-left",  d:"" },
-    { id:"card2", eye:"EFFORTLESS STYLE", name:"Casual Luxe", link:"/shop?category=Women",         image:"https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80&fit=crop", cls:"col-card-2", rev:"m-reveal",        d:"m-d2" },
-    { id:"card3", eye:"FINAL TOUCHES",    name:"Accessories", link:"/shop?category=Accessories",   image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=80&fit=crop", cls:"col-card-3", rev:"m-reveal-right", d:"" },
+    { id:"card1", eye:"SHARP & REFINED",  name:"Tailoring",   link:"/shop?category=Men&sub=Suits", image:null, cls:"col-card-1", rev:"m-reveal-left",  d:"" },
+    { id:"card2", eye:"EFFORTLESS STYLE", name:"Casual Luxe", link:"/shop?category=Women",         image:null, cls:"col-card-2", rev:"m-reveal",        d:"m-d2" },
+    { id:"card3", eye:"FINAL TOUCHES",    name:"Accessories", link:"/shop?category=Accessories",   image:null, cls:"col-card-3", rev:"m-reveal-right", d:"" },
   ];
   const heroContentRef = useRef(null);
   const heroBeamRef    = useRef(null);

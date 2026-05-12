@@ -70,21 +70,7 @@ const CSS = `
   .tp-toast.on { opacity:1;transform:translateX(-50%) translateY(0); }
 `;
 
-// ── Fallback catalogue ────────────────────────────────────────────────────────
-const FALLBACK = [
-  { _id:"f1",  name:"Navy Pinstripe Blazer",   category:"Men",         subCategory:"Suits",      price:18500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80&fit=crop"}] },
-  { _id:"f2",  name:"Belted Trench Coat",       category:"Women",       subCategory:"Outerwear",  price:24900, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=600&q=80&fit=crop"}] },
-  { _id:"f3",  name:"Chelsea Leather Boots",    category:"Accessories", subCategory:"Shoes",      price:12750, originalPrice:18000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&fit=crop"}] },
-  { _id:"f4",  name:"Silk Satin Blouse",        category:"Women",       subCategory:"Tops",       price:8200,  tag:null,   images:[{url:"https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=600&q=80&fit=crop"}] },
-  { _id:"f5",  name:"Shawl Collar Overcoat",    category:"Men",         subCategory:"Outerwear",  price:34500, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1520975916090-8105d898b5a1?w=600&q=80&fit=crop"}] },
-  { _id:"f6",  name:"Cashmere Wrap Cardigan",   category:"Women",       subCategory:"Knitwear",   price:19500, originalPrice:26000, tag:"SALE", images:[{url:"https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600&q=80&fit=crop"}] },
-  { _id:"f7",  name:"Leather Crossbody Bag",    category:"Accessories", subCategory:"Bags",       price:16800, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=600&q=80&fit=crop"}] },
-  { _id:"f8",  name:"Double-Breasted Suit",     category:"Men",         subCategory:"Suits",      price:48000, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1617137968427-85924c800a22?w=600&q=80&fit=crop"}] },
-  { _id:"f9",  name:"Draped Maxi Dress",        category:"Women",       subCategory:"Dresses",    price:13900, tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80&fit=crop"}] },
-  { _id:"f10", name:"Aviator Sunglasses",       category:"Accessories", subCategory:"Sunglasses", price:8900,  tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&q=80&fit=crop"}] },
-  { _id:"f11", name:"Oxford Dress Shirt",       category:"Men",         subCategory:"Shirts",     price:6800,  tag:null,   images:[{url:"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&q=80&fit=crop"}] },
-  { _id:"f12", name:"Wide Leg Trousers",        category:"Women",       subCategory:"Trousers",   price:8900,  tag:"NEW",  images:[{url:"https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=600&q=80&fit=crop"}] },
-];
+// No hardcoded fallback — products come exclusively from the API (AdminProducts panel).
 
 const CATS  = ["All","Women","Men","Accessories"];
 const SORTS = [
@@ -298,23 +284,13 @@ export default function TrendingPage() {
   useEffect(()=>{ window.scrollTo(0,0); },[]);
   useEffect(()=>{ setPage(1); },[cat,si]);
 
-  const fallback = ()=>{
-    let fb=[...FALLBACK];
-    if(cat!=="All") fb=fb.filter(p=>p.category===cat);
-    const s=SORTS[si].param;
-    if(s==="price") fb.sort((a,b)=>a.price-b.price);
-    if(s==="-price") fb.sort((a,b)=>b.price-a.price);
-    if(s==="name") fb.sort((a,b)=>a.name.localeCompare(b.name));
-    return fb;
-  };
-
   useEffect(()=>{
     setLoading(true);
     const params={sort:SORTS[si].param,limit:LIMIT,page};
     if(cat!=="All") params.category=cat;
     getProducts(params)
-      .then(d=>{ const p=d.products||[]; setProducts(p.length?p:fallback()); setTotal(p.length?d.total||p.length:fallback().length); })
-      .catch(()=>{ const fb=fallback(); setProducts(fb); setTotal(fb.length); })
+      .then(d=>{ const p=d.products||[]; setProducts(p); setTotal(d.total||p.length); })
+      .catch(()=>{ setProducts([]); setTotal(0); })
       .finally(()=>setLoading(false));
   },[cat,si,page]);
 
@@ -392,9 +368,9 @@ export default function TrendingPage() {
             <div style={{display:"flex",gap:32,paddingLeft:32,whiteSpace:"nowrap",
               animation:"tpTicker 28s linear infinite"}}>
               {[...Array(2)].flatMap((_,ri)=>
-                ["NAVY PINSTRIPE BLAZER","BELTED TRENCH COAT","CHELSEA BOOTS",
-                 "SILK SATIN BLOUSE","CASHMERE CARDIGAN","LEATHER CROSSBODY",
-                 "DOUBLE-BREASTED SUIT","DRAPED MAXI DRESS","AVIATOR SUNGLASSES"]
+                ["NEW ARRIVALS","TRENDING STYLES","EXCLUSIVE DROPS",
+                 "CURATED LOOKS","PREMIUM QUALITY","SEASONAL PICKS",
+                 "SHOP NOW","LIMITED EDITION","FREE SHIPPING OVER ₹999"]
                 .map((item,i)=>(
                   <span key={`${ri}-${i}`} style={{fontFamily:"'DM Sans',system-ui,sans-serif",
                     fontSize:"12px",letterSpacing:"0.10em",color:"rgba(255,255,255,.22)",flexShrink:0}}>
@@ -449,14 +425,23 @@ export default function TrendingPage() {
             </div>
           : products.length===0
             ? <div style={{textAlign:"center",padding:"80px 0"}}>
-                <div style={{fontSize:48,marginBottom:16}}>🔍</div>
-                <p style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:20,color:"#6b5c44"}}>No items found</p>
-                <button onClick={()=>setCat("All")}
-                  style={{marginTop:20,padding:"12px 28px",background:"#c9a84c",
-                    border:"none",color:"#0f0c08",cursor:"pointer",
-                    fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,letterSpacing:"0.10em"}}>
-                  VIEW ALL
-                </button>
+                <div style={{fontSize:56,marginBottom:20}}>🛍️</div>
+                <p style={{fontFamily:"'DM Serif Display',Georgia,serif",fontSize:24,color:"#1a1208",marginBottom:10}}>
+                  No products yet
+                </p>
+                <p style={{fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:13,color:"#6b5c44",marginBottom:24,maxWidth:360,margin:"0 auto 24px"}}>
+                  {cat!=="All"
+                    ? `No ${cat} items found. Try a different category or add products via Admin → Products.`
+                    : "Your store is empty. Head to Admin → Products to add your first items."}
+                </p>
+                {cat!=="All"&&(
+                  <button onClick={()=>setCat("All")}
+                    style={{padding:"12px 28px",background:"#c9a84c",
+                      border:"none",color:"#0f0c08",cursor:"pointer",
+                      fontFamily:"'DM Sans',system-ui,sans-serif",fontSize:11,letterSpacing:"0.10em"}}>
+                    VIEW ALL
+                  </button>
+                )}
               </div>
             : <div style={{display:"grid",
                 gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))",

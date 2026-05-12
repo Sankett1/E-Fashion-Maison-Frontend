@@ -20,6 +20,13 @@ import GiftCardsPage      from "../pages/GiftCardsPage";
 import SizeGuidePage      from "../pages/SizeGuidePage";
 import ReturnsPage        from "../pages/ReturnsPage";
 import NotFoundPage       from "../pages/NotFoundPage";
+import ShippingPolicyPage from "../pages/ShippingPolicyPage";
+import FAQPage            from "../pages/FAQPage";
+import TrackOrderPage     from "../pages/TrackOrderPage";
+import CareersPage        from "../pages/CareersPage";
+import PressPage          from "../pages/PressPage";
+import SustainabilityPage from "../pages/SustainabilityPage";
+import CraftsmanshipPage  from "../pages/CraftsmanshipPage";
 
 // Admin
 import TrendingPage   from "../pages/TrendingPage";
@@ -174,15 +181,22 @@ const router = createBrowserRouter([
   { path: "/sale/accessories", element: <WithNavbar Page={ShopPage} /> },
 
   // Other pages
-  { path: "/cart",       element: <WithNavbar Page={CartPage} /> },
-  { path: "/checkout",   element: <WithNavbar Page={CheckoutPage} /> },
-  { path: "/account",    element: <WithNavbar Page={AccountPage} /> },
-  { path: "/about",      element: <WithNavbar Page={AboutPage} /> },
-  { path: "/wishlist",   element: <WithNavbar Page={WishlistPage} /> },
-  { path: "/contact",    element: <WithNavbar Page={ContactPage} /> },
-  { path: "/gift-cards", element: <WithNavbar Page={GiftCardsPage} /> },
-  { path: "/size-guide", element: <WithNavbar Page={SizeGuidePage} /> },
-  { path: "/returns",    element: <WithNavbar Page={ReturnsPage} /> },
+  { path: "/cart",             element: <WithNavbar Page={CartPage} /> },
+  { path: "/checkout",         element: <WithNavbar Page={CheckoutPage} /> },
+  { path: "/account",          element: <WithNavbar Page={AccountPage} /> },
+  { path: "/about",            element: <WithNavbar Page={AboutPage} /> },
+  { path: "/wishlist",         element: <WithNavbar Page={WishlistPage} /> },
+  { path: "/contact",          element: <WithNavbar Page={ContactPage} /> },
+  { path: "/gift-cards",       element: <WithNavbar Page={GiftCardsPage} /> },
+  { path: "/size-guide",       element: <WithNavbar Page={SizeGuidePage} /> },
+  { path: "/returns",          element: <WithNavbar Page={ReturnsPage} /> },
+  { path: "/shipping-policy",  element: <WithNavbar Page={ShippingPolicyPage} /> },
+  { path: "/faq",              element: <WithNavbar Page={FAQPage} /> },
+  { path: "/track-order",      element: <WithNavbar Page={TrackOrderPage} /> },
+  { path: "/careers",          element: <WithNavbar Page={CareersPage} /> },
+  { path: "/press",            element: <WithNavbar Page={PressPage} /> },
+  { path: "/sustainability",   element: <WithNavbar Page={SustainabilityPage} /> },
+  { path: "/craftsmanship",    element: <WithNavbar Page={CraftsmanshipPage} /> },
 
   // Admin — protected, waits for hydration
   {

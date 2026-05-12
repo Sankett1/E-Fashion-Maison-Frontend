@@ -432,26 +432,27 @@ export default function ShopPage() {
     setLoading(true);
     try {
       const params = {limit:LIMIT, page, sort:sortParam(), maxPrice:priceMax};
-      if(q)   params.keyword  = q;
-      if(cat) params.category = cat;
-      if(tag) params.tag      = tag;
+      if(q)   params.keyword     = q;
+      if(cat) params.category    = cat;
+      if(sub) params.subCategory = sub;
+      if(tag) params.tag         = tag;
       const res = await getProducts(params);
       setProducts(res.products||[]);
       setTotal(res.total||0);
     } catch { setProducts([]); setTotal(0); }
     finally  { setLoading(false); }
-  },[q,cat,tag,page,sortBy,priceMax]);
+  },[q,cat,sub,tag,page,sortBy,priceMax]);
 
   useEffect(()=>{ window.scrollTo(0,0); setPage(1); },[searchParams.toString()]);
   useEffect(()=>{ fetchProducts(); },[fetchProducts]);
 
   const filtered = products.filter(p=>{
-    if(sub && cat) return p.subCategory===sub;
     if(filter==="editors") return p.isFeatured;
     return true;
   });
 
-  const totalPages = Math.ceil(total/LIMIT);
+  const displayCount = sub ? filtered.length : total;
+  const totalPages = Math.ceil((sub ? filtered.length : total) / LIMIT);
 
   const handleWishlistToggle = async(productId)=>{
     try { await toggleWishlist(productId); await refreshUser(); } catch {}
@@ -491,7 +492,7 @@ export default function ShopPage() {
         boxShadow:"0 2px 12px rgba(0,0,0,0.05)"
       }}>
         <span className="sp-count" style={{padding:"16px 0"}}>
-          {loading ? "—" : `${total.toLocaleString()} ${total===1?"piece":"pieces"}`}
+          {loading ? "—" : `${displayCount.toLocaleString()} ${displayCount===1?"piece":"pieces"}`}
         </span>
         <div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 0"}}>
           <select className="sp-sort" value={sortBy} onChange={e=>{setSortBy(e.target.value);setPage(1);}}>
